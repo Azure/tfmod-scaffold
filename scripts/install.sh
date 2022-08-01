@@ -10,3 +10,4 @@ fi
 
 echo "Cloning tfmod-scaffold"
 git clone -c advice.detachedHead=false --depth=1 -b $BRANCH $GITHUB_REPO
+ln -s tfmod-scaffold/scripts scripts
