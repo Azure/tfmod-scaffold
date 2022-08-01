@@ -9,6 +9,9 @@ on:
       - '.github/workflows/**'
       - '**.md'
 
+env:
+  SKIP_CHECKOV: ${{secrets.SKIP_CHECKOV}}
+
 jobs:
   prepr-check:
     runs-on: ubuntu-latest
@@ -50,7 +53,7 @@ jobs:
           make tflint
       - name: Run Checkov action
         id: checkov
-        if: secrets.SKIP_CHECKOV == ''
+        if: ${{env.SKIP_CHECKOV == ''}}
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./
