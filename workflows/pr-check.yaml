@@ -48,13 +48,13 @@ jobs:
       - name: tflint
         run: |
           make tflint
-# current module code has some compliance issues, we won't touch module code in v5, skip Checkov check for now.
-#      - name: Run Checkov action
-#        id: checkov
-#        uses: bridgecrewio/checkov-action@master
-#        with:
-#          directory: ./
-#          framework: terraform
-#          quiet: true
-#          output_format: sarif
-#          download_external_modules: true
+      - name: Run Checkov action
+        id: checkov
+        if: secrets.SKIP_CHECKOV == ''
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./
+          framework: terraform
+          quiet: true
+          output_format: sarif
+          download_external_modules: true
