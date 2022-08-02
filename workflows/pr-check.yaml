@@ -9,18 +9,12 @@ on:
       - '.github/workflows/**'
       - '**.md'
 
-env:
-  SKIP_CHECKOV: ${{secrets.SKIP_CHECKOV}}
-
 jobs:
   prepr-check:
     runs-on: ubuntu-latest
     steps:
       - name: checkout
         uses: actions/checkout@v3
-#      - name: Gitleaks
-#        run: |
-#          docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" --no-git --redact -v
       - uses: actions/setup-go@v3
         with:
           go-version: '>=1.17.0'
@@ -53,7 +47,6 @@ jobs:
           make tflint
       - name: Run Checkov action
         id: checkov
-        if: ${{env.SKIP_CHECKOV == ''}}
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./
