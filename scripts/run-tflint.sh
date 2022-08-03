@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 if [ -z "${TFLINT_CONFIG}" ]; then
-	export TFLINT_CONFIG="./tflint.hcl"
+	export TFLINT_CONFIG=".tflint.hcl"
 fi
 
 # Check gofmt
