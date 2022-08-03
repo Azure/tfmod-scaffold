@@ -7,3 +7,5 @@ if [ -z "${SKIP_INSTALL_GH_ACTION_WORKFLOW}" ]; then
 else
 	echo "Skip workflow installation"
 fi
+
+cp tfmod-scaffold/.tflint.hcl .tflint.hcl
