@@ -47,7 +47,7 @@ lint: golint tflint
 checkovcheck:
 	@sh "$(CURDIR)/scripts/checkovcheck.sh"
 
-fmtcheck: gofmtcheck goimportscheck tfvalidatecheck tffmtcheck terrafmtcheck
+fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
 
 pr-check: gencheck depscheck fmtcheck lint #checkovcheck
 
@@ -61,15 +61,7 @@ terrafmt:
 	@echo "==> Fixing test and document terraform blocks code with terrafmt..."
 	@find . -name '*.md' -o -name "*.go" | grep -v -e '.github' -e '.terraform' -e 'vendor' | while read f; do terrafmt fmt -f $$f; done
 
-goimports:
-	@echo "==> Fixing imports code with goimports..."
-	@find . -name '*.go' | grep -v vendor | while read f; do sh "$(CURDIR)/scripts/goimport-file.sh" "$$f"; done
-
-goimportscheck:
-	@echo "==> Fixing imports code with goimports..."
-	@sh "$(CURDIR)/scripts/goimport-check.sh"
-
-pre-commit: tffmt terrafmt depsensure goimports fmt fumpt generate
+pre-commit: tffmt terrafmt depsensure fmt fumpt generate
 
 depsensure:
 	@sh "$(CURDIR)/scripts/deps-ensure.sh"
