@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+if [ ! -d "./test" ]; then
+    echo "No test folder, skip deps-ensure"
+    exit 0
+fi
 cd ./test
 echo "==> Checking source code with go mod tidy..."
 cp go.mod go_mod
