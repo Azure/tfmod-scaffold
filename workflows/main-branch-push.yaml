@@ -4,6 +4,7 @@ on:
     branches:
       - main
       - master
+      - add-ci
 jobs:
   main-branch-push:
     runs-on: ubuntu-latest
