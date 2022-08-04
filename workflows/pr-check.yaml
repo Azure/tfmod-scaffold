@@ -47,6 +47,7 @@ jobs:
           make tflint
       - name: Run Checkov action
         id: checkov
+        if: ${{env.SKIP_CHECKOV == ''}}
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./

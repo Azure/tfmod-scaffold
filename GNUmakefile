@@ -49,7 +49,7 @@ checkovcheck:
 
 fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
 
-pr-check: gencheck depscheck fmtcheck lint #checkovcheck
+pr-check: gencheck depscheck fmtcheck lint checkovcheck
 
 e2e-test:
 	@sh "$(CURDIR)/scripts/run-e2e-test.sh"
