@@ -1,6 +1,6 @@
 plugin "azurerm" {
   enabled = true
-  version = "0.16.0"
+  version = "0.17.1"
   source = "github.com/terraform-linters/tflint-ruleset-azurerm"
 }
 
@@ -9,7 +9,7 @@ rule "terraform_comment_syntax" {
 }
 
 rule "terraform_deprecated_index" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_deprecated_interpolation" {
@@ -17,7 +17,7 @@ rule "terraform_deprecated_interpolation" {
 }
 
 rule "terraform_documented_outputs" {
-  enabled = false
+  enabled = true
 }
 
 rule "terraform_documented_variables" {
