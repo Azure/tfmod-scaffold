@@ -1,5 +1,5 @@
 ARG GOLANG_IMAGE_TAG=1.19
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
+FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
 RUN cd /src && \
@@ -7,7 +7,7 @@ RUN cd /src && \
     apt install -y zip npm  && \
     make tools
 
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as runner
+FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as runner
 ARG TERRAFORM_VERSION=1.2.7
 ARG TFLINT_AZURERM_VERSION=0.17.1
 ARG TFLINT_BASIC_EXT_VERSION=0.0.2
