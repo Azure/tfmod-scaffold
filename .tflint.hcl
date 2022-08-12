@@ -159,3 +159,15 @@ rule "terraform_resource_data_arg_layout" {
 rule "azurerm_arg_order" {
   enabled = true
 }
+
+rule "terraform_count_index_usage" {
+  enabled = true
+}
+
+rule "terraform_heredoc_usage" {
+  enabled = true
+}
+
+rule "terraform_versions_file" {
+  enabled = true
+}
