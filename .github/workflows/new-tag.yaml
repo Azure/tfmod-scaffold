@@ -7,7 +7,7 @@ on:
 
 env:
   APP_NAME: tfmodule-localrunner
-  DOCKERHUB_REPO: ${{ secrets.DOCKER_SERVER_URL }}/tfmodule-localrunner
+  DOCKERHUB_REPO: ${{ secrets.DOCKER_SERVER_URL }}/public/azterraform
 
 jobs:
   main:
