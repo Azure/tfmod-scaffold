@@ -47,6 +47,9 @@ lint: golint tflint
 checkovcheck:
 	@sh "$(CURDIR)/scripts/checkovcheck.sh"
 
+checkovplancheck:
+	@sh "$(CURDIR)/scripts/checkovplancheck.sh"
+
 fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
 
 pr-check: gencheck depscheck fmtcheck lint checkovcheck
