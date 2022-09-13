@@ -7,13 +7,13 @@ SET THIS FILE'S PATH TO $TFLINT_CONFIG ENVVIRONMENT VARIABLE.
 plugin "azurerm" {
   enabled = true
   version = "0.17.1"
-  source = "github.com/terraform-linters/tflint-ruleset-azurerm"
+  source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
 }
 
 plugin "basic-ext" {
-  enabled = true
-  version = "0.0.2"
-  source  = "github.com/DrikoldLun/tflint-ruleset-basic-ext"
+  enabled     = true
+  version     = "0.0.2"
+  source      = "github.com/DrikoldLun/tflint-ruleset-basic-ext"
   signing_key = <<-KEY
     -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -42,9 +42,9 @@ plugin "basic-ext" {
 }
 
 plugin "azurerm-ext" {
-  enabled = true
-  version = "0.0.1"
-  source  = "github.com/DrikoldLun/tflint-ruleset-azurerm-ext"
+  enabled     = true
+  version     = "0.0.1"
+  source      = "github.com/DrikoldLun/tflint-ruleset-azurerm-ext"
   signing_key = <<-KEY
     -----BEGIN PGP PUBLIC KEY BLOCK-----
 
@@ -165,6 +165,10 @@ rule "terraform_count_index_usage" {
 }
 
 rule "terraform_heredoc_usage" {
+  enabled = true
+}
+
+rule "terraform_sensitive_variable_no_default" {
   enabled = true
 }
 
