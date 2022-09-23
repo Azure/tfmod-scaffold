@@ -161,7 +161,7 @@ rule "azurerm_arg_order" {
 }
 
 rule "azurerm_resource_tag" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_count_index_usage" {
@@ -173,7 +173,7 @@ rule "terraform_heredoc_usage" {
 }
 
 rule "terraform_module_provider_declaration" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_required_providers_declaration" {

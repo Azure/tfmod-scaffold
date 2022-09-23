@@ -8,11 +8,11 @@ RUN cd /src && \
     make tools
 
 FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as runner
-ARG TERRAFORM_VERSION=1.2.8
-ARG CHECKOV_VERSION=2.1.204
-ARG TFLINT_AZURERM_VERSION=0.17.1
-ARG TFLINT_BASIC_EXT_VERSION=0.0.2
-ARG TFLINT_AZURERM_EXT_VERSION=0.0.1
+ARG TERRAFORM_VERSION=1.2.9
+ARG CHECKOV_VERSION=2.1.223
+ARG TFLINT_AZURERM_VERSION=0.18.0
+ARG TFLINT_BASIC_EXT_VERSION=0.0.10
+ARG TFLINT_AZURERM_EXT_VERSION=0.0.5
 ARG BUILDARCH
 ENV TFLINT_PLUGIN_DIR /tflint
 COPY --from=build $GOPATH/bin $GOPATH/bin
@@ -26,10 +26,10 @@ RUN curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform
     curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${BUILDARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${BUILDARCH}.zip && \
 	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/DrikoldLun/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/DrikoldLun/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
+    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
+    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/DrikoldLun/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/DrikoldLun/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
+    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
+    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
 	rm -f /tmp/terraform.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip

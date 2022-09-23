@@ -4,6 +4,10 @@ if [ -z "${TFLINT_CONFIG}" ]; then
 	export TFLINT_CONFIG=".tflint.hcl"
 fi
 
+if [ -z "${TFLINT_EXAMPLE_CONFIG}" ]; then
+	export TFLINT_EXAMPLE_CONFIG=".tflint_example.hcl"
+fi
+
 # Check gofmt
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
