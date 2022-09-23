@@ -85,7 +85,7 @@ gencheck:
 	@markdown-table-formatter README-generated.md
 	@echo "==> Comparing generated code to committed code..."
 	@diff -q README.md README-generated.md || \
-    		(echo; echo "Unexpected difference in generated document. Run 'make generate' to update the generated document and commit."; exit 1)
+    		(echo; echo "Unexpected difference in generated document. Run 'make pre-commit' to update the generated document and commit."; exit 1)
 
 test: fmtcheck
 	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
