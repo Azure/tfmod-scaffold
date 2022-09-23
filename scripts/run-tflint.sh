@@ -33,7 +33,7 @@ cd examples
 files=$(find * -type f -name "*.tf" | grep -v ".terraform")
 error=false
 for f in $files; do
-  tflint --config=../$TFLINT_CONFIG --disable-rule=terraform_documented_outputs --disable-rule=terraform_documented_variables --disable-rule=terraform_typed_variables "$f" || error=true
+  tflint --config=../$TFLINT_EXAMPLE_CONFIG "$f" || error=true
 done
 if ${error}; then
   echo "------------------------------------------------"

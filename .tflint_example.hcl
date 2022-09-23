@@ -85,11 +85,11 @@ rule "terraform_deprecated_interpolation" {
 }
 
 rule "terraform_documented_outputs" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_documented_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_module_pinned_source" {
@@ -117,7 +117,7 @@ rule "terraform_standard_module_structure" {
 }
 
 rule "terraform_typed_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_unused_declarations" {
