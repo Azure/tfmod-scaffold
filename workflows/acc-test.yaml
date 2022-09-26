@@ -9,12 +9,9 @@ on:
       - '.github/workflows/**'
       - '**.md'
 
-env:
-  MSI_ID: 'fe405819-42c4-4877-a28d-f96b88d7994b'
-
 jobs:
   acc-tests:
-    runs-on: [self-hosted, 1ES.Pool=AzureVerifiedTerraformModule]
+    runs-on: [self-hosted, 1ES.Pool=<YOUR_RUNNER_POOL>]
     environment:
       name: acctests
     steps:
@@ -24,13 +21,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: e2e test
         run: |
-          az login --identity --username $MSI_ID
+          az login --identity --username $MSI_ID > /dev/null
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           ARM_USE_MSI=true make e2e-test
       - name: version-upgrade test
         run: |
-          az login --identity --username $MSI_ID
+          az login --identity --username $MSI_ID > /dev/null
           export ARM_SUBSCRIPTION_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .id')
           export ARM_TENANT_ID=$(az login --identity --username $MSI_ID | jq -r '.[0] | .tenantId')
           ARM_USE_MSI=true make version-upgrade-test
