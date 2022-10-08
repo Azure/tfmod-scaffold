@@ -52,7 +52,10 @@ checkovplancheck:
 
 fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
 
-pr-check: gencheck depscheck fmtcheck lint checkovcheck
+pr-check: gencheck depscheck fmtcheck unit-test lint checkovcheck
+
+unit-test:
+	@sh "$(CURDIR)/scripts/run-unit-test.sh"
 
 e2e-test:
 	@sh "$(CURDIR)/scripts/run-e2e-test.sh"
