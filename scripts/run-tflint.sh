@@ -11,7 +11,7 @@ fi
 # Check gofmt
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
-files=$(find * -maxdepth 1 -type f -name "*.tf" | grep -v ".terraform")
+files=$(find * -maxdepth 0 -type f -name "*.tf" | grep -v ".terraform")
 error=false
 for f in $files; do
   tflint  --config=$TFLINT_CONFIG "$f" || error=true
