@@ -4,5 +4,6 @@ if [ ! -d "./test" ]; then
     exit 0
 fi
 cd ./test
+rm -rf vendor
 go mod tidy
 go mod vendor
