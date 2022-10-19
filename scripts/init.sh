@@ -4,6 +4,7 @@ if [ -z "${SKIP_INSTALL_GH_ACTION_WORKFLOW}" ]; then
   cp tfmod-scaffold/workflows/acc-test.yaml .github/workflows/acc-test.yaml
   cp tfmod-scaffold/workflows/pr-check.yaml .github/workflows/pr-check.yaml
   cp tfmod-scaffold/workflows/main-branch-push.yaml .github/workflows/main-branch-push.yaml
+  cp tfmod-scaffold/workflows/breaking-change-detect.yaml .github/workflows/breaking-change-detect.yaml
   mkdir -p .github/ISSUE_TEMPLATE
   cp tfmod-scaffold/workflows/ISSUE_TEMPLATE/Bug_Report.yml .github/ISSUE_TEMPLATE/Bug_Report.yml
   cp tfmod-scaffold/workflows/ISSUE_TEMPLATE/Feature_Request.yml .github/ISSUE_TEMPLATE/Feature_Request.yml
