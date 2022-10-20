@@ -12,7 +12,7 @@ plugin "azurerm" {
 
 plugin "basic-ext" {
   enabled     = true
-  version     = "0.1.1"
+  version     = "0.1.2"
   source      = "github.com/Azure/tflint-ruleset-basic-ext"
   signing_key = <<-KEY
 -----BEGIN PGP PUBLIC KEY BLOCK-----
