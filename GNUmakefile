@@ -1,15 +1,3 @@
-tools:
-	@echo "==> installing required tooling..."
-	go install github.com/katbyte/terrafmt@latest
-	go install golang.org/x/tools/cmd/goimports@latest
-	go install mvdan.cc/gofumpt@latest
-	go install github.com/yngveh/sprig-cli@latest
-	go install github.com/terraform-docs/terraform-docs@v0.16.0
-	go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@v0.0.22
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $$(go env GOPATH || $$GOPATH)/bin v1.49.0
-	export TFLINT_VERSION=v0.41.0 && curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
-	npm install markdown-table-formatter -g
-
 fmt:
 	@echo "==> Fixing source code with gofmt..."
 	# This logic should match the search logic in scripts/gofmtcheck.sh

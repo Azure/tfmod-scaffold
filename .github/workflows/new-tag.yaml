@@ -15,6 +15,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+      - name: Read version.env
+        id: readenv
+        uses: juliangruber/read-file-action@v1
+        with:
+          path: ./version.env
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
@@ -38,3 +43,5 @@ jobs:
           tags: |
             ${{ env.DOCKERHUB_REPO }}:latest
             ${{ env.DOCKERHUB_REPO }}:${{ env.APP_VERSION }}
+          build-args: |
+            ${{ steps.readenv.outputs.content }}

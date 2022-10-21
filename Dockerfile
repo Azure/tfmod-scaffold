@@ -1,22 +1,34 @@
 ARG GOLANG_IMAGE_TAG=1.19
 FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
+ARG TERRAFORM_DOCS_VERSION=v0.16.0
+ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
+ARG TFLINT_VERSION=v0.41.0
+ARG GOLANGCI_LINT_VERSION=v1.49.0
+ARG HCLEDIT_VERSION=v0.2.6
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
 RUN cd /src && \
     apt-get update && \
     apt-get install -y zip npm  && \
-    make tools
+    go install github.com/katbyte/terrafmt@latest && \
+    go install golang.org/x/tools/cmd/goimports@latest && \
+    go install mvdan.cc/gofumpt@latest && \
+    go install github.com/yngveh/sprig-cli@latest && \
+    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
+    go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
+    go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
+    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION
 
 FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as runner
-ARG TERRAFORM_VERSION=1.3.2
-ARG CHECKOV_VERSION=2.1.259
+ARG TERRAFORM_VERSION=1.3.3
+ARG CHECKOV_VERSION=2.1.282
 ARG TFLINT_AZURERM_VERSION=0.18.0
 ARG TFLINT_BASIC_EXT_VERSION=0.1.2
 ARG TFLINT_AZURERM_EXT_VERSION=0.1.1
 ARG BUILDARCH
 ENV TFLINT_PLUGIN_DIR /tflint
 COPY --from=build $GOPATH/bin $GOPATH/bin
-COPY --from=build /usr/local/bin/tflint /bin/tflint
 COPY .terraformrc /root/.terraformrc
 RUN apt-get update && apt-get install -y curl zip python3 pip coreutils jq nodejs npm && \
     npm install markdown-table-formatter -g && \
