@@ -5,6 +5,7 @@ ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
 ARG TFLINT_VERSION=v0.41.0
 ARG GOLANGCI_LINT_VERSION=v1.49.0
 ARG HCLEDIT_VERSION=v0.2.6
+ARG GOSEC_VERSION=v2.14.0
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
 RUN cd /src && \
@@ -17,6 +18,7 @@ RUN cd /src && \
     go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
+    go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION
 

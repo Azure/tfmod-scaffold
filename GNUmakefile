@@ -8,6 +8,10 @@ fumpt:
 	# This logic should match the search logic in scripts/gofmtcheck.sh
 	find . -name '*.go' | grep -v vendor | xargs gofumpt -w
 
+gosec:
+	@echo "==> Checking go code with gosec..."
+	gosec -tests ./...
+
 tffmt:
 	@echo "==> Formatting terraform code..."
 	terraform fmt -recursive
@@ -31,7 +35,7 @@ golint:
 tflint:
 	@sh "$(CURDIR)/scripts/run-tflint.sh"
 
-lint: golint tflint
+lint: golint tflint gosec
 
 checkovcheck:
 	@sh "$(CURDIR)/scripts/checkovcheck.sh"
