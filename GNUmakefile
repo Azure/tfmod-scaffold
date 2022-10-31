@@ -10,7 +10,7 @@ fumpt:
 
 gosec:
 	@echo "==> Checking go code with gosec..."
-	@sh "$(CURDIR)/scripts/gosec.sh"
+	cd test && gosec -tests ./...
 
 tffmt:
 	@echo "==> Formatting terraform code..."
