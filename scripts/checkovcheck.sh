@@ -5,4 +5,8 @@ if [ ! -z "$SKIP_CHECKOV" ]; then
 fi
 
 echo "==> Checking Terraform code with BridgeCrew Checkov"
-checkov --skip-framework dockerfile --skip-check CKV_GHA_3 --quiet -d ./
+if [ ! -z "$CHECKOV_CONFIG" ]; then
+	checkov --config-file $CHECKOV_CONFIG
+else
+	checkov --skip-framework dockerfile --skip-check CKV_GHA_3 --quiet -d ./
+fi
