@@ -8,7 +8,6 @@ if [ -z "${TFLINT_EXAMPLE_CONFIG}" ]; then
 	export TFLINT_EXAMPLE_CONFIG=".tflint_example.hcl"
 fi
 
-# Check gofmt
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
 files=$(find * -maxdepth 0 -type f -name "*.tf" | grep -v ".terraform")
@@ -32,6 +31,7 @@ fi
 cd examples
 files=$(find * -type f -name "*.tf" | grep -v ".terraform")
 error=false
+tflint --init --config=../$TFLINT_EXAMPLE_CONFIG
 for f in $files; do
   tflint --config=../$TFLINT_EXAMPLE_CONFIG "$f" || error=true
 done

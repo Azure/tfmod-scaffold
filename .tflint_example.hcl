@@ -6,7 +6,7 @@ SET THIS FILE'S PATH TO $TFLINT_CONFIG ENVVIRONMENT VARIABLE.
 
 plugin "azurerm" {
   enabled = true
-  version = "0.18.0"
+  version = "0.19.0"
   source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
 }
 
@@ -146,6 +146,10 @@ rule "terraform_documented_outputs" {
 
 rule "terraform_documented_variables" {
   enabled = false
+}
+
+rule "terraform_empty_list_equality" {
+  enabled = true
 }
 
 rule "terraform_module_pinned_source" {

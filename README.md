@@ -42,6 +42,7 @@ docker run --rm -v ${pwd}:/src -w /src localrunner sh scaffold-ci-scripts/sync-t
 | [Golangci-lint](https://github.com/golangci/golangci-lint)                                | ![](https://img.shields.io/github/v/tag/golangci/golangci-lint)                   |
 | [Terraform Module Breaking Detect](https://github.com/Azure/terraform-module-test-helper) | ![](https://img.shields.io/github/v/tag/Azure/terraform-module-test-helper)       |
 | [HCLEdit](https://github.com/minamijoyo/hcledit)                                          | ![](https://img.shields.io/github/v/tag/minamijoyo/hcledit)                       |
+| [GoSec](https://github.com/securego/gosec)                                                | ![](https://img.shields.io/github/v/tag/securego/gosec)                           |
 
 ## To Add CI Pipeline In New Azure Verified Terraform Module
 
