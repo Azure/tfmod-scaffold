@@ -11,5 +11,8 @@ fi
 cd ./test/upgrade
 go mod tidy
 go mod vendor
+if [ -z "$TEST_TIMEOUT" ]; then
+    export TEST_TIMEOUT=720m
+fi
 echo "==> Executing go test"
-go test -v -p=1 -timeout=240m ./...
+go test -v -p=1 -timeout=$TEST_TIMEOUT ./...
