@@ -35,9 +35,9 @@ ENV PATH=$PATH:/usr/local/go/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
 RUN yum update && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
-    wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go*.linux-amd64.tar.gz && \
-    rm go${GOLANG_IMAGE_TAG}.linux-amd64.tar.gz && \
+    wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${BUILDARCH}.tar.gz && \
+    tar -C /usr/local -xzf go*.linux-${BUILDARCH}.tar.gz && \
+    rm go${GOLANG_IMAGE_TAG}.linux-${BUILDARCH}.tar.gz && \
     npm install markdown-table-formatter -g && \
     mkdir -p $HOME/.terraform.d/plugin-cache
 RUN pip3 install --upgrade setuptools && \
