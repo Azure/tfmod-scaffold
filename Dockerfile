@@ -29,24 +29,24 @@ ARG CHECKOV_VERSION=2.1.282
 ARG TFLINT_AZURERM_VERSION=0.18.0
 ARG TFLINT_BASIC_EXT_VERSION=0.1.2
 ARG TFLINT_AZURERM_EXT_VERSION=0.1.1
-ARG BUILDARCH
+ARG TARGETARCH
 ENV TFLINT_PLUGIN_DIR /tflint
 ENV PATH=$PATH:/usr/local/go/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
 RUN yum update && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
-    wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${BUILDARCH}.tar.gz && \
-    tar -C /usr/local -xzf go*.linux-${BUILDARCH}.tar.gz && \
-    rm go${GOLANG_IMAGE_TAG}.linux-${BUILDARCH}.tar.gz && \
+    wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
+    tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
+    rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     npm install markdown-table-formatter -g && \
     mkdir -p $HOME/.terraform.d/plugin-cache
 RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
-    curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${BUILDARCH}.zip && \
+    curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip && \
 	unzip -q -d /bin/ /tmp/terraform.zip && \
-	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${BUILDARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${BUILDARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${BUILDARCH}.zip && \
+	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
+    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
+    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
 	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
     mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
     mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
