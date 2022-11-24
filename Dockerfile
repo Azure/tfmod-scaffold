@@ -34,7 +34,7 @@ ENV TFLINT_PLUGIN_DIR /tflint
 ENV PATH=$PATH:/usr/local/go/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
-RUN yum update && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
+RUN yum update -y && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
     wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
