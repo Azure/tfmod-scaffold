@@ -8,4 +8,5 @@ if [ -z "$TEST_TIMEOUT" ]; then
     export TEST_TIMEOUT=720m
 fi
 echo "==> go test"
+terraform version
 go test -v -p=1 -timeout=$TEST_TIMEOUT ./...
