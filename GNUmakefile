@@ -87,4 +87,7 @@ test: fmtcheck
 	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
 	@TEST=$(TEST) ./scripts/run-test.sh
 
+build-test:
+	@sh "$(CURDIR)/scripts/build-test.sh"
+
 .PHONY: fmt fmtcheck pr-check
