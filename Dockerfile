@@ -10,7 +10,7 @@ COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
 RUN cd /src && \
     apt-get update && \
-    apt-get install -y zip npm  && \
+    apt-get install -y zip  && \
     go install github.com/katbyte/terrafmt@latest && \
     go install golang.org/x/tools/cmd/goimports@latest && \
     go install mvdan.cc/gofumpt@latest && \
