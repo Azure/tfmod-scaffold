@@ -204,6 +204,10 @@ rule "terraform_output_separate" {
   enabled = true
 }
 
+rule "terraform_variable_nullable_false" {
+  enabled = true
+}
+
 rule "terraform_variable_order" {
   enabled = true
 }
@@ -225,7 +229,7 @@ rule "azurerm_resource_tag" {
 }
 
 rule "terraform_count_index_usage" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_heredoc_usage" {
