@@ -20,6 +20,7 @@ RUN cd /src && \
     go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
+    go install github.com/lonegunmanb/previousTag@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
