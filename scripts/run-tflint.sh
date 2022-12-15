@@ -2,10 +2,14 @@
 
 if [ -z "${TFLINT_CONFIG}" ]; then
 	export TFLINT_CONFIG=".tflint.hcl"
+elif [ -f ".tflint_alt.hcl" ]; then
+	export TFLINT_CONFIG=".tflint_alt.hcl"
 fi
 
 if [ -z "${TFLINT_EXAMPLE_CONFIG}" ]; then
 	export TFLINT_EXAMPLE_CONFIG=".tflint_example.hcl"
+elif [ -f ".tflint_example_alt.hcl" ]; then
+	export TFLINT_EXAMPLE_CONFIG=".tflint_example_alt.hcl"
 fi
 
 echo "==> Checking that code complies with tflint requirements..."
