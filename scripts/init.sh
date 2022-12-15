@@ -11,6 +11,7 @@ if [ -z "${SKIP_INSTALL_GH_ACTION_WORKFLOW}" ]; then
   cp tfmod-scaffold/workflows/ISSUE_TEMPLATE/config.yml .github/ISSUE_TEMPLATE/config.yml
 
   cp tfmod-scaffold/workflows/pull_request_template.md .github/pull_request_template.md
+  cp tfmod-scaffold/workflows/dependabot.yml .github/dependabot.yml
 else
 	echo "Skip workflow installation"
 fi
