@@ -1,11 +1,19 @@
 name: E2E Test
 on:
   workflow_call:
+    inputs:
+      environment:
+        type: string
+        required: true
+      runs-on:
+        type: string
+        required: true
 
 jobs:
   acc-tests:
     environment:
-      name: acctests
+      name: ${{ inputs.environment }}
+    runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v3
       - name: e2e test
