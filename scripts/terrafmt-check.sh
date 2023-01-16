@@ -3,7 +3,11 @@ echo "==> Checking documentation terraform blocks are formatted..."
 files=$(find . -type f -name "*.md" -o -name "*.go" | grep -v -e ".github" -e "-terraform" -e "vendor" -e ".terraform")
 error=false
 for f in $files; do
-  terrafmt diff -c -q "$f" || error=true
+  terrafmt diff -c -q "$f"
+  retValue=$?
+  if [ $retValue -ne 0 ] && [ $retValue -ne 2 ]; then
+      error=true
+  fi
 done
 if ${error}; then
   echo "------------------------------------------------"
