@@ -32,6 +32,7 @@ docker run --rm -v ${pwd}:/src -w /src localrunner sh scaffold-ci-scripts/sync-t
 
 | Name                                                                                      | Latest Version                                                                    |
 |-------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------|
+| [Go](https://github.com/golang/go)                			                            | ![](https://img.shields.io/github/v/tag/golang/go)			                    |
 | [TFLint](https://github.com/terraform-linters/tflint)                                     | ![](https://img.shields.io/github/v/tag/terraform-linters/tflint)                 |
 | [TFLint AzureRM Ruleset](https://github.com/terraform-linters/tflint-ruleset-azurerm)     | ![](https://img.shields.io/github/v/tag/terraform-linters/tflint-ruleset-azurerm) |
 | [TFLint Basic Ruleset Extension](https://github.com/Azure/tflint-ruleset-basic-ext)       | ![](https://img.shields.io/github/v/tag/Azure/tflint-ruleset-basic-ext)           |

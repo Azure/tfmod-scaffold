@@ -32,12 +32,14 @@ ARG TFLINT_BASIC_EXT_VERSION=0.1.2
 ARG TFLINT_AZURERM_EXT_VERSION=0.1.1
 ARG TARGETARCH
 ENV TFLINT_PLUGIN_DIR /tflint
-ENV PATH=$PATH:/usr/local/go/bin
+ENV GOROOT=/root/go
+ENV GOPATH=/usr/local/go
+ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
     wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
-    tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
+    tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     npm install markdown-table-formatter -g && \
     mkdir -p $HOME/.terraform.d/plugin-cache
