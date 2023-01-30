@@ -26,6 +26,7 @@ RUN cd /src && \
 FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
+ARG TERRAGRUNT_VERSION=v0.43.0
 ARG CHECKOV_VERSION=2.1.282
 ARG TFLINT_AZURERM_VERSION=0.18.0
 ARG TFLINT_BASIC_EXT_VERSION=0.1.2
@@ -47,6 +48,8 @@ RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
     curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip && \
 	unzip -q -d /bin/ /tmp/terraform.zip && \
+    curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
+    chmod +x /bin/terragrunt && \
 	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \

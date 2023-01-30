@@ -39,6 +39,7 @@ docker run --rm -v ${pwd}:/src -w /src localrunner sh scaffold-ci-scripts/sync-t
 | [TFLint AzureRM Ruleset Extension](https://github.com/Azure/tflint-ruleset-azurerm-ext)   | ![](https://img.shields.io/github/v/tag/Azure/tflint-ruleset-azurerm-ext)         |
 | [BridgeCrew Checkov](https://github.com/bridgecrewio/checkov)                             | ![](https://img.shields.io/github/v/tag/bridgecrewio/checkov)                     |
 | [HashiCorp Terraform](https://github.com/hashicorp/terraform)                             | ![](https://img.shields.io/github/v/tag/hashicorp/terraform)                      |
+| [GruntWork TerraGrunt](https://github.com/gruntwork-io/terragrunt)                        | ![](https://img.shields.io/github/v/tag/gruntwork-io/terragrunt)                  |
 | [Terraform Docs](https://github.com/terraform-docs/terraform-docs)                        | ![](https://img.shields.io/github/v/tag/terraform-docs/terraform-docs)            |
 | [Golangci-lint](https://github.com/golangci/golangci-lint)                                | ![](https://img.shields.io/github/v/tag/golangci/golangci-lint)                   |
 | [Terraform Module Breaking Detect](https://github.com/Azure/terraform-module-test-helper) | ![](https://img.shields.io/github/v/tag/Azure/terraform-module-test-helper)       |
