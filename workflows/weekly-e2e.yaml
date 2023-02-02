@@ -28,5 +28,5 @@ jobs:
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: 'Update TestRecord'
+          message: 'Update TestVersionSnapshot'
           branch: ${{ env.default_branch }}
