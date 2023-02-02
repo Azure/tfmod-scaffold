@@ -1,4 +1,4 @@
-name: Update Changelog
+name: pr-merged
 on:
   workflow_call:
 
@@ -25,6 +25,7 @@ jobs:
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           pr: ${{ steps.PR.outputs.number }}
+          workflow: acc-test.yaml
           name: TestRecord-${{ steps.PR.outputs.number }}
           path: TestRecord
           if_no_artifact_found: ignore
