@@ -15,8 +15,8 @@ for f in $folders; do
     touch ../examples/$d/TestRecord.md
   fi
 
-  cat ../quickstart/$d/TestRecord.md >> $d/TestRecord.md.tmp
-  cat $d/TestRecord.md.tmp > ../quickstart/$d/TestRecord.md
+  cat ../examples/$d/TestRecord.md >> $d/TestRecord.md.tmp
+  cat $d/TestRecord.md.tmp > ../examples/$d/TestRecord.md
 done
 
 cd ..
