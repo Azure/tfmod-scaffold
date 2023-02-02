@@ -32,11 +32,6 @@ jobs:
       - name: Update
         run: |
           sh scripts/update-test-record.sh
-      - name: Fix Permission
-        run: |
-          cd .git
-          sudo chmod -R a+rwX .
-          sudo find . -type d -exec chmod g+s '{}' +
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
