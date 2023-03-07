@@ -1,3 +1,3 @@
 #!/bin/bash
-chown -R $USER ./
+sudo chown -R $USER ./
 sh scripts/update-test-record.sh
