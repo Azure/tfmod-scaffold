@@ -1,3 +1,3 @@
 #!/bin/bash
-sudo chown -R $USER ./
-sh scripts/update-test-record.sh
+git config --global --add safe.directory /src
+sudo sh scripts/update-test-record.sh
