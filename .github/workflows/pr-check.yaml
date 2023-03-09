@@ -5,10 +5,6 @@ on:
 jobs:
   prepr-check:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: read
-      security-events: write
     steps:
       - name: checkout
         uses: actions/checkout@v3
