@@ -42,8 +42,7 @@ RUN yum update -y && yum install -y yum ca-certificates zip unzip jq nodejs pyth
     wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
-    npm install markdown-table-formatter -g && \
-    mkdir -p $HOME/.terraform.d/plugin-cache
+    npm install markdown-table-formatter -g
 RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
     curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip && \
