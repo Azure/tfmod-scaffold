@@ -4,6 +4,7 @@ on:
 
 jobs:
   update-changelog:
+    name: update-changelog
     runs-on: ubuntu-latest
     steps:
       - name: get-default-branch

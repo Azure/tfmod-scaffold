@@ -6,6 +6,14 @@ jobs:
   pr-merged:
     runs-on: ubuntu-latest
     steps:
+      - name: Wait for update-changelog to succeed
+        uses: lewagon/wait-on-check-action@v1.3.1
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'update-changelog'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+          allowed-conclusions: success,skipped,cancelled
       - name: get-default-branch
         run: |
           branch=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY" | jq -r '.default_branch')
