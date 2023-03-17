@@ -2,8 +2,6 @@ name: Update Changelog
 on:
   workflow_call:
 
-permissions: write-all
-
 jobs:
   update-changelog:
     name: update-changelog
