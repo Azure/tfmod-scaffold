@@ -4,8 +4,7 @@ mkdir -p .github/workflows
 cp tfmod-scaffold/workflows/acc-test.yaml .github/workflows/acc-test.yaml
 cp tfmod-scaffold/workflows/pr-check.yaml .github/workflows/pr-check.yaml
 cp tfmod-scaffold/workflows/breaking-change-detect.yaml .github/workflows/breaking-change-detect.yaml
-cp tfmod-scaffold/workflows/update-changelog.yaml .github/workflows/update-changelog.yaml
-cp tfmod-scaffold/workflows/pr-merged.yaml .github/workflows/pr-merged.yaml
+cp tfmod-scaffold/workflows/post-push.yaml .github/workflows/post-push.yaml
 cp tfmod-scaffold/workflows/weekly-e2e.yaml .github/workflows/weekly-e2e.yaml
 mkdir -p .github/ISSUE_TEMPLATE
 cp tfmod-scaffold/workflows/ISSUE_TEMPLATE/Bug_Report.yml .github/ISSUE_TEMPLATE/Bug_Report.yml

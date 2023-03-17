@@ -1,0 +1,59 @@
+name: Post Push Update
+on:
+  workflow_call:
+
+jobs:
+  post-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: get-default-branch
+        run: |
+          branch=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY" | jq -r '.default_branch')
+          echo "default_branch=$branch" >> $GITHUB_ENV
+      - uses: 8BitJonny/gh-get-current-pr@2.1.0
+        id: PR
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ env.default_branch }}
+      - name: init
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make generate
+      - name: update-changelog
+        run: |
+          MAJOR_VERSION=$(ls | grep CHANGELOG |  cut -d'-' -f 2 | cut -f 1 -d '.' |  grep v | sort -V -r | head -n 1)
+          if [ -z "$MAJOR_VERSION" ]; then
+            MAJOR_VERSION=0
+          else
+            MAJOR_VERSION=${MAJOR_VERSION#"v"}
+            MAJOR_VERSION=$((MAJOR_VERSION+1))
+          fi
+          
+          previous_tag=$(docker run -e MAJOR_VERSION=$MAJOR_VERSION --rm mcr.microsoft.com/azterraform:latest previousTag ${{ github.repository_owner }} ${{ github.event.repository.name }} $MAJOR_VERSION.0.0)
+          if [ -z $previous_tag ]; then
+            docker run --rm -v $(pwd):/src -w /src githubchangeloggenerator/github-changelog-generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} -t ${{ secrets.GITHUB_TOKEN }} --no-issues --no-compare-link
+          else
+            docker run --rm -v $(pwd):/src -w /src githubchangeloggenerator/github-changelog-generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} -t ${{ secrets.GITHUB_TOKEN }} --no-issues --no-compare-link --since-tag=$previous_tag
+          fi
+          sudo chmod -R ugo+rwX .
+      - name: Download TestVersionSnapshot
+        id: download-test-version-snapshot-artifact
+        uses: dawidd6/action-download-artifact@v2
+        if: ${{ steps.PR.outputs.number != '' }}
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          pr: ${{ steps.PR.outputs.number }}
+          workflow: acc-test.yaml
+          name: TestRecord-${{ steps.PR.outputs.number }}
+          path: TestRecord
+          if_no_artifact_found: ignore
+      - name: Update Test Record
+        if: ${{ steps.PR.outputs.number != '' }}
+        run: |
+          sh scripts/update-test-record.sh
+      - name: Commit & Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: 'Auto update'
+          branch: ${{ env.default_branch }}
