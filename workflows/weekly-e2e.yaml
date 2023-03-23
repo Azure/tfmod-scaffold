@@ -4,6 +4,9 @@ on:
   schedule:
     - cron: '0 0 * * 0'
 
+permissions:
+  contents: write
+
 jobs:
   full-e2e-check:
     runs-on: [self-hosted, 1ES.Pool=<YOUR_REPO_NAME>]

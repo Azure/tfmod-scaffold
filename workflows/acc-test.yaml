@@ -10,6 +10,10 @@ on:
       - '**.md'
       - '**/go.mod'
 
+permissions:
+  contents: write
+  pull-requests: read
+
 jobs:
   acc-tests:
     runs-on: [self-hosted, 1ES.Pool=<YOUR_REPO_NAME>]

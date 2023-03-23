@@ -10,6 +10,10 @@ on:
       - '**.md'
       - '**/go.mod'
 
+permissions:
+  contents: read
+  pull-requests: read
+
 jobs:
   prepr-check:
     uses: Azure/tfmod-scaffold/.github/workflows/pr-check.yaml@main
