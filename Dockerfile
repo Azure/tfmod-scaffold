@@ -6,6 +6,8 @@ ARG TFLINT_VERSION=v0.41.0
 ARG GOLANGCI_LINT_VERSION=v1.49.0
 ARG HCLEDIT_VERSION=v0.2.6
 ARG GOSEC_VERSION=v2.14.0
+ARG YOR_VERSION=0.1.171
+ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
 RUN cd /src && \
@@ -21,7 +23,9 @@ RUN cd /src && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     go install github.com/lonegunmanb/previousTag@latest && \
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
+    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
+    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
