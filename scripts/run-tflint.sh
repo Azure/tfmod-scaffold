@@ -14,11 +14,8 @@ fi
 
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
-files=$(find * -maxdepth 0 -type f -name "*.tf" | grep -v ".terraform")
 error=false
-for f in $files; do
-  tflint  --config=$TFLINT_CONFIG "$f" || error=true
-done
+tflint --config=$TFLINT_CONFIG --chdir=$(pwd)/ || error=true
 if ${error}; then
   echo "------------------------------------------------"
   echo ""
@@ -33,11 +30,11 @@ if [ ! -d "examples" ]; then
 fi
 
 cd examples
-files=$(find * -type f -name "*.tf" | grep -v ".terraform")
+dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
 error=false
-tflint --init --config=../$TFLINT_EXAMPLE_CONFIG
-for f in $files; do
-  tflint --config=../$TFLINT_EXAMPLE_CONFIG "$f" || error=true
+tflint --init --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG
+for d in $dirs; do
+  tflint --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG --chdir=$(pwd)/./$d || error=true
 done
 if ${error}; then
   echo "------------------------------------------------"

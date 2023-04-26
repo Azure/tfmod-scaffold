@@ -74,6 +74,9 @@ generate:
 gencheck:
 	@sh "$(CURDIR)/scripts/gencheck.sh"
 
+yor-tag:
+	@sh "$(CURDIR)/scripts/yor-tag.sh"
+
 test: fmtcheck
 	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
 	@TEST=$(TEST) ./scripts/run-test.sh

@@ -23,9 +23,14 @@ RUN cd /src && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     go install github.com/lonegunmanb/previousTag@latest && \
+    go install github.com/magodo/hclgrep@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
-    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
-    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
+    go install github.com/lonegunmanb/yorbox@latest && \
+#    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
+#    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
+    git clone https://github.com/lonegunmanb/yor.git && \
+    cd yor && git checkout special && \
+    go install
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
@@ -43,7 +48,7 @@ ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git diffutils build-essential && \
-    wget https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
+    wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     npm install markdown-table-formatter -g

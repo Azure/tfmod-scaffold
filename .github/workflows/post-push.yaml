@@ -51,6 +51,10 @@ jobs:
         if: ${{ steps.PR.outputs.number != '' }}
         run: |
           sh scripts/update-test-record.sh
+      - name: Yor Tag
+        id: yor-tag
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yortag
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
