@@ -54,7 +54,7 @@ jobs:
       - name: Yor Tag
         id: yor-tag
         run: |
-          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yortag
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yor-tag
       - name: Terraform Validate
         id: terraform-validate
         run: |
