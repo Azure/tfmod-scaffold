@@ -55,6 +55,10 @@ jobs:
         id: yor-tag
         run: |
           docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yortag
+      - name: Terraform Validate
+        id: terraform-validate
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest sh -c "make pre-commit && make pr-check"
       - name: Commit & Push changes
         uses: actions-js/push@master
         with:
