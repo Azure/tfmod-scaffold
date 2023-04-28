@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-tracing_tags_enabled=$(hclgrep -x 'variable tracing_tags_enabled {@*_}')
+tracing_tags_enabled=$(hclgrep -x 'variable "tracing_tags_enabled" {@*_}' variables.tf)
 
 if [ -z "$tracing_tags_enabled" ]; then
     echo "==> No tracing_tags_enabled variable found, skip tagging"
