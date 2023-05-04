@@ -7,6 +7,7 @@ ARG GOLANGCI_LINT_VERSION=v1.49.0
 ARG HCLEDIT_VERSION=v0.2.6
 ARG GOSEC_VERSION=v2.14.0
 ARG YOR_VERSION=0.1.171
+ARG YORBOX_VERSION=latest
 ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
@@ -25,7 +26,8 @@ RUN cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
-    go install github.com/lonegunmanb/yorbox@latest && \
+    go install github.com/lonegunmanb/azure-verified-module-fix/avmfix@latest && \
+    go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
 #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
 #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
     git clone https://github.com/lonegunmanb/yor.git && \
