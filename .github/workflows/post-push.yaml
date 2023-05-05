@@ -56,6 +56,10 @@ jobs:
         id: yor-tag
         run: |
           docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yor-tag
+      - name: AutoFix
+        id: autofix
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make autofix
       - name: Terraform Validate
         id: terraform-validate
         run: |

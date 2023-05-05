@@ -77,6 +77,9 @@ gencheck:
 yor-tag:
 	@sh "$(CURDIR)/scripts/yor-tag.sh"
 
+autofix:
+	@sh "$(CURDIR)/scripts/autofix.sh"
+
 test: fmtcheck
 	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
 	@TEST=$(TEST) ./scripts/run-test.sh
