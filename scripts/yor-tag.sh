@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 tracing_tags_enabled=$(hclgrep -x 'variable "tracing_tags_enabled" {@*_}' variables.tf)
+tracing_tags_prefix=$(hclgrep -x 'variable "tracing_tags_prefix" {@*_}' variables.tf)
 
-if [ -z "$tracing_tags_enabled" ]; then
-    echo "==> No tracing_tags_enabled variable found, skip tagging"
+if [ -z "$tracing_tags_enabled" ] || [ -z "$tracing_tags_prefix" ]; then
+    echo "==> No tracing_tags_enabled or tracing_tags_prefix variable found, skip tagging"
     exit 0
 fi
 
@@ -16,4 +17,4 @@ if ${error}; then
   echo ""
   exit 1
 fi
-yorbox -dir "$(pwd)" -tagsPrefix avm_ -toggleName tracing_tags_enabled
+yorbox -dir "$(pwd)" -tagsPrefix avm_ -toggleName tracing_tags_enabled --boxTemplate '/*<box>*/ (var.{{ .toggleName }} ? { for k,v in /*</box>*/ { yor_trace = 123 } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {} ) /*</box>*/'
