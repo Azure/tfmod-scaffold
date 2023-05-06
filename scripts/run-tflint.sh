@@ -31,16 +31,20 @@ fi
 
 cd examples
 dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
-error=false
+has_error=false
 tflint --init --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG
 for d in $dirs; do
+  error=false
   tflint --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG --chdir=$(pwd)/./$d || error=true
+  if ${error}; then
+    has_error=true
+    echo "------------------------------------------------"
+    echo ""
+    echo "The $d contain terraform blocks that does not complies with tflint requirements."
+    echo ""
+  fi
 done
-if ${error}; then
-  echo "------------------------------------------------"
-  echo ""
-  echo "The preceding files contain terraform blocks that does not complies with tflint requirements."
-  echo ""
+if ${has_error}; then
   exit 1
 fi
 exit 0
