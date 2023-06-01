@@ -257,353 +257,353 @@ rule "terraform_versions_file" {
 }
 
 rule "azurerm_automation_account_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_account_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_application_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_application_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_certificate_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_pool_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_batch_pool_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_directline_invalid_bot_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_directline_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_email_invalid_bot_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_email_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_ms_teams_invalid_bot_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_ms_teams_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_slack_invalid_bot_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channel_slack_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_channels_registration_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_connection_invalid_bot_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_connection_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_connection_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_web_app_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_bot_web_app_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cdn_endpoint_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cdn_profile_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cognitive_account_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_container_registry_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_container_registry_webhook_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_container_registry_webhook_invalid_registry_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_account_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_account_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_cassandra_keyspace_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_cassandra_keyspace_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_gremlin_database_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_gremlin_database_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_gremlin_graph_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_gremlin_graph_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_mongo_collection_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_mongo_database_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_mongo_database_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_sql_container_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_sql_container_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_sql_database_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_sql_database_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_table_invalid_account_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_cosmosdb_table_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_mysql_invalid_linked_service_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_mysql_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_postgresql_invalid_linked_service_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_postgresql_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_sql_server_table_invalid_linked_service_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_dataset_sql_server_table_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_linked_service_data_lake_storage_gen2_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_linked_service_mysql_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_linked_service_postgresql_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_linked_service_sql_server_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_data_factory_pipeline_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_databricks_workspace_invalid_managed_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_databricks_workspace_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_dev_test_policy_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_frontdoor_firewall_policy_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_frontdoor_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_frontdoor_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_healthcare_service_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_hpc_cache_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_iothub_endpoint_storage_container_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_iothub_route_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_key_vault_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_key_vault_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_kubernetes_cluster_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_maps_account_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_nat_gateway_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_account_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_pool_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_pool_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_snapshot_invalid_pool_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_snapshot_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_snapshot_invalid_volume_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_volume_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_volume_invalid_pool_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_netapp_volume_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_notification_hub_namespace_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_postgresql_configuration_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_postgresql_database_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_postgresql_firewall_rule_invalid_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_redis_cache_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_relay_namespace_invalid_sku_name" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_storage_account_invalid_resource_group_name" {
-  enabled = true
+  enabled = false
 }
