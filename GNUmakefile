@@ -57,8 +57,7 @@ version-upgrade-test:
 	@sh "$(CURDIR)/scripts/version-upgrade-test.sh"
 
 terrafmt:
-	@echo "==> Fixing test and document terraform blocks code with terrafmt..."
-	@find . -name '*.md' -o -name "*.go" | grep -v -e '.github' -e '.terraform' -e 'vendor' | while read f; do terrafmt fmt -f $$f; done
+	@sh "$(CURDIR)/scripts/terrafmt.sh"
 
 pre-commit: tffmt terrafmt depsensure fmt fumpt generate
 
