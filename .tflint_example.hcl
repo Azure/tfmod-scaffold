@@ -249,7 +249,7 @@ rule "terraform_required_version_declaration" {
 }
 
 rule "terraform_sensitive_variable_no_default" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_versions_file" {
