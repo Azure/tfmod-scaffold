@@ -66,6 +66,7 @@ jobs:
           docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest sh -c "make pre-commit && make pr-check"
       - name: Commit & Push changes
         uses: actions-js/push@master
+        if: ${{ github.repository != 'Azure/terraform-verified-module' }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           message: 'Auto update'
