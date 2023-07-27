@@ -1,4 +1,4 @@
-ARG GOLANG_IMAGE_TAG=1.19
+ARG GOLANG_IMAGE_TAG=1.20
 FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
 ARG TERRAFORM_DOCS_VERSION=v0.16.0
 ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
@@ -14,6 +14,7 @@ COPY scripts /src/scripts
 RUN cd /src && \
     apt-get update && \
     apt-get install -y zip  && \
+    export CGO_ENABLED=0 && \
     go install github.com/katbyte/terrafmt@latest && \
     go install golang.org/x/tools/cmd/goimports@latest && \
     go install mvdan.cc/gofumpt@latest && \
