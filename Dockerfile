@@ -50,7 +50,9 @@ ENV GOPATH=/usr/local/go
 ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
-RUN yum update -y && yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git less diffutils build-essential openssh-server && \
+RUN yum update -y && \
+    yum install -y yum ca-certificates zip unzip jq nodejs python3-pip make git less diffutils build-essential openssh-server && \
+    tdnf install moby-cli ca-certificates -y && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
