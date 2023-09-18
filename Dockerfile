@@ -76,6 +76,7 @@ RUN pip3 install --upgrade setuptools && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
 	rm -f /tmp/terraform.zip && \
+    rm -f /tmp/packer.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip && \
     rm -f /tmp/tflint-ruleset-azurerm-ext.zip && \
     rm -f /tmp/tflint-ruleset-basic-ext.zip && \
