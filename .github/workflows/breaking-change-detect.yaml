@@ -10,7 +10,7 @@ jobs:
     if: ${{ github.event.workflow_run.event == 'pull_request' }}
     steps:
       - name: 'Download change artifact'
-        uses: dawidd6/action-download-artifact@v2
+        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
         with:
           github_token: "${{ secrets.GITHUB_TOKEN }}"
           run_id: ${{ github.event.workflow_run.id }}
@@ -19,7 +19,7 @@ jobs:
           if_no_artifact_found: ignore
       - name: Check change existence
         id: check_change
-        uses: andstor/file-existence-action@v1
+        uses: andstor/file-existence-action@f02338908d150e00a4b8bebc2dad18bd9e5229b0 # v1.1.0
         with:
           files: "change"
       - name: 'Comment on PR'
