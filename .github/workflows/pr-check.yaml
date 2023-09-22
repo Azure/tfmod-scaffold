@@ -14,7 +14,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 #3.5.0
         with:
-          go-version: 1.21.1
+          go-version: 1.20.7
       - name: Initialize CodeQL
         uses: github/codeql-action/init@6a28655e3dcb49cb0840ea372fd6d17733edd8a4 #v2.21.8
         with:
