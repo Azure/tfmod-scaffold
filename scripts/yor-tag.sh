@@ -17,4 +17,4 @@ if ${error}; then
   echo ""
   exit 1
 fi
-yorbox -dir "$(pwd)" -tagsPrefix avm_ -toggleName tracing_tags_enabled --boxTemplate '/*<box>*/ (var.{{ .toggleName }} ? { for k,v in /*</box>*/ { yor_trace = 123 } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {} ) /*</box>*/'
+yorbox -dir "$(pwd)" -tagsPrefix avm_ -toggleName tracing_tags_enabled -ignoreResourceType modtm_telemetry --boxTemplate '/*<box>*/ (var.{{ .toggleName }} ? { for k,v in /*</box>*/ { yor_trace = 123 } /*<box>*/ : replace(k, "avm_", var.tracing_tags_prefix) => v } : {} ) /*</box>*/'
