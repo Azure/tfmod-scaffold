@@ -57,7 +57,9 @@ RUN yum update -y && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
-    npm install markdown-table-formatter -g
+    npm install markdown-table-formatter -g && \
+    git config --global user.email "tfmod442916@users.noreply.github.com" && \
+    git config --global user.name "github-actions[bot]"
 RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
     curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip && \

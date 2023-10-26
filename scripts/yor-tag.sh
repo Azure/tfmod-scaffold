@@ -15,7 +15,7 @@ if [ -f "module_telemetry.tf" ]; then
 	make autofix
 	git config --global --add safe.directory $(pwd)
 	git add module_telemetry.tf
-  git commit --author="github-actions[bot] <tfverifiedmod@microsoft.com>" -m "Auto update for yor tags"
+  git commit -m "Auto update for yor tags"
 fi
 
 error=false
