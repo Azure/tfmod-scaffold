@@ -20,6 +20,10 @@ jobs:
       - name: init
         run: |
           docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make generate
+      - name: Yor Tag
+        id: yor-tag
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yor-tag
       - name: update-changelog
         run: |
           MAJOR_VERSION=$(ls | grep CHANGELOG |  cut -d'-' -f 2 | cut -f 1 -d '.' |  grep v | sort -V -r | head -n 1)
@@ -52,10 +56,6 @@ jobs:
         if: ${{ steps.PR.outputs.number != '' }}
         run: |
           sh scripts/update-test-record.sh
-      - name: Yor Tag
-        id: yor-tag
-        run: |
-          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make yor-tag
       - name: AutoFix
         id: autofix
         run: |

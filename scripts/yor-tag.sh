@@ -8,6 +8,12 @@ if [ -z "$tracing_tags_enabled" ] || [ -z "$tracing_tags_prefix" ]; then
     exit 0
 fi
 
+if [ -f "module_telemetry.tf" ]; then
+	cat module_telemetry.tf | hcledit attribute rm resource.modtm_telemetry.this.nonce | hcledit attribute append resource.modtm_telemetry.this.nonce $RANDOM | tee module_telemetry.tf
+	git add module_telemetry.tf
+  git commit --author="github-actions[bot] <>" -m "Auto update for yor tags"
+fi
+
 error=false
 yor tag -d "$(pwd)" --skip-dirs "$(pwd)/examples" --skip-tags git_last_modified_by,git_modifiers --tag-prefix avm_ --parsers Terraform || error=true
 if ${error}; then
