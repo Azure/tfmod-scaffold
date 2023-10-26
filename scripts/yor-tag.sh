@@ -9,7 +9,9 @@ if [ -z "$tracing_tags_enabled" ] || [ -z "$tracing_tags_prefix" ]; then
 fi
 
 if [ -f "module_telemetry.tf" ]; then
-	cat module_telemetry.tf | hcledit attribute rm resource.modtm_telemetry.this.nonce | hcledit attribute append resource.modtm_telemetry.this.nonce $RANDOM | tee module_telemetry.tf
+	cat module_telemetry.tf | hcledit attribute rm resource.modtm_telemetry.this.nonce | hcledit attribute append resource.modtm_telemetry.this.nonce $RANDOM | tee module_telemetry.tf.bak
+	cat module_telemetry.tf.bak > module_telemetry.tf
+	rm module_telemetry.tf.bak
 	make autofix
 	git add module_telemetry.tf
   git commit --author="github-actions[bot] <>" -m "Auto update for yor tags"
