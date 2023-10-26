@@ -13,6 +13,7 @@ if [ -f "module_telemetry.tf" ]; then
 	cat module_telemetry.tf.bak > module_telemetry.tf
 	rm module_telemetry.tf.bak
 	make autofix
+	git config --global --add safe.directory $(pwd)
 	git add module_telemetry.tf
   git commit --author="github-actions[bot] <>" -m "Auto update for yor tags"
 fi
