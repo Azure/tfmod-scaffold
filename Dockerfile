@@ -53,7 +53,7 @@ COPY --from=build /go/bin /usr/local/go/bin
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
     yum install -y yum ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server && \
-    tdnf install moby-cli ca-certificates -y && \
+    tdnf install moby-cli ca-certificates azure-cli -y && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
