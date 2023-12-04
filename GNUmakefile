@@ -1,11 +1,11 @@
+REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/scripts"
+
 fmt:
 	@echo "==> Fixing source code with gofmt..."
-	# This logic should match the search logic in scripts/gofmtcheck.sh
 	find . -name '*.go' | grep -v vendor | xargs gofmt -s -w
 
 fumpt:
 	@echo "==> Fixing source code with Gofumpt..."
-	# This logic should match the search logic in scripts/gofmtcheck.sh
 	find . -name '*.go' | grep -v vendor | xargs gofumpt -w
 
 gosec:
@@ -17,73 +17,73 @@ tffmt:
 	terraform fmt -recursive
 
 tffmtcheck:
-	@sh "$(CURDIR)/scripts/terraform-fmt.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/terraform-fmt.sh" | sh -s
 
 tfvalidatecheck:
-	@sh "$(CURDIR)/scripts/terraform-validate.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/terraform-validate.sh" | sh -s
 
 terrafmtcheck:
-	@sh "$(CURDIR)/scripts/terrafmt-check.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/terrafmt-check.sh" | sh -s
 
 gofmtcheck:
-	@sh "$(CURDIR)/scripts/gofmtcheck.sh"
-	@sh "$(CURDIR)/scripts/fumptcheck.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/gofmtcheck.sh" | sh -s
+	curl -sSL "$(REMOTE_SCRIPT)/fumptcheck.sh" | sh -s
 
 golint:
-	@sh "$(CURDIR)/scripts/run-golangci-lint.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/run-golangci-lint.sh" | sh -s
 
 tflint:
-	@sh "$(CURDIR)/scripts/run-tflint.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/run-tflint.sh" | sh -s
 
 lint: golint tflint gosec
 
 checkovcheck:
-	@sh "$(CURDIR)/scripts/checkovcheck.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/checkovcheck.sh" | sh -s
 
 checkovplancheck:
-	@sh "$(CURDIR)/scripts/checkovplancheck.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/checkovplancheck.sh" | sh -s
 
 fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
 
 pr-check: depscheck fmtcheck lint unit-test checkovcheck
 
 unit-test:
-	@sh "$(CURDIR)/scripts/run-unit-test.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | sh -s
 
 e2e-test:
-	@sh "$(CURDIR)/scripts/run-e2e-test.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/run-e2e-test.sh" | sh -s
 
 version-upgrade-test:
-	@sh "$(CURDIR)/scripts/version-upgrade-test.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/version-upgrade-test.sh" | sh -s
 
 terrafmt:
-	@sh "$(CURDIR)/scripts/terrafmt.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | sh -s
 
 pre-commit: tffmt terrafmt depsensure fmt fumpt generate
 
 depsensure:
-	@sh "$(CURDIR)/scripts/deps-ensure.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/deps-ensure.sh" | sh -s
 
 depscheck:
-	@sh "$(CURDIR)/scripts/deps-check.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/deps-check.sh" | sh -s
 
 generate:
-	@sh "$(CURDIR)/scripts/generate.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/generate.sh" | sh -s
 
 gencheck:
-	@sh "$(CURDIR)/scripts/gencheck.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/gencheck.sh" | sh -s
 
 yor-tag:
-	@sh "$(CURDIR)/scripts/yor-tag.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/yor-tag.sh" | sh -s
 
 autofix:
-	@sh "$(CURDIR)/scripts/autofix.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/autofix.sh" | sh -s
 
 test: fmtcheck
 	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
 	@TEST=$(TEST) ./scripts/run-test.sh
 
 build-test:
-	@sh "$(CURDIR)/scripts/build-test.sh"
+	curl -sSL "$(REMOTE_SCRIPT)/build-test.sh" | sh -s
 
 .PHONY: fmt fmtcheck pr-check
