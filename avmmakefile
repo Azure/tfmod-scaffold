@@ -1,0 +1,87 @@
+REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
+
+docs:
+	curl -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | sh -s
+
+docscheck:
+	curl -sSL "$(REMOTE_SCRIPT)/docs-check.sh" | sh -s
+
+fmt: gofmt
+	@echo "==> Fixing Terraform code with terraform fmt..."
+	terraform fmt -recursive
+	@echo "==> Fixing embedded Terraform with terrafmt..."
+	find . | egrep ".md|.tf" | grep -v README.md | sort | while read f; do terrafmt fmt $$f; done
+
+gofmt:
+	@echo "==> Fixing source code with gofmt..."
+	find . -name '*.go' | grep -v vendor | xargs gofmt -s -w
+
+tools:
+	go install github.com/katbyte/terrafmt@latest
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install mvdan.cc/gofumpt@latest
+	go install github.com/terraform-docs/terraform-docs@latest
+	go install github.com/lonegunmanb/avmfix@latest
+	go install github.com/magodo/hclgrep@latest
+
+fumpt:
+	curl -sSL "$(REMOTE_SCRIPT)/go-fumpt.sh" | sh -s
+
+gosec:
+	curl -sSL "$(REMOTE_SCRIPT)/gosec.sh" | sh -s
+
+tffmtcheck:
+	curl -sSL "$(REMOTE_SCRIPT)/terraform-fmt.sh" | sh -s
+
+tfvalidatecheck:
+	curl -sSL "$(REMOTE_SCRIPT)/terraform-validate.sh" | sh -s
+
+terrafmtcheck:
+	curl -sSL "$(REMOTE_SCRIPT)/terrafmt-check.sh" | sh -s
+
+gofmtcheck:
+	curl -sSL "$(REMOTE_SCRIPT)/gofmtcheck.sh" | sh -s
+	curl -sSL "$(REMOTE_SCRIPT)/fumptcheck.sh" | sh -s
+
+golint:
+	curl -sSL "$(REMOTE_SCRIPT)/run-golangci-lint.sh" | sh -s
+
+tflint:
+	curl -sSL "$(REMOTE_SCRIPT)/run-tflint.sh" | sh -s
+
+lint: golint tflint gosec
+
+checkovcheck:
+	curl -sSL "$(REMOTE_SCRIPT)/checkovcheck.sh" | sh -s
+
+checkovplancheck:
+	curl -sSL "$(REMOTE_SCRIPT)/checkovplancheck.sh" | sh -s
+
+fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
+
+pr-check: fmtcheck lint unit-test
+
+unit-test:
+	curl -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | sh -s
+
+e2e-test:
+	curl -sSL "$(REMOTE_SCRIPT)/run-e2e-test.sh" | sh -s
+
+version-upgrade-test:
+	curl -sSL "$(REMOTE_SCRIPT)/version-upgrade-test.sh" | sh -s
+
+terrafmt:
+	curl -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | sh -s
+
+pre-commit: tffmt terrafmt depsensure fmt fumpt docs autofix
+
+depsensure:
+	curl -sSL "$(REMOTE_SCRIPT)/deps-ensure.sh" | sh -s
+
+yor-tag:
+	curl -sSL "$(REMOTE_SCRIPT)/yor-tag.sh" | sh -s
+
+autofix:
+	curl -sSL "$(REMOTE_SCRIPT)/autofix.sh" | sh -s
+
+.PHONY: docs docscheck fmt gofmt tools fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix
