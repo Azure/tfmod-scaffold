@@ -14,7 +14,7 @@ fmt: gofmt
 
 gofmt:
 	@echo "==> Fixing source code with gofmt..."
-	find . -name '*.go' | grep -v vendor | xargs gofmt -s -w
+	@files=$$(find . -name '*.go' | grep -v vendor); if [ -n "$$files" ]; then echo $$files | xargs gofmt -s -w; fi
 
 tools:
 	go install github.com/katbyte/terrafmt@latest
