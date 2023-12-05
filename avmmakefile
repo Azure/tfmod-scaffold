@@ -71,7 +71,7 @@ version-upgrade-test:
 terrafmt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | sh -s
 
-pre-commit: tffmt terrafmt depsensure fmt fumpt docs autofix
+pre-commit: depsensure fmt fumpt docs autofix
 
 depsensure:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/deps-ensure.sh" | sh -s
