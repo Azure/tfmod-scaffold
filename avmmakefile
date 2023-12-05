@@ -6,11 +6,9 @@ docs:
 docscheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-check.sh" | sh -s
 
-fmt: gofmt
+fmt: gofmt terrafmt
 	@echo "==> Fixing Terraform code with terraform fmt..."
 	terraform fmt -recursive
-	@echo "==> Fixing embedded Terraform with terrafmt..."
-	find . | egrep ".md|.tf" | grep -v README.md | sort | while read f; do terrafmt fmt $$f; done
 
 gofmt:
 	@echo "==> Fixing source code with gofmt..."
