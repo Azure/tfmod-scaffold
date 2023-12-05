@@ -4,4 +4,7 @@ echo "==> Generating module documentation..."
 rm -f .terraform.lock.hcl
 terraform-docs -c .terraform-docs.yml .
 echo "==> Generating examples documentation..."
-cd examples && for d in $$(ls -d */); do rm -f .terraform.lock.hcl && terraform-docs  $$d; done
+examples=$(find ./examples -maxdepth 1 -mindepth 1 -type d)
+for d in $examples; do
+  (echo "===> Generating examples documentation in " $d && cd $d && rm -f .terraform.lock.hcl && terraform-docs .
+done
