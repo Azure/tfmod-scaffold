@@ -51,6 +51,7 @@ ARG TFLINT_BASIC_EXT_VERSION=0.1.2
 ARG TFLINT_AZURERM_EXT_VERSION=0.1.1
 ARG TARGETARCH
 ARG PACKER_VERSION=1.9.4
+ARG TFSEC_VERSION=v1.28.4
 ENV TFLINT_PLUGIN_DIR /tflint
 ENV GOROOT=/root/go
 ENV GOPATH=/usr/local/go
@@ -83,6 +84,7 @@ RUN pip3 install --upgrade setuptools && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
+    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/${TFSEC_VERSION}/scripts/install_linux.sh | bash && \
 	rm -f /tmp/packer.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip && \
     rm -f /tmp/tflint-ruleset-azurerm-ext.zip && \

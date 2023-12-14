@@ -55,9 +55,9 @@ checkovcheck:
 checkovplancheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/checkovplancheck.sh" | sh -s
 
-fmtcheck: gofmtcheck tfvalidatecheck tffmtcheck terrafmtcheck
+fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
-pr-check: fmtcheck lint unit-test
+pr-check: fmtcheck tfvalidatecheck lint unit-test
 
 unit-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | sh -s

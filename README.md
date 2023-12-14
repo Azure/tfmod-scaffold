@@ -50,6 +50,7 @@ docker run --rm -v ${pwd}:/src -w /src localrunner sh scaffold-ci-scripts/sync-t
 | [hclgrep](https://github.com/magodo/hclgrep)												| ![](https://img.shields.io/github/v/tag/magodo/hclgrep)                           |
 | [avmfix](https://github.com/lonegunmanb/avmfix)											| ![](https://img.shields.io/github/v/tag/lonegunmanb/avmfix)                       |
 | [hclgrep](https://github.com/lonegunmanb/yorbox)											| ![](https://img.shields.io/github/v/tag/lonegunmanb/yorbox)                       |
+| [tfsec](https://github.com/aquasecurity/tfsec)											| ![](https://img.shields.io/github/v/tag/aquasecurity/tfsec)                       |
 
 ## To Add CI Pipeline In New Azure Verified Terraform Module
 
