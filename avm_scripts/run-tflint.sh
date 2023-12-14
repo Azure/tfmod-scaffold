@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
 
-if [ -f ".tflint_alt.hcl" ]; then
-	export TFLINT_CONFIG=".tflint_alt.hcl"
-elif [ -z "${TFLINT_CONFIG}" ]; then
-	export TFLINT_CONFIG=".tflint.hcl"
-fi
+set_tflint_config() {
+  local env_var=$1
+  local alt_file=$2
+  local default_url=$3
+  local download_file=$4
 
-if [ -f ".tflint_example_alt.hcl" ]; then
-	export TFLINT_EXAMPLE_CONFIG=".tflint_example_alt.hcl"
-elif [ -z "${TFLINT_EXAMPLE_CONFIG}" ]; then
-	export TFLINT_EXAMPLE_CONFIG=".tflint_example.hcl"
-fi
+  if [ -z "${!env_var}" ]; then
+    if [ -f "$alt_file" ]; then
+      export $env_var="$alt_file"
+    else
+      curl -H 'Cache-Control: no-cache, no-store' -sSL "$default_url" -o "$download_file"
+      export $env_var="$download_file"
+    fi
+  fi
+}
+
+set_tflint_config "TFLINT_CONFIG" ".tflint_alt.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint.hcl" "avm.tflint.hcl"
+set_tflint_config "TFLINT_EXAMPLE_CONFIG" ".tflint_example_alt.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint_example.hcl" "avm.tflint_example.hcl"
+
 
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
