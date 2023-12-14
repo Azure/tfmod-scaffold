@@ -8,6 +8,7 @@ ARG HCLEDIT_VERSION=v0.2.6
 ARG GOSEC_VERSION=v2.14.0
 ARG YOR_VERSION=0.1.171
 ARG YORBOX_VERSION=latest
+ARG TFENV=v3.0.0
 ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
@@ -27,13 +28,18 @@ RUN cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
-    go install github.com/lonegunmanb/azure-verified-module-fix/avmfix@latest && \
+    go install github.com/lonegunmanb/avmfix@latest && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
 #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
 #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout special && \
-    go install
+    go install && \
+    cd /src && \
+    git clone https://github.com/tfutils/tfenv.git && \
+    cd /src/tfenv && \
+    git checkout $TFENV && \
+    rm -rf .git
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
@@ -48,8 +54,9 @@ ARG PACKER_VERSION=1.9.4
 ENV TFLINT_PLUGIN_DIR /tflint
 ENV GOROOT=/root/go
 ENV GOPATH=/usr/local/go
-ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/tfenv/bin
 COPY --from=build /go/bin /usr/local/go/bin
+COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
     yum install -y yum ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server && \
@@ -61,8 +68,8 @@ RUN yum update -y && \
     git config --global user.name "github-actions[bot]"
 RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
-    curl '-#' -fL -o /tmp/terraform.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_${TARGETARCH}.zip && \
-	unzip -q -d /bin/ /tmp/terraform.zip && \
+    tfenv install $TERRAFORM_VERSION && \
+    tfenv use $TERRAFORM_VERSION && \
     curl '-#' -fL -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${TARGETARCH}.zip && \
     unzip -q -d /bin/ /tmp/packer.zip && \
     curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
@@ -76,8 +83,7 @@ RUN pip3 install --upgrade setuptools && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
-	rm -f /tmp/terraform.zip && \
-    rm -f /tmp/packer.zip && \
+	rm -f /tmp/packer.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip && \
     rm -f /tmp/tflint-ruleset-azurerm-ext.zip && \
     rm -f /tmp/tflint-ruleset-basic-ext.zip && \
