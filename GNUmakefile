@@ -50,9 +50,6 @@ pr-check: depscheck fmtcheck lint unit-test checkovcheck
 unit-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | sh -s
 
-test-examples:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-examples.sh" | sh -s
-
 e2e-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-e2e-test.sh" | sh -s
 
