@@ -85,4 +85,7 @@ yor-tag:
 autofix:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/autofix.sh" | sh -s
 
+grept-apply:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | sh -s
+
 .PHONY: docs docscheck fmt gofmt tools fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix
