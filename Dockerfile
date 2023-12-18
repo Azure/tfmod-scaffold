@@ -86,8 +86,7 @@ RUN pip3 install --upgrade setuptools && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
-    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/${TFSEC_VERSION}/scripts/install_linux.sh | bash && \
-	rm -f /tmp/packer.zip && \
+    rm -f /tmp/packer.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip && \
     rm -f /tmp/tflint-ruleset-azurerm-ext.zip && \
     rm -f /tmp/tflint-ruleset-basic-ext.zip && \
