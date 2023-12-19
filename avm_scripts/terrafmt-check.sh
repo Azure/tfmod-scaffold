@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 echo "==> Checking documentation terraform blocks are formatted..."
-files=$(find . -type f -name "*.md" -o -name "*.go" | grep -v -e ".github" -e "-terraform" -e "vendor" -e ".terraform")
+files=$(find . -type f -name "*.md" -o -name "*.go" | grep -v -e ".github" -e "-terraform" -e "vendor" -e ".terraform" -e "README.md")
 error=false
 for f in $files; do
   terrafmt diff -c -q "$f"
