@@ -1,4 +1,4 @@
-REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts"
+REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)"
 
 docs:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | sh -s
