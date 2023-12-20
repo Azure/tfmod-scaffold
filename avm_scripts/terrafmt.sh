@@ -1,6 +1,6 @@
 echo "==> Fixing test and document terraform blocks code with terrafmt..."
 
-files=$(find . -type f -name "*.md" -o -name "*.go" | grep -v -e ".github" -e "-terraform" -e "vendor" -e ".terraform")
+files=$(find . -type f -name "*.md" -o -name "*.go" | grep -v -e ".github" -e "-terraform" -e "vendor" -e ".terraform" -e "README.md")
 for f in $files; do
   terrafmt fmt -f "$f"
   retValue=$?
