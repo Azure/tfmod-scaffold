@@ -14,5 +14,5 @@ for d in $examples; do
   else
   	terraform-docs markdown table --output-file README.md --output-mode inject .
   fi
-
+  cd ../..
 done
