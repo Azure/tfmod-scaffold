@@ -3,6 +3,6 @@ avmfix -folder "$(pwd)"
 
 examples=$(find ./examples -maxdepth 1 -mindepth 1 -type d)
 for d in $examples; do
-  echo "===> Autofix in " $d && cd $d && avmfix -folder "examples/$(pwd)"
+  echo "===> Autofix in " $d && cd $d && avmfix -folder "examples/$(d)"
 done
 exit 0
