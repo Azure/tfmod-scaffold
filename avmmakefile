@@ -18,7 +18,7 @@ tools:
 	go install github.com/katbyte/terrafmt@latest
 	go install golang.org/x/tools/cmd/goimports@latest
 	go install mvdan.cc/gofumpt@latest
-	go install github.com/terraform-docs/terraform-docs@latest
+	go install github.com/terraform-docs/terraform-docs@v0.17.0
 	go install github.com/lonegunmanb/avmfix@latest
 	go install github.com/magodo/hclgrep@latest
 
