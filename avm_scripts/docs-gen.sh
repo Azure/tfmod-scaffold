@@ -2,7 +2,7 @@
 
 generate_docs () {
   local dir=$1
-  echo "===> Generating examples documentation in " $dir
+  echo "===> Generating examples documentation in $dir"
   rm -f "$dir/.terraform.lock.hcl"
   if [ -f ".terraform-docs.yml" ]; then
     terraform-docs -c ".terraform-docs.yml" "$dir"
