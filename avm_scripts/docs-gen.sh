@@ -15,6 +15,10 @@ echo "==> Generating module documentation..."
 rm -f .terraform.lock.hcl
 terraform-docs -c .terraform-docs.yml .
 echo "==> Generating examples documentation..."
+if [ ! -d examples ]; then
+  echo "==> Error - no examples directory found"
+  exit 1
+fi
 cd examples
 subexamples=$(find ./ -maxdepth 1 -mindepth 1 -type d)
 for d in $subexamples; do
