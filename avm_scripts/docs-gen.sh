@@ -17,6 +17,7 @@ terraform-docs -c .terraform-docs.yml .
 echo "==> Generating examples documentation..."
 cd examples
 subexamples=$(find ./ -maxdepth 1 -mindepth 1 -type d)
-for d in subexamples; do
+for d in $subexamples; do
   generate_docs $d
 done
+cd ..
