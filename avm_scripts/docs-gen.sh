@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-function generate_docs() {
+function generate_docs {
   local dir=$1
   echo "===> Generating examples documentation in " $dir
   rm -f "$dir/.terraform.lock.hcl"
