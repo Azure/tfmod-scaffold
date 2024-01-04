@@ -9,6 +9,13 @@ docscheck:
 fmt: gofmt terrafmt
 	@echo "==> Fixing Terraform code with terraform fmt..."
 	terraform fmt -recursive
+tools:
+	go install github.com/katbyte/terrafmt@latest
+	go install golang.org/x/tools/cmd/goimports@latest
+	go install mvdan.cc/gofumpt@latest
+	go install github.com/terraform-docs/terraform-docs@v0.17.0
+	go install github.com/lonegunmanb/avmfix@latest
+	go install github.com/magodo/hclgrep@latest
 
 gofmt:
 	@echo "==> Fixing source code with gofmt..."
@@ -80,4 +87,4 @@ autofix:
 grept-apply:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | sh -s
 
-.PHONY: docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix
+.PHONY: docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
