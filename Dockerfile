@@ -10,6 +10,8 @@ ARG YOR_VERSION=0.1.171
 ARG YORBOX_VERSION=latest
 ARG TFENV=v3.0.0
 ARG GREPT_VERSION=1a4f08c2fdc41b6a3702fa1238354c40a3fcce3e
+ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
+ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
 ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
@@ -29,9 +31,10 @@ RUN cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
-    go install github.com/lonegunmanb/avmfix@latest && \
+    go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
+    go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
 #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
 #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
     git clone https://github.com/lonegunmanb/yor.git && \
