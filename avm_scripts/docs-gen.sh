@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
 
-generate_docs () {
+generate_example_docs () {
   local dir=$1
   echo "===> Generating examples documentation in $dir"
   rm -f "$dir/.terraform.lock.hcl"
-  if [ -f ".terraform-docs.yml" ]; then
-    terraform-docs -c ".terraform-docs.yml" "$dir"
-  else
-    terraform-docs markdown table --output-file "README.md" --output-mode inject "$dir"
-  fi
+  terraform-docs -c ".terraform-docs.yml" "$dir"
 }
 
 echo "==> Generating module documentation..."
@@ -22,6 +18,6 @@ fi
 cd examples
 subexamples=$(find ./ -maxdepth 1 -mindepth 1 -type d)
 for d in $subexamples; do
-  generate_docs $d
+  generate_example_docs $d
 done
 cd ..
