@@ -56,6 +56,7 @@ ARG CHECKOV_VERSION=2.1.282
 ARG TFLINT_AZURERM_VERSION=0.18.0
 ARG TFLINT_BASIC_EXT_VERSION=0.1.2
 ARG TFLINT_AZURERM_EXT_VERSION=0.1.1
+ARG TFLINT_AVM_VERSION=0.1.0
 ARG TARGETARCH
 ARG PACKER_VERSION=1.9.4
 ARG TFSEC_VERSION=v1.28.4
@@ -85,16 +86,20 @@ RUN pip3 install --upgrade setuptools && \
 	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
+    curl '-#' -fL -o /tmp/tflint-ruleset-avm.zip https://github.com/Azure/tflint-ruleset-avm/releases/download/v${TFLINT_AVM_VERSION}/tflint-ruleset-avm_linux_${TARGETARCH}.zip && \
 	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
     mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
     mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
+    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
     unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
+    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} /tmp/tflint-ruleset-avm.zip && \
     curl '-#' -fL -o /bin/tfsec https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-${TARGETARCH} && \
     chmod +x /bin/tfsec && \
 	rm -f /tmp/packer.zip && \
     rm -f /tmp/tflint-ruleset-azurerm.zip && \
     rm -f /tmp/tflint-ruleset-azurerm-ext.zip && \
     rm -f /tmp/tflint-ruleset-basic-ext.zip && \
+    rm -f /tmp/tflint-ruleset-avm.zip && \
     yum clean all
