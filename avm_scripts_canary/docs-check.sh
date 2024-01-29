@@ -7,7 +7,7 @@ check_example_docs () {
   rm -f "$dir/.terraform.lock.hcl"
   terraform-docs -c ".terraform-docs.yml" "$dir"
 	echo "===> Comparing examples documentation in $dir"
-	if [ ! -z $(diff -q "$dir/README.md" "$dir/README-generated.md") ]; then
+	if [ ! -z "$(diff -q "$dir/README.md" "$dir/README-generated.md")" ]; then
 		echo "==> examples/$dir/README.md is out of date. Run 'make pre-commit' to update the generated document and commit."
 		rm -f "$dir/README-generated.md"
 		exit 1
@@ -22,7 +22,7 @@ rm -f .terraform.lock.hcl
 terraform-docs -c .terraform-docs.yml .
 
 echo "==> Comparing generated code to committed code..."
-if [ ! -z $(diff -q README.md README-generated.md) ]; then
+if [ ! -z "$(diff -q README.md README-generated.md)" ]; then
 		echo "==> README.md is out of date. Run 'make pre-commit' to update the generated document and commit."
 		rm -f README-generated.md
 		exit 1
