@@ -6,7 +6,7 @@ plugin "terraform" {
 
 plugin "avm" {
   enabled     = true
-  version     = "0.1.0"
+  version     = "0.2.0"
   source      = "github.com/Azure/tflint-ruleset-avm"
   signing_key = <<-KEY
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -104,7 +104,7 @@ rule "terraform_heredoc_usage" {
 }
 
 rule "terraform_module_provider_declaration" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_output_separate" {
