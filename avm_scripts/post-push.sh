@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 default_branch=$(curl -s "https://api.github.com/repos/$GITHUB_REPOSITORY" | jq -r '.default_branch')
-git checkout https://avmbot:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY workspace
+git checkout https://avmbot:$GITHUB_TOKEN@github.com/$GITHUB_REPOSITORY.git workspace
 cd workspace
 avm yor-tag
 avm pre-commit
