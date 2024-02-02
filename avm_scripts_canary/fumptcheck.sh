@@ -2,7 +2,7 @@
 # Check gofmt
 echo "==> Checking that code complies with gofumpt requirements..."
 # This filter should match the search filter in ../GNUMakefile
-gofmt_files=$(find . -name '*.go' | grep -v vendor | xargs gofumpt -l)
+gofmt_files=$(find . -name '*.go' | grep -v vendor | grep -v examples | xargs gofumpt -l)
 if [ -n "${gofmt_files}" ]; then
     echo 'gofumpt needs running on the following files:'
     echo "${gofmt_files}"
