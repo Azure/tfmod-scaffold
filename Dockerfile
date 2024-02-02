@@ -75,7 +75,8 @@ RUN yum update -y && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     git config --global user.email "tfmod442916@users.noreply.github.com" && \
-    git config --global user.name "github-actions[bot]"
+    git config --global user.name "github-actions[bot]" && \
+    git config --global --add safe.directory '*'
 RUN pip3 install --upgrade setuptools && \
     pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
     tfenv install $TERRAFORM_VERSION && \
