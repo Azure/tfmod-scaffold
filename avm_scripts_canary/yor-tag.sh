@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 tracing_tags_enabled=$(hclgrep -x 'variable "tracing_tags_enabled" {@*_}' variables.tf)
 tracing_tags_prefix=$(hclgrep -x 'variable "tracing_tags_prefix" {@*_}' variables.tf)

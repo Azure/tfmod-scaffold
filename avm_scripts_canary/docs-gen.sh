@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 
 generate_example_docs () {
   local dir=$1
