@@ -6,5 +6,12 @@ make yor-tag
 make pre-commit
 make autofix
 make pr-check
+
+# Check if there are changes
+if git diff --exit-code > /dev/null; then
+    echo "No changes to commit"
+    exit 0
+fi
+
 git commit -am "Auto update"
 git push -u origin $default_branch
