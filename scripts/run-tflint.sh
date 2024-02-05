@@ -22,8 +22,8 @@ set_tflint_config() {
   fi
 }
 
-set_tflint_config "TFLINT_CONFIG" ".tflint_override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint.hcl" ".tflint.hcl" ".tflint.merged.hcl"
-set_tflint_config "TFLINT_EXAMPLE_CONFIG" ".tflint_example_override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint_example.hcl" ".tflint_example.hcl" ".tflint_example.merged.hcl"
+set_tflint_config "TFLINT_CONFIG" ".tflint.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint.hcl" ".tflint.hcl" ".tflint.merged.hcl"
+set_tflint_config "TFLINT_EXAMPLE_CONFIG" ".tflint_example.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint_example.hcl" ".tflint_example.hcl" ".tflint_example.merged.hcl"
 
 
 echo "==> Checking that code complies with tflint requirements..."
