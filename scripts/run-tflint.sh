@@ -1,16 +1,30 @@
 #!/usr/bin/env bash
 
-if [ -f ".tflint_alt.hcl" ]; then
-	export TFLINT_CONFIG=".tflint_alt.hcl"
-elif [ -z "${TFLINT_CONFIG}" ]; then
-	export TFLINT_CONFIG=".tflint.hcl"
-fi
+set_tflint_config() {
+  local env_var=$1
+  local override_file=$2
+  local default_url=$3
+  local download_file=$4
+  local merged_file=$5
 
-if [ -f ".tflint_example_alt.hcl" ]; then
-	export TFLINT_EXAMPLE_CONFIG=".tflint_example_alt.hcl"
-elif [ -z "${TFLINT_EXAMPLE_CONFIG}" ]; then
-	export TFLINT_EXAMPLE_CONFIG=".tflint_example.hcl"
-fi
+  # Always download the file from GitHub
+  curl -H 'Cache-Control: no-cache, no-store' -sSL "$default_url" -o "$download_file"
+
+  # Check if the override file exists
+  if [ -f "$override_file" ]; then
+    # If it does, merge the override file and the downloaded file
+    hclmerge -1 "$override_file" -2 "$download_file" -d "$merged_file"
+    # Set the environment variable to the path of the merged file
+    export $env_var="$merged_file"
+  else
+    # If it doesn't, set the environment variable to the path of the downloaded file
+    export $env_var="$download_file"
+  fi
+}
+
+set_tflint_config "TFLINT_CONFIG" ".tflint_override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint.hcl" ".tflint.hcl" ".tflint.merged.hcl"
+set_tflint_config "TFLINT_EXAMPLE_CONFIG" ".tflint_example_override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/.tflint_example.hcl" ".tflint_example.hcl" ".tflint_example.merged.hcl"
+
 
 echo "==> Checking that code complies with tflint requirements..."
 tflint --init --config=$TFLINT_CONFIG
