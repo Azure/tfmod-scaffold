@@ -4,12 +4,6 @@ IF YOU WANT TO USE A CUSTOMIZED CONFIGURATION, PLEASE CREATE YOUR OWN AND
 SET THIS FILE'S PATH TO $TFLINT_CONFIG ENVVIRONMENT VARIABLE.
 */
 
-plugin "azurerm" {
-  enabled = true
-  version = "0.23.0"
-  source  = "github.com/terraform-linters/tflint-ruleset-azurerm"
-}
-
 plugin "basic-ext" {
   enabled     = true
   version     = "0.6.0"
