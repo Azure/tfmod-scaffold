@@ -11,7 +11,7 @@ env:
 
 jobs:
   main:
-    runs-on: [self-hosted, 1ES.Pool=tfmod-scaffold]
+    runs-on: ubuntu-latest
     steps:
       - name: Maximize build space
         uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c
@@ -21,6 +21,7 @@ jobs:
           remove-dotnet: 'true'
           remove-android: 'true'
           remove-haskell: 'true'
+          remove-codeql: 'true'
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
       - name: Read version.env
