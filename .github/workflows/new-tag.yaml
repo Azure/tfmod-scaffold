@@ -16,12 +16,11 @@ jobs:
       - name: Use Temporary Disk as Docker Path
         run: |
           sudo service docker stop
-          tmp_dir=$(mktemp -d)
-          sudo cp -a /var/lib/docker/* $tmp_dir/
+          cd /var/lib
+          sudo rm -rf docker
           sudo umount /mnt
           sudo mount /dev/sda1 /var/lib/docker
-          sudo cp -a $tmp_dir/* /var/lib/docker/
-          sudo service docker start
+          sudo service docker restart
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
       - name: Read version.env
