@@ -13,17 +13,15 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be #v1.3.1
-        with:
-          # all of these default to true, but feel free to set to
-          # "false" if necessary for your workflow
-          android: true
-          dotnet: true
-          haskell: true
-          large-packages: true
-          docker-images: false
-          swap-storage: true
+      - name: Use Temporary Disk as Docker Path
+        run: |
+          sudo service docker stop
+          tmp_dir=$(mktemp -d)
+          sudo cp -a /var/lib/docker/* $tmp_dir/
+          sudo umount /mnt
+          sudo mount /dev/sda1 /var/lib/docker
+          sudo cp -a $tmp_dir/* /var/lib/docker/
+          sudo service docker start
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
       - name: Read version.env
