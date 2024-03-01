@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export TF_VAR_msi_id=$MSI_ID
+
 cd /tmp
 testFolder="avmtester$AVM_EXAMPLE$RANDOM"
 
