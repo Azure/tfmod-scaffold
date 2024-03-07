@@ -20,10 +20,8 @@ RUN cd /src && \
     apt-get update && \
     apt-get install -y zip  && \
     export CGO_ENABLED=0 && \
-    go install github.com/katbyte/terrafmt@latest && \
     go install golang.org/x/tools/cmd/goimports@latest && \
     go install mvdan.cc/gofumpt@latest && \
-    go install github.com/yngveh/sprig-cli@latest && \
     go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
@@ -40,7 +38,11 @@ RUN cd /src && \
 #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
 #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
     git clone https://github.com/lonegunmanb/yor.git && \
-    cd yor && git checkout special && \
+    cd yor && git checkout main && \
+    go install && \
+    cd /src && \
+    git clone https://github.com/lonegunmanb/terrafmt.git && \
+    cd terrafmt && \
     go install && \
     cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
@@ -48,7 +50,7 @@ RUN cd /src && \
     git checkout $TFENV && \
     rm -rf .git
 
-FROM mcr.microsoft.com/cbl-mariner/base/core:1.0 as runner
+FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TERRAGRUNT_VERSION=v0.43.0
@@ -69,7 +71,7 @@ COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
-    yum install -y yum ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server && \
+    yum install -y yum ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server wget && \
     tdnf install moby-cli ca-certificates azure-cli -y && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
@@ -86,8 +88,8 @@ RUN pip3 install --upgrade setuptools && \
     curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
     chmod +x /bin/terragrunt && \
 	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/DrikoldLun/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/DrikoldLun/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
+    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/Azure/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
+    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/Azure/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-avm.zip https://github.com/Azure/tflint-ruleset-avm/releases/download/v${TFLINT_AVM_VERSION}/tflint-ruleset-avm_linux_${TARGETARCH}.zip && \
     curl '-#' -fL -o /tmp/tflint-ruleset-terraform.zip https://github.com/terraform-linters/tflint-ruleset-terraform/releases/download/v${TFLINT_TERRAFORM_VERSION}/tflint-ruleset-terraform_linux_${TARGETARCH}.zip && \
 	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
