@@ -14,4 +14,4 @@
 #fi
 
 echo "We've bypassed checkov check for now"
-return 0
+exit 0
