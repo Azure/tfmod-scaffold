@@ -66,12 +66,12 @@ ARG TFSEC_VERSION=v1.28.4
 ENV TFLINT_PLUGIN_DIR /tflint
 ENV GOROOT=/root/go
 ENV GOPATH=/usr/local/go
-ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/tfenv/bin
+ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/tfenv/bin:/pkenv/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
-    yum install -y yum ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server wget && \
+    yum install -y ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server wget && \
     tdnf install moby-cli ca-certificates azure-cli -y && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
@@ -79,30 +79,31 @@ RUN yum update -y && \
     git config --global user.email "tfmod442916@users.noreply.github.com" && \
     git config --global user.name "github-actions[bot]" && \
     git config --global --add safe.directory '*'
-RUN pip3 install --upgrade setuptools && \
-    pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
-    tfenv install $TERRAFORM_VERSION && \
+#RUN pip3 install --upgrade setuptools && \
+#    pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
+RUN tfenv install $TERRAFORM_VERSION && \
     tfenv use $TERRAFORM_VERSION && \
-    curl '-#' -fL -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${TARGETARCH}.zip && \
-    unzip -q -d /bin/ /tmp/packer.zip && \
+#    curl '-#' -fL -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${TARGETARCH}.zip && \
+#    unzip -q -d /bin/ /tmp/packer.zip && \
     curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
     chmod +x /bin/terragrunt && \
-	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/Azure/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/Azure/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-avm.zip https://github.com/Azure/tflint-ruleset-avm/releases/download/v${TFLINT_AVM_VERSION}/tflint-ruleset-avm_linux_${TARGETARCH}.zip && \
-    curl '-#' -fL -o /tmp/tflint-ruleset-terraform.zip https://github.com/terraform-linters/tflint-ruleset-terraform/releases/download/v${TFLINT_TERRAFORM_VERSION}/tflint-ruleset-terraform_linux_${TARGETARCH}.zip && \
-	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} && \
-    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-terraform/${TFLINT_TERRAFORM_VERSION} && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} /tmp/tflint-ruleset-avm.zip && \
-    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-terraform/${TFLINT_TERRAFORM_VERSION} /tmp/tflint-ruleset-terraform.zip && \
-    curl '-#' -fL -o /bin/tfsec https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-${TARGETARCH} && \
-    chmod +x /bin/tfsec && \
+#	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
+#    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/Azure/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
+#    curl '-#' -fL -o /tmp/tflint-ruleset-basic-ext.zip https://github.com/Azure/tflint-ruleset-basic-ext/releases/download/v${TFLINT_BASIC_EXT_VERSION}/tflint-ruleset-basic-ext_linux_${TARGETARCH}.zip && \
+#    curl '-#' -fL -o /tmp/tflint-ruleset-avm.zip https://github.com/Azure/tflint-ruleset-avm/releases/download/v${TFLINT_AVM_VERSION}/tflint-ruleset-avm_linux_${TARGETARCH}.zip && \
+#    curl '-#' -fL -o /tmp/tflint-ruleset-terraform.zip https://github.com/terraform-linters/tflint-ruleset-terraform/releases/download/v${TFLINT_TERRAFORM_VERSION}/tflint-ruleset-terraform_linux_${TARGETARCH}.zip && \
+#	mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} && \
+#    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} && \
+#    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} && \
+#    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} && \
+#    mkdir -p ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-terraform/${TFLINT_TERRAFORM_VERSION} && \
+#    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-azurerm/${TFLINT_AZURERM_VERSION} /tmp/tflint-ruleset-azurerm.zip && \
+#    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-azurerm-ext/${TFLINT_AZURERM_EXT_VERSION} /tmp/tflint-ruleset-azurerm-ext.zip && \
+#    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-basic-ext/${TFLINT_BASIC_EXT_VERSION} /tmp/tflint-ruleset-basic-ext.zip && \
+#    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/Azure/tflint-ruleset-avm/${TFLINT_AVM_VERSION} /tmp/tflint-ruleset-avm.zip && \
+#    unzip -q -d ${TFLINT_PLUGIN_DIR}/github.com/terraform-linters/tflint-ruleset-terraform/${TFLINT_TERRAFORM_VERSION} /tmp/tflint-ruleset-terraform.zip && \
+#    curl '-#' -fL -o /bin/tfsec https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-${TARGETARCH} && \
+#    chmod +x /bin/tfsec && \
+    git clone https://github.com/iamhsa/pkenv.git /pkenv && \
 	rm -r /tmp/* && \
     yum clean all
