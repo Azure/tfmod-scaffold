@@ -26,7 +26,10 @@ RUN cd /src && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
-    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
+#    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
+    git clone https://github.com/lonegunmanb/hcledit.git && \
+    cd hcledit && git checkout $HCLEDIT_VERSION && go install && \
+    cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
@@ -72,7 +75,9 @@ COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
     yum install -y ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server wget && \
-    tdnf install moby-cli ca-certificates azure-cli -y && \
+    tdnf install moby-cli ca-certificates -y && \
+    pip3 install cryptography -U && \
+    pip install azure-cli && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /root -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
