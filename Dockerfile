@@ -22,7 +22,7 @@ RUN cd /src && \
     export CGO_ENABLED=0 && \
     go install golang.org/x/tools/cmd/goimports@latest && \
     go install mvdan.cc/gofumpt@latest && \
-    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
+#    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
@@ -46,6 +46,11 @@ RUN cd /src && \
     cd /src && \
     git clone https://github.com/lonegunmanb/terrafmt.git && \
     cd terrafmt && \
+    go install && \
+    cd /src && \
+    git clone https://github.com/lonegunmanb/terraform-docs.git && \
+    cd terraform-docs && \
+    git checkout $TERRAFORM_DOCS_VERSION && \
     go install && \
     cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
