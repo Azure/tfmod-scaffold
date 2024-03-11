@@ -74,7 +74,7 @@ COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
 RUN yum update -y && \
-    yum install -y ca-certificates zip unzip jq python3-pip make git less diffutils build-essential openssh-server wget && \
+    yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
     tdnf install moby-cli ca-certificates -y && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
