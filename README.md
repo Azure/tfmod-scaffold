@@ -1,5 +1,7 @@
 # Azure Verified Terraform Module Scaffold
 
+![Image Build & Scan](https://img.shields.io/github/actions/workflow/status/Azure/tfmod-scaffold/check.yml)
+
 This scaffold is a collection of scripts to facilitate Azure Verified Terraform Module CI pipeline. It's designed to
 work with CI such as GitHub Actions, and provides a Dockerfile to run these steps on your local machine.
 

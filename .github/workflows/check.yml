@@ -13,14 +13,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
-    - name: Set up Go
-      uses: actions/setup-go@6edd4406fa81c3da01a34fa6f6343087c207a568 #3.5.0
-      with:
-        go-version: 1.21.1
-    - name: Install HCLEdit
+    - name: Docker Build Test
       run: |
-        export $(grep -v '^#' version.env | xargs)
-        go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION
-    - name: Check TFLint Plugin Version
+        docker build $(sh build-arg-helper.sh version.env) -t localrunner .
+    - name: Trivy Scan
       run: |
-        sh scaffold-ci-scripts/check-tflint-plugin-version.sh
+        docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --timeout 120m localrunner

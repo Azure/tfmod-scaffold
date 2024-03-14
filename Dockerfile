@@ -53,6 +53,11 @@ RUN cd /src && \
     git checkout $TERRAFORM_DOCS_VERSION && \
     go install && \
     cd /src && \
+    git clone https://github.com/lonegunmanb/terraform.git && \
+    cd terraform && \
+    git checkout $TERRAFORM_VERSION && \
+    go install github.com/hashicorp/terraform && \
+    cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
     cd /src/tfenv && \
     git checkout $TFENV && \
@@ -74,7 +79,7 @@ ARG TFSEC_VERSION=v1.28.4
 ENV TFLINT_PLUGIN_DIR /tflint
 ENV GOROOT=/root/go
 ENV GOPATH=/usr/local/go
-ENV PATH=$PATH:$GOROOT/bin:$GOPATH/bin:/tfenv/bin:/pkenv/bin
+ENV PATH=$PATH:/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
@@ -91,8 +96,9 @@ RUN yum update -y && \
     git config --global --add safe.directory '*'
 #RUN pip3 install --upgrade setuptools && \
 #    pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
-RUN tfenv install $TERRAFORM_VERSION && \
-    tfenv use $TERRAFORM_VERSION && \
+RUN echo hello && \
+#    tfenv install $TERRAFORM_VERSION && \
+#    tfenv use $TERRAFORM_VERSION && \
 #    curl '-#' -fL -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${TARGETARCH}.zip && \
 #    unzip -q -d /bin/ /tmp/packer.zip && \
     curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
