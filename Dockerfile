@@ -53,11 +53,6 @@ RUN cd /src && \
     git checkout $TERRAFORM_DOCS_VERSION && \
     go install && \
     cd /src && \
-    git clone https://github.com/lonegunmanb/terraform.git && \
-    cd terraform && \
-    git checkout $TERRAFORM_VERSION && \
-    go install github.com/hashicorp/terraform && \
-    cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
     cd /src/tfenv && \
     git checkout $TFENV && \
@@ -80,6 +75,8 @@ ENV TFLINT_PLUGIN_DIR /tflint
 ENV GOROOT=/root/go
 ENV GOPATH=/usr/local/go
 ENV PATH=$PATH:/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
+ENV TFENV_AUTO_INSTALL=true
+ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /tfenv
 COPY .terraformrc /root/.terraformrc
@@ -96,12 +93,7 @@ RUN yum update -y && \
     git config --global --add safe.directory '*'
 #RUN pip3 install --upgrade setuptools && \
 #    pip3 install --no-cache-dir checkov==$CHECKOV_VERSION && \
-RUN echo hello && \
-#    tfenv install $TERRAFORM_VERSION && \
-#    tfenv use $TERRAFORM_VERSION && \
-#    curl '-#' -fL -o /tmp/packer.zip https://releases.hashicorp.com/packer/${PACKER_VERSION}/packer_${PACKER_VERSION}_linux_${TARGETARCH}.zip && \
-#    unzip -q -d /bin/ /tmp/packer.zip && \
-    curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
+RUN curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
     chmod +x /bin/terragrunt && \
 #	curl '-#' -fL -o /tmp/tflint-ruleset-azurerm.zip https://github.com/terraform-linters/tflint-ruleset-azurerm/releases/download/v${TFLINT_AZURERM_VERSION}/tflint-ruleset-azurerm_linux_${TARGETARCH}.zip && \
 #    curl '-#' -fL -o /tmp/tflint-ruleset-azurerm-ext.zip https://github.com/Azure/tflint-ruleset-azurerm-ext/releases/download/v${TFLINT_AZURERM_EXT_VERSION}/tflint-ruleset-azurerm-ext_linux_${TARGETARCH}.zip && \
@@ -121,5 +113,6 @@ RUN echo hello && \
 #    curl '-#' -fL -o /bin/tfsec https://github.com/aquasecurity/tfsec/releases/download/${TFSEC_VERSION}/tfsec-linux-${TARGETARCH} && \
 #    chmod +x /bin/tfsec && \
     git clone https://github.com/iamhsa/pkenv.git /pkenv && \
+    cd /pkenv && rm -rf .git && \
 	rm -r /tmp/* && \
     yum clean all

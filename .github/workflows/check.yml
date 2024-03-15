@@ -18,4 +18,4 @@ jobs:
         docker build $(sh build-arg-helper.sh version.env) -t localrunner .
     - name: Trivy Scan
       run: |
-        docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --timeout 120m localrunner
+        docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --timeout 120m --exit-code 1 --severity HIGH,CRITICAL localrunner
