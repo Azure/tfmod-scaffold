@@ -16,6 +16,12 @@ jobs:
     - name: Docker Build Test
       run: |
         docker build $(sh build-arg-helper.sh version.env) -t localrunner .
-    - name: Trivy Scan
-      run: |
-        docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image --timeout 120m --exit-code 1 --severity HIGH,CRITICAL localrunner
+    - name: Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        image-ref: 'localrunner'
+        format: 'table'
+        exit-code: '1'
+        severity: 'CRITICAL,HIGH'
+        trivyignores: '.trivyignore'
+        timeout: '120m'
