@@ -25,3 +25,4 @@ jobs:
         severity: 'CRITICAL,HIGH'
         trivyignores: '.trivyignore'
         timeout: '120m'
+        scanners: 'vuln'
