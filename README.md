@@ -47,7 +47,7 @@ docker run --rm -v ${pwd}:/src -w /src localrunner sh scaffold-ci-scripts/sync-t
 | [Terraform Module Breaking Detect](https://github.com/Azure/terraform-module-test-helper) | ![](https://img.shields.io/github/v/tag/Azure/terraform-module-test-helper)       |
 | [HCLEdit](https://github.com/minamijoyo/hcledit)                                          | ![](https://img.shields.io/github/v/tag/minamijoyo/hcledit)                       |
 | [GoSec](https://github.com/securego/gosec)                                                | ![](https://img.shields.io/github/v/tag/securego/gosec)                           |
-| [BridgeCrew Yor](https://github.com/securego/gosec)                                       | ![](https://img.shields.io/github/v/tag/bridgecrewio/yor)                         |
+| [BridgeCrew Yor](https://github.com/bridgecrewio/yor)                                     | ![](https://img.shields.io/github/v/tag/bridgecrewio/yor)                         |
 | [tfenv](https://github.com/tfutils/tfenv)                                       	 		| ![](https://img.shields.io/github/v/tag/tfutils/tfenv)                            |
 | [hclgrep](https://github.com/magodo/hclgrep)												| ![](https://img.shields.io/github/v/tag/magodo/hclgrep)                           |
 | [avmfix](https://github.com/lonegunmanb/avmfix)											| ![](https://img.shields.io/github/v/tag/lonegunmanb/avmfix)                       |
