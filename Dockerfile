@@ -24,7 +24,6 @@ RUN cd /src && \
     go install mvdan.cc/gofumpt@latest && \
 #    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
-    go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
 #    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     git clone https://github.com/lonegunmanb/hcledit.git && \
@@ -40,6 +39,11 @@ RUN cd /src && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
 #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
 #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
+#    go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
+    git clone https://github.com/lonegunmanb/tflint.git && \
+    cd tflint && git checkout $TFLINT_VERSION && \
+    go install && \
+    cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
     go install && \
