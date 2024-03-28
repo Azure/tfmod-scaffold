@@ -24,10 +24,6 @@ jobs:
           make build-test
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@1b1aada464948af03b950897e5eb522f92603cc2 #v3.24.9
-      - name: Upload SARIF file
-        uses: github/codeql-action/upload-sarif@1b1aada464948af03b950897e5eb522f92603cc2 #v3.24.9
-        with:
-          sarif_file: results.sarif
       - name: Breaking Change Brief
         run: |
           c=$(docker run --rm -t -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest breaking_detect /src ${{ github.repository_owner }} ${{ github.event.repository.name }} ${{ github.base_ref }})
