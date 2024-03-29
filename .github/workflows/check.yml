@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Check TFLint Version
+    name: Build and Check with Trivy
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
