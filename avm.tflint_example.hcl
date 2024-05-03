@@ -138,3 +138,7 @@ rule "azurerm_resource_tag" {
 rule "tfnfr26" {
   enabled = false
 }
+
+rule "required_module_source_tffr1" {
+  enabled = false
+}
