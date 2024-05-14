@@ -31,7 +31,8 @@ RUN cd /src && \
     cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
+    #    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
@@ -70,39 +71,39 @@ RUN cd /src && \
     git checkout $TFENV && \
     rm -rf .git
 
-#FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
-#ARG GOLANG_IMAGE_TAG=1.19
-#ARG TERRAFORM_VERSION=1.3.3
-#ARG TARGETARCH
-#ARG PACKER_VERSION=1.9.4
-#ARG TFSEC_VERSION=v1.28.4
-#ARG TFLINT_VERSION=v0.41.0
-#ENV TFLINT_PLUGIN_DIR /home/runtimeuser/tflint
-#ENV GOROOT=/usr/local/go
-#ENV GOPATH=/home/runtimeuser/go
-#ENV PATH=$PATH:/home/runtimeuser/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
-#ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
-#ENV TFENV_AUTO_INSTALL=true
-#ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
-#ENV TF_CLI_CONFIG_FILE=/home/runtimeuser/.terraformrc
-#RUN yum update -y && \
-#    yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
-#    tdnf install moby-cli ca-certificates -y && \
-#    pip3 install cryptography -U && \
-#    pip install azure-cli && \
-#    wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
-#    tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
-#    rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
-#    git config --global user.email "tfmod442916@users.noreply.github.com" && \
-#    git config --global user.name "github-actions[bot]" && \
-#    git config --global --add safe.directory '*'
-#RUN mkdir /home/runtimeuser && \
-#    chmod -R 777 /home/runtimeuser
-#COPY .terraformrc /home/runtimeuser/.terraformrc
-#COPY --from=build /go/bin /usr/local/go/bin
-#COPY --from=build /src/tfenv /home/runtimeuser/tfenv
-#RUN chmod 777 /home/runtimeuser/tfenv && \
-#    git clone https://github.com/iamhsa/pkenv.git /pkenv && \
-#    cd /pkenv && rm -rf .git && \
-#    rm -r /tmp/* && \
-#    yum clean all
+FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
+ARG GOLANG_IMAGE_TAG=1.19
+ARG TERRAFORM_VERSION=1.3.3
+ARG TARGETARCH
+ARG PACKER_VERSION=1.9.4
+ARG TFSEC_VERSION=v1.28.4
+ARG TFLINT_VERSION=v0.41.0
+ENV TFLINT_PLUGIN_DIR /home/runtimeuser/tflint
+ENV GOROOT=/usr/local/go
+ENV GOPATH=/home/runtimeuser/go
+ENV PATH=$PATH:/home/runtimeuser/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
+ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
+ENV TFENV_AUTO_INSTALL=true
+ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
+ENV TF_CLI_CONFIG_FILE=/home/runtimeuser/.terraformrc
+RUN yum update -y && \
+    yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
+    tdnf install moby-cli ca-certificates -y && \
+    pip3 install cryptography -U && \
+    pip install azure-cli && \
+    wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
+    tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
+    rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
+    git config --global user.email "tfmod442916@users.noreply.github.com" && \
+    git config --global user.name "github-actions[bot]" && \
+    git config --global --add safe.directory '*'
+RUN mkdir /home/runtimeuser && \
+    chmod -R 777 /home/runtimeuser
+COPY .terraformrc /home/runtimeuser/.terraformrc
+COPY --from=build /go/bin /usr/local/go/bin
+COPY --from=build /src/tfenv /home/runtimeuser/tfenv
+RUN chmod 777 /home/runtimeuser/tfenv && \
+    git clone https://github.com/iamhsa/pkenv.git /pkenv && \
+    cd /pkenv && rm -rf .git && \
+    rm -r /tmp/* && \
+    yum clean all
