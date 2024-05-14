@@ -184,10 +184,6 @@ rule "private_endpoints" {
   enabled = true
 }
 
-rule "private_endpoints" {
-  enabled = true
-}
-
 rule "role_assignments" {
   enabled = true
 }
