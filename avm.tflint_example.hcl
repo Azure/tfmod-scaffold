@@ -6,7 +6,7 @@ plugin "terraform" {
 
 plugin "avm" {
   enabled     = true
-  version     = "0.3.1"
+  version     = "0.5.0"
   source      = "github.com/Azure/tflint-ruleset-avm"
   signing_key = <<-KEY
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -135,10 +135,58 @@ rule "azurerm_resource_tag" {
   enabled = false
 }
 
+# AVM Provider Rules
+
 rule "tfnfr26" {
   enabled = false
 }
 
+# AVM Module Rules
+
 rule "required_module_source_tffr1" {
   enabled = false
+}
+
+# AVM Output Rules
+
+rule "required_output_rmfr7" {
+  enabled = false
+}
+
+rule "required_output_tffr2" {
+  enabled = false
+}
+
+# AVM Variable Interface Rules
+
+rule "customer_managed_key" {
+  enabled = true
+}
+
+rule "diagnostic_settings" {
+  enabled = true
+}
+
+rule "location" {
+  enabled = true
+}
+
+rule "lock" {
+  enabled = true
+}
+
+rule "managed_identities" {
+  enabled = true
+}
+
+rule "private_endpoints" {
+  enabled = true
+}
+
+rule "role_assignments" {
+  enabled = true
+}
+
+rule "tags" {
+  enabled = true
 }
