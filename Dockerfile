@@ -1,8 +1,8 @@
 ARG GOLANG_IMAGE_TAG=1.20
 FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
 ARG TERRAFORM_DOCS_VERSION=v0.16.0
+ARG TERRAGRUNT_VERSION=v0.43.0
 ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
-ARG TFLINT_VERSION=v0.41.0
 ARG GOLANGCI_LINT_VERSION=v1.49.0
 ARG HCLEDIT_VERSION=v0.2.6
 ARG GOSEC_VERSION=v2.14.0
@@ -31,7 +31,8 @@ RUN cd /src && \
     cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
+    #    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
+    go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
@@ -47,6 +48,14 @@ RUN cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
     go install && \
+    cd /src && \
+    git clone https://github.com/gruntwork-io/terragrunt.git && \
+    cd terragrunt && git checkout $TERRAGRUNT_VERSION && \
+    go install && \
+    cd /src && \
+    git clone https://github.com/lonegunmanb/tflintenv.git && \
+    cd tflintenv && cd tflintenv && go install && \
+    cd ../tflint && go install && \
     cd /src && \
     git clone https://github.com/lonegunmanb/terrafmt.git && \
     cd terrafmt && \
@@ -65,14 +74,15 @@ RUN cd /src && \
 FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
-ARG TERRAGRUNT_VERSION=v0.43.0
 ARG TARGETARCH
 ARG PACKER_VERSION=1.9.4
 ARG TFSEC_VERSION=v1.28.4
+ARG TFLINT_VERSION=v0.41.0
 ENV TFLINT_PLUGIN_DIR /home/runtimeuser/tflint
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/runtimeuser/go
 ENV PATH=$PATH:/home/runtimeuser/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
+ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFENV_AUTO_INSTALL=true
 ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
 ENV TF_CLI_CONFIG_FILE=/home/runtimeuser/.terraformrc
@@ -93,8 +103,6 @@ COPY .terraformrc /home/runtimeuser/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv /home/runtimeuser/tfenv
 RUN chmod 777 /home/runtimeuser/tfenv && \
-    curl '-#' -fL -o /bin/terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/${TERRAGRUNT_VERSION}/terragrunt_linux_${TARGETARCH} && \
-    chmod +x /bin/terragrunt && \
     git clone https://github.com/iamhsa/pkenv.git /pkenv && \
     cd /pkenv && rm -rf .git && \
     rm -r /tmp/* && \
