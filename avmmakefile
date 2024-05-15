@@ -49,7 +49,7 @@ checkovplancheck:
 
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
-pr-check: fmtcheck tfvalidatecheck lint unit-test
+pr-check: clean fmtcheck tfvalidatecheck lint unit-test clean2
 
 unit-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | bash
@@ -80,4 +80,10 @@ autofix:
 grept-apply:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | bash
 
-.PHONY: docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
+clean:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
+
+clean2:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
+
+.PHONY: clean clean2 docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
