@@ -22,28 +22,19 @@ RUN cd /src && \
     export CGO_ENABLED=0 && \
     go install golang.org/x/tools/cmd/goimports@latest && \
     go install mvdan.cc/gofumpt@latest && \
-    #    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
-    #    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     git clone https://github.com/lonegunmanb/hcledit.git && \
     cd hcledit && git checkout $HCLEDIT_VERSION && go install && \
     cd /src && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
-    #    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH || $GOPATH)/bin $GOLANGCI_LINT_VERSION && \
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
-    #    curl '-#' -fL -o /tmp/yor.tar.gz https://github.com/bridgecrewio/yor/releases/download/${YOR_VERSION}/yor_${YOR_VERSION}_linux_${TARGETARCH}.tar.gz && \
-    #    tar -xzf /tmp/yor.tar.gz -C /go/bin && chmod +x /go/bin/yor
-    #    go install github.com/terraform-linters/tflint@$TFLINT_VERSION && \
-    git clone https://github.com/lonegunmanb/tflint.git && \
-    cd tflint && git checkout $TFLINT_VERSION && \
-    go install && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
@@ -69,23 +60,30 @@ RUN cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
     cd /src/tfenv && \
     git checkout $TFENV && \
+    rm -rf .git && \
+    cd /src && \
+    git clone https://github.com/iamhsa/pkenv.git && \
+    cd pkenv && \
     rm -rf .git
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
+ARG HOME_DIR=/home/runtimeuser
 ARG PACKER_VERSION=1.9.4
 ARG TFSEC_VERSION=v1.28.4
 ARG TFLINT_VERSION=v0.41.0
 ENV TFLINT_PLUGIN_DIR /home/runtimeuser/tflint
 ENV GOROOT=/usr/local/go
 ENV GOPATH=/home/runtimeuser/go
-ENV PATH=$PATH:/home/runtimeuser/tfenv/bin:/pkenv/bin:$GOROOT/bin:$GOPATH/bin
+ENV PATH=$PATH:${HOME_DIR}/tfenv/bin:${HOME_DIR}/pkenv/bin:$GOROOT/bin:$GOPATH/bin
 ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
+ENV TFLINTENV_HOME_DIR=/home/runtimeuser/tflintenv
 ENV TFENV_AUTO_INSTALL=true
 ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
-ENV TF_CLI_CONFIG_FILE=/home/runtimeuser/.terraformrc
+ENV TF_CLI_CONFIG_FILE=${HOME_DIR}/.terraformrc
+# Update image, install and configure system-wide software
 RUN yum update -y && \
     yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
     tdnf install moby-cli ca-certificates -y && \
@@ -97,13 +95,17 @@ RUN yum update -y && \
     git config --global user.email "tfmod442916@users.noreply.github.com" && \
     git config --global user.name "github-actions[bot]" && \
     git config --global --add safe.directory '*'
-RUN mkdir /home/runtimeuser && \
-    chmod -R 777 /home/runtimeuser
-COPY .terraformrc /home/runtimeuser/.terraformrc
+# Create home directory, copy over utilities for xyzenv, terraform cli config, and set permissions
+RUN mkdir ${HOME_DIR}
+COPY .terraformrc ${HOME_DIR}/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
-COPY --from=build /src/tfenv /home/runtimeuser/tfenv
-RUN chmod 777 /home/runtimeuser/tfenv && \
-    git clone https://github.com/iamhsa/pkenv.git /pkenv && \
-    cd /pkenv && rm -rf .git && \
+COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
+COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
+RUN mkdir ${HOME_DIR}/tflintenv && \
+    mkdir -p ${HOME_DIR}/.terraform.d/plugin-cache && \
+    chmod -Rv a+rwX ${HOME_DIR} && \
+    chmod 777 ${HOME_DIR}/tfenv/bin/* && \
+    chmod 777 ${HOME_DIR}/pkenv/bin/* && \
     rm -r /tmp/* && \
     yum clean all
+ENV HOME=${HOME_DIR}
