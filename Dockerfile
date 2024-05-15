@@ -74,15 +74,17 @@ ARG HOME_DIR=/home/runtimeuser
 ARG PACKER_VERSION=1.9.4
 ARG TFSEC_VERSION=v1.28.4
 ARG TFLINT_VERSION=v0.41.0
-ENV TFLINT_PLUGIN_DIR /home/runtimeuser/tflint
+ENV AVM_MOD_PATH=/src
+ENV AVM_IN_CONTAINER=1
+ENV GOPATH=${HOME_DIR}/go
 ENV GOROOT=/usr/local/go
-ENV GOPATH=/home/runtimeuser/go
 ENV PATH=$PATH:${HOME_DIR}/tfenv/bin:${HOME_DIR}/pkenv/bin:$GOROOT/bin:$GOPATH/bin
-ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
-ENV TFLINTENV_HOME_DIR=/home/runtimeuser/tflintenv
+ENV TF_CLI_CONFIG_FILE=${HOME_DIR}/.terraformrc
 ENV TFENV_AUTO_INSTALL=true
 ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
-ENV TF_CLI_CONFIG_FILE=${HOME_DIR}/.terraformrc
+ENV TFLINT_PLUGIN_DIR ${HOME_DIR}/tflint
+ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
+ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN yum update -y && \
     yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
