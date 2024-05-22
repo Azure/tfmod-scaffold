@@ -23,6 +23,7 @@ set_tflint_config() {
 }
 
 set_tflint_config "TFLINT_CONFIG" "avm.tflint.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint.hcl" "avm.tflint.hcl" "avm.tflint.merged.hcl"
+set_tflint_config "TFLINT_MODULE_CONFIG" "avm.tflint_module.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint_module.hcl" "avm.tflint_module.hcl" "avm.tflint_module.merged.hcl"
 set_tflint_config "TFLINT_EXAMPLE_CONFIG" "avm.tflint_example.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint_example.hcl" "avm.tflint_example.hcl" "avm.tflint_example.merged.hcl"
 
 echo "==> Checking that code complies with tflint requirements..."
@@ -35,6 +36,30 @@ if ${error}; then
   echo "The preceding files contain terraform blocks that does not complies with tflint requirements."
   echo ""
   exit 1
+fi
+
+if [ ! -d "modules" ]; then
+	echo "===> No modules folder, skip lint module code"
+else
+  cd modules
+  dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
+  has_error=false
+  tflint --init --config=$(pwd)/../$TFLINT_MODULE_CONFIG
+  for d in $dirs; do
+    error=false
+    tflint --config=$(pwd)/../$TFLINT_MODULE_CONFIG --chdir=$(pwd)/./$d || error=true
+    if ${error}; then
+      has_error=true
+      echo "------------------------------------------------"
+      echo ""
+      echo "The $d contain terraform blocks that does not complies with tflint requirements."
+      echo ""
+    fi
+  done
+  if ${has_error}; then
+    exit 1
+  fi
+  cd ..
 fi
 
 if [ ! -d "examples" ]; then
@@ -60,4 +85,6 @@ done
 if ${has_error}; then
   exit 1
 fi
+cd ..
+
 exit 0
