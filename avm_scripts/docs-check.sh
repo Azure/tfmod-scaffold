@@ -1,37 +1,43 @@
 #!/usr/bin/env bash
 
-check_example_docs () {
+check_docs () {
   local dir=$1
-  echo "===> Generating examples documentation in $dir"
+  echo "===> Generating documentation in $dir"
 	cp "$dir/README.md" "$dir/README-generated.md"
   rm -f "$dir/.terraform.lock.hcl"
   terraform-docs -c ".terraform-docs.yml" "$dir"
-	echo "===> Comparing examples documentation in $dir"
+	echo "===> Comparing documentation in $dir"
 	if [ ! -z "$(diff -q "$dir/README.md" "$dir/README-generated.md")" ]; then
-		echo "==> examples/$dir/README.md is out of date. Run 'make pre-commit' to update the generated document and commit."
+		echo "==> $dir/README.md is out of date. Run 'make pre-commit' to update the generated document and commit."
 		mv -f "$dir/README-generated.md" "$dir/README.md"
 		exit 1
 	fi
 	rm -f "$dir/README-generated.md"
 }
 
-echo "==> Generating..."
-cp README.md README-generated.md
+echo "==> Checking root module documentation..."
+check_docs .
 
-rm -f .terraform.lock.hcl
-terraform-docs -c .terraform-docs.yml .
-
-echo "==> Comparing generated code to committed code..."
-if [ ! -z "$(diff -q README.md README-generated.md)" ]; then
-		echo "==> README.md is out of date. Run 'make pre-commit' to update the generated document and commit."
-		mv -f README-generated.md README.md
-		exit 1
+echo "==> Checking examples documentation..."
+if [ ! -d examples ]; then
+  echo "==> Error - no examples directory found"
+  exit 1
 fi
-rm -f README-generated.md
-
 cd examples
-subexamples=$(find ./ -maxdepth 1 -mindepth 1 -type d)
-for d in $subexamples; do
-  check_example_docs $d
+subfolders=$(find ./ -maxdepth 1 -mindepth 1 -type d)
+for d in $subfolders; do
+  check_docs $d
 done
 cd ..
+
+echo "==> Checking sub modules documentation..."
+if [ ! -d modules ]; then
+  echo "==> Warning - no modules directory found"
+else
+	cd modules
+	subfolders=$(find ./ -maxdepth 1 -mindepth 1 -type d)
+	for d in $subfolders; do
+	check_docs $d
+	done
+	cd ..
+fi
