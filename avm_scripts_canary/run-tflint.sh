@@ -26,65 +26,86 @@ set_tflint_config "TFLINT_CONFIG" "avm.tflint.override.hcl" "https://raw.githubu
 set_tflint_config "TFLINT_MODULE_CONFIG" "avm.tflint_module.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint_module.hcl" "avm.tflint_module.hcl" "avm.tflint_module.merged.hcl"
 set_tflint_config "TFLINT_EXAMPLE_CONFIG" "avm.tflint_example.override.hcl" "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm.tflint_example.hcl" "avm.tflint_example.hcl" "avm.tflint_example.merged.hcl"
 
-echo "==> Checking that code complies with tflint requirements..."
-tflint --init --config=$TFLINT_CONFIG
-error=false
-tflint --config=$TFLINT_CONFIG --chdir=$(pwd)/ || error=true
-if ${error}; then
-  echo "------------------------------------------------"
-  echo ""
-  echo "The preceding files contain terraform blocks that does not complies with tflint requirements."
-  echo ""
-  exit 1
+configPathRoot=$(pwd)/$TFLINT_CONFIG
+configPathModule=$(pwd)/$TFLINT_MODULE_CONFIG
+configPathExample=$(pwd)/$TFLINT_EXAMPLE_CONFIG
+
+run_tflint () {
+  local dir=$1
+  local config=$2
+  local moduleType=$3
+  local currentDir=$(pwd)
+
+  cd $dir
+
+  echo "==> Running tflint for $moduleType $dir"
+
+  tflint --init --config=$config
+  tflint --config=$config --minimum-failure-severity=warning
+  local result=$?
+
+  cd $currentDir
+
+  if [ $result -ne 0 ]; then
+    echo "------------------------------------------------"
+    echo ""
+    echo "The $moduleType $dir contains terraform blocks that do not comply with tflint requirements."
+    echo ""
+    return 1
+  fi
+
+  return 0
+}
+
+has_error=false
+
+echo "==> Checking that root module complies with tflint requirements..."
+run_tflint . $configPathRoot "root module"
+result=$?
+if [ $result -ne 0 ]; then
+  has_error=true
 fi
 
+echo "==> Checking that sub modules comply with tflint requirements..."
 if [ ! -d "modules" ]; then
 	echo "===> No modules folder, skip lint module code"
 else
   cd modules
   dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
   has_error=false
-  tflint --init --config=$(pwd)/../$TFLINT_MODULE_CONFIG
   for d in $dirs; do
-    error=false
-    tflint --config=$(pwd)/../$TFLINT_MODULE_CONFIG --chdir=$(pwd)/./$d || error=true
-    if ${error}; then
+    run_tflint $d $configPathModule "sub module"
+    result=$?
+    if [ $result -ne 0 ]; then
       has_error=true
-      echo "------------------------------------------------"
-      echo ""
-      echo "The $d contain terraform blocks that does not complies with tflint requirements."
-      echo ""
     fi
   done
-  if ${has_error}; then
-    exit 1
-  fi
   cd ..
 fi
 
+echo "==> Checking that examples comply with tflint requirements..."
 if [ ! -d "examples" ]; then
 	echo "===> No examples folder, skip lint example code"
-	exit 0
+else
+  cd examples
+  dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
+  has_error=false
+  for d in $dirs; do
+    run_tflint $d $configPathExample "example"
+    result=$?
+    if [ $result -ne 0 ]; then
+      has_error=true
+    fi
+  done
+  cd ..
 fi
 
-cd examples
-dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
-has_error=false
-tflint --init --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG
-for d in $dirs; do
-  error=false
-  tflint --config=$(pwd)/../$TFLINT_EXAMPLE_CONFIG --chdir=$(pwd)/./$d || error=true
-  if ${error}; then
-    has_error=true
-    echo "------------------------------------------------"
-    echo ""
-    echo "The $d contain terraform blocks that does not complies with tflint requirements."
-    echo ""
-  fi
-done
 if ${has_error}; then
+  echo "------------------------------------------------"
+  echo ""
+  echo "The preceding files contain terraform blocks that do not comply with tflint requirements."
+  echo ""
   exit 1
 fi
-cd ..
 
 exit 0
