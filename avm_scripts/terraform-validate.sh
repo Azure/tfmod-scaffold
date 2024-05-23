@@ -29,8 +29,8 @@ echo "==> Checking module terraform code are validate..."
 if [ ! -d modules ]; then
   echo "==> Warning - no modules directory found"
 else
-  examples=$(find ./modules -maxdepth 1 -mindepth 1 -type d)
-  for d in $examples; do
+  modules=$(find ./modules -maxdepth 1 -mindepth 1 -type d)
+  for d in $modules; do
     (echo "===> Terraform validating in " $d && cd $d && rm -f .terraform.lock.hcl && rm -rf .terraform && terraform init -upgrade && terraform validate -json | jq -e .valid) || error=true
     if ${error}; then
       echo "------------------------------------------------"
