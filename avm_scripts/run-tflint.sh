@@ -72,7 +72,7 @@ if [ ! -d "modules" ]; then
 else
   cd modules
   dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
-  has_error=false
+
   for d in $dirs; do
     run_tflint $d $configPathModule "sub module"
     result=$?
@@ -80,6 +80,7 @@ else
       has_error=true
     fi
   done
+
   cd ..
 fi
 
@@ -89,7 +90,7 @@ if [ ! -d "examples" ]; then
 else
   cd examples
   dirs=$(find . -maxdepth 1 -mindepth 1 -type d)
-  has_error=false
+
   for d in $dirs; do
     run_tflint $d $configPathExample "example"
     result=$?
@@ -97,6 +98,7 @@ else
       has_error=true
     fi
   done
+
   cd ..
 fi
 
