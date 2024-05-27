@@ -82,7 +82,6 @@ ENV PATH=$PATH:${HOME_DIR}/tfenv/bin:${HOME_DIR}/pkenv/bin:$GOROOT/bin:$GOPATH/b
 ENV TF_CLI_CONFIG_FILE=${HOME_DIR}/.terraformrc
 ENV TFENV_AUTO_INSTALL=true
 ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
-ENV TFLINT_PLUGIN_DIR ${HOME_DIR}/tflint
 ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
@@ -104,7 +103,6 @@ COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
 COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
 RUN mkdir ${HOME_DIR}/tflintenv && \
-    mkdir -p ${HOME_DIR}/.terraform.d/plugin-cache && \
     chmod -Rv a+rwX ${HOME_DIR} && \
     chmod 777 ${HOME_DIR}/tfenv/bin/* && \
     chmod 777 ${HOME_DIR}/pkenv/bin/* && \
