@@ -21,25 +21,6 @@ jobs:
           languages: go
       - name: build-test
         run: |
-          make build-test
+          sudo make build-test
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@1b1aada464948af03b950897e5eb522f92603cc2 #v3.24.9
-      - name: Breaking Change Brief
-        run: |
-          c=$(docker run --rm -t -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest breaking_detect /src ${{ github.repository_owner }} ${{ github.event.repository.name }} ${{ github.base_ref }})
-          if [ ! -z "$c" ]; then
-            msg=$(printf "Potential Breaking Changes in ${{ github.event.pull_request.head.sha }}:\n${c}")
-            jq -n --arg msg "$msg" '{pr: ${{ github.event.pull_request.number }}, body: $msg}' > change
-          fi
-      - name: Check change existence
-        id: check_change
-        uses: andstor/file-existence-action@f02338908d150e00a4b8bebc2dad18bd9e5229b0 #v1.1.0
-        with:
-          files: "change"
-      - name: 'Upload breaking change warning'
-        if: steps.check_change.outputs.files_exists == 'true'
-        uses: actions/upload-artifact@82c141cc518b40d92cc801eee768e7aafc9c2fa2 #v2.3.1
-        with:
-          retention-days: 1
-          name: change
-          path: change
