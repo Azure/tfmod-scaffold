@@ -160,33 +160,33 @@ rule "required_output_tffr2" {
 # AVM Variable Interface Rules
 
 rule "customer_managed_key" {
-  enabled = true
+  enabled = false
 }
 
 rule "diagnostic_settings" {
-  enabled = true
+  enabled = false
 }
 
 rule "location" {
-  enabled = true
+  enabled = false
 }
 
 rule "lock" {
-  enabled = true
+  enabled = false
 }
 
 rule "managed_identities" {
-  enabled = true
+  enabled = false
 }
 
 rule "private_endpoints" {
-  enabled = true
+  enabled = false
 }
 
 rule "role_assignments" {
-  enabled = true
+  enabled = false
 }
 
 rule "tags" {
-  enabled = true
+  enabled = false
 }
