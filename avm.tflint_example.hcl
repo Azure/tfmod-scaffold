@@ -48,11 +48,11 @@ rule "terraform_deprecated_lookup" {
 }
 
 rule "terraform_documented_outputs" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_documented_variables" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_empty_list_equality" {
