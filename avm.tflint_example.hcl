@@ -6,7 +6,7 @@ plugin "terraform" {
 
 plugin "avm" {
   enabled     = true
-  version     = "0.6.0"
+  version     = "0.8.0"
   source      = "github.com/Azure/tflint-ruleset-avm"
   signing_key = <<-KEY
 -----BEGIN PGP PUBLIC KEY BLOCK-----
@@ -189,4 +189,70 @@ rule "role_assignments" {
 
 rule "tags" {
   enabled = false
+}
+
+# AVM WAF Rules
+
+rule "azurerm_application_gateway.zones" {
+  enabled = true
+}
+
+rule "azurerm_application_gateway.sku.name" {
+  enabled = true
+}
+
+rule "azurerm_cosmosdb_account.backup.type" {
+  enabled = true
+}
+
+rule "azurerm_kubernetes_cluster.zones" {
+  enabled = true
+}
+
+rule "azurerm_lb.sku" {
+  enabled = true
+}
+
+rule "azurerm_mysql_flexible_server.high_availability.mode" {
+  enabled = true
+}
+
+rule "azurerm_mysql_flexible_server.maintenance_window.day_of_week" {
+  enabled = true
+}
+
+rule "azurerm_postgresql_flexible_server.high_availability.mode" {
+  enabled = true
+}
+
+rule "azurerm_postgresql_flexible_server.maintenance_window.day_of_week" {
+  enabled = true
+}
+
+rule "azurerm_public_ip.sku" {
+  enabled = true
+}
+
+rule "azurerm_public_ip.zones" {
+  enabled = true
+}
+
+rule "azurerm_service_plan.zone_balancing_enabled" {
+  enabled = true
+}
+
+rule "azurerm_storage_account.account_replication_type" {
+  enabled = true
+}
+
+rule "azurerm_virtual_machine.zone" {
+  enabled = true
+}
+
+rule "azurerm_virtual_machine.zones" {
+  enabled = true
+}
+
+rule "azurerm_virtual_network_gateway.sku" {
+  enabled = true
 }
