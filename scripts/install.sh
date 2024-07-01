@@ -14,4 +14,4 @@ cp -r tfmod-scaffold/.tflint_example.hcl .tflint_example.hcl
 
 rm -rf .devcontainer
 mkdir -p .devcontainer
-cp tfmod-scaffold/devcontainer/devcontainer.json .devcontainer/devcontainer.json
+cp tfmod-scaffold/.devcontainer/devcontainer.json .devcontainer/devcontainer.json
