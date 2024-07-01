@@ -103,7 +103,8 @@ COPY .terraformrc ${HOME_DIR}/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
 COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
-RUN mkdir ${HOME_DIR}/tflintenv && \
+RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
+    mkdir ${HOME_DIR}/tflintenv && \
     chmod -Rv a+rwX ${HOME_DIR} && \
     chmod 777 ${HOME_DIR}/tfenv/bin/* && \
     chmod 777 ${HOME_DIR}/pkenv/bin/* && \
