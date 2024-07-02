@@ -62,9 +62,10 @@ RUN cd /src && \
     git checkout $TFENV && \
     rm -rf .git && \
     cd /src && \
-    git clone https://github.com/iamhsa/pkenv.git && \
-    cd pkenv && \
-    rm -rf .git
+    git clone https://github.com/lonegunmanb/pkenv.git && \
+    cd pkenv/pkenv && \
+    go install && cd ../packer && \
+    go install
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
@@ -85,6 +86,7 @@ ENV TFENV_TERRAFORM_VERSION=$TERRAFORM_VERSION
 ENV TFLINT_PLUGIN_DIR ${HOME_DIR}/tflint
 ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
+ENV PKENV_DEFAULT_VERSION=${PACKER_VERSION}
 # Update image, install and configure system-wide software
 RUN yum update -y && \
     yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
@@ -102,12 +104,10 @@ RUN mkdir ${HOME_DIR}
 COPY .terraformrc ${HOME_DIR}/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
-COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
 RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
     mkdir ${HOME_DIR}/tflintenv && \
     chmod -Rv a+rwX ${HOME_DIR} && \
     chmod 777 ${HOME_DIR}/tfenv/bin/* && \
-    chmod 777 ${HOME_DIR}/pkenv/bin/* && \
     rm -r /tmp/* && \
     yum clean all
 ENV HOME=${HOME_DIR}
