@@ -153,10 +153,6 @@ rule "required_output_rmfr7" {
   enabled = false
 }
 
-rule "required_output_tffr2" {
-  enabled = false
-}
-
 # AVM Variable Interface Rules
 
 rule "customer_managed_key" {

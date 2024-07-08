@@ -87,7 +87,6 @@ rule "terraform_typed_variables" {
   enabled = true
 }
 
-# disable for `locals.version.tf.json for now
 rule "terraform_unused_declarations" {
   enabled = true
 }
@@ -151,10 +150,6 @@ rule "required_module_source_tffr1" {
 # AVM Output Rules
 
 rule "required_output_rmfr7" {
-  enabled = true
-}
-
-rule "required_output_tffr2" {
   enabled = true
 }
 
