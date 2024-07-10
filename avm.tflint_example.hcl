@@ -186,3 +186,7 @@ rule "role_assignments" {
 rule "tags" {
   enabled = false
 }
+
+rule "provider_modtm_version" {
+  enabled = false
+}
