@@ -48,7 +48,7 @@ RUN cd /src && \
     cd tflintenv && cd tflintenv && go install && \
     cd ../tflint && go install && \
     cd /src && \
-    git clone https://github.com/lonegunmanb/terrafmt.git && \
+    git clone https://github.com/katbyte/terrafmt.git && \
     cd terrafmt && \
     go install && \
     cd /src && \
