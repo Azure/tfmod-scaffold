@@ -32,6 +32,6 @@ fi
 cd modules
 subfolders=$(find ./ -maxdepth 1 -mindepth 1 -type d)
 for d in $subfolders; do
-  generate_docs $d
+  run_tests $d
 done
 cd ..
