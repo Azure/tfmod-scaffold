@@ -108,7 +108,7 @@ rule "terraform_module_provider_declaration" {
 }
 
 rule "terraform_output_separate" {
-  enabled = true
+  enabled = false
 }
 
 rule "terraform_required_providers_declaration" {
@@ -128,7 +128,7 @@ rule "terraform_variable_nullable_false" {
 }
 
 rule "terraform_variable_separate" {
-  enabled = true
+  enabled = false
 }
 
 rule "azurerm_resource_tag" {
