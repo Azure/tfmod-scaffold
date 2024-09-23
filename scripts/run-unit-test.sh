@@ -10,3 +10,5 @@ go mod tidy
 go mod vendor
 echo "==> unit test"
 go test -v -timeout=60m ./...
+
+rm -rf TestRecord
