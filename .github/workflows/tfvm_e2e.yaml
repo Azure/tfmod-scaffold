@@ -10,7 +10,7 @@ jobs:
     env:
       TF_IN_AUTOMATION: 1
       TF_VAR_enable_telemetry: false
-      REMOTE_SCRIPT: "https://raw.githubusercontent.com/Azure/tfmod-scaffold/refs/heads/oidc/scripts"
+      REMOTE_SCRIPT: "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/scripts"
     steps:
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
       - name: e2e test
