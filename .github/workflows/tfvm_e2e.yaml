@@ -1,0 +1,32 @@
+name: E2E Test
+on:
+  workflow_call:
+
+jobs:
+  acc-tests:
+    runs-on: ubuntu-latest
+    environment:
+      name: test
+    env:
+      TF_IN_AUTOMATION: 1
+      TF_VAR_enable_telemetry: false
+    steps:
+      - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
+      - name: init
+        run: |
+          docker run --rm -v $(pwd):/src -w /src mcr.microsoft.com/azterraform:latest make generate
+      - name: e2e test
+        env:
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        run: |
+          sh scripts/ci-e2e.sh
+      - name: version-upgrade test
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        run: |
+          sh scripts/ci-version-upgrade.sh
