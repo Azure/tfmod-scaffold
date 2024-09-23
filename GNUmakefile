@@ -1,4 +1,4 @@
-REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/refs/heads/oidc/scripts"
+REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/scripts"
 
 fmt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/fmt.sh" | bash
