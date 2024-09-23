@@ -1,20 +1,16 @@
-REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/scripts"
+REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/refs/heads/oidc/scripts"
 
 fmt:
-	@echo "==> Fixing source code with gofmt..."
-	find . -name '*.go' | grep -v vendor | xargs gofmt -s -w
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/fmt.sh" | bash
 
 fumpt:
-	@echo "==> Fixing source code with Gofumpt..."
-	find . -name '*.go' | grep -v vendor | xargs gofumpt -w
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/fumpt.sh" | bash
 
 gosec:
-	@echo "==> Checking go code with gosec..."
-	cd test && gosec -tests ./...
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/gosec.sh" | bash
 
 tffmt:
-	@echo "==> Formatting terraform code..."
-	terraform fmt -recursive
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/tffmt.sh" | bash
 
 tffmtcheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terraform-fmt.sh" | bash
@@ -80,8 +76,8 @@ autofix:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/autofix.sh" | bash
 
 test: fmtcheck
-	@TEST=$(TEST) ./scripts/run-gradually-deprecated.sh
-	@TEST=$(TEST) ./scripts/run-test.sh
+	@TEST=$(TEST) curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-gradually-deprecated.sh" | bash
+	@TEST=$(TEST) curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-test.sh" | bash
 
 build-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/build-test.sh" | bash
