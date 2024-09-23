@@ -19,7 +19,7 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         run: |
-          curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/ci-e2e.sh" | bash
+          curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/ci-e2e.sh" | bash
       - name: version-upgrade test
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -27,4 +27,4 @@ jobs:
           ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
           ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
         run: |
-          curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/ci-version-upgrade.sh" | bash
+          curl -H 'Cache-Control: no-cache, no-store' -sSL "$REMOTE_SCRIPT/ci-version-upgrade.sh" | bash
