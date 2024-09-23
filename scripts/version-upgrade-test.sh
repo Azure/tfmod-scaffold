@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+terraform version
 echo "==> Running Module Version Upgrade Tests..."
 set -e
 if [ -z "$PREVIOUS_MAJOR_VERSION" ]; then
