@@ -41,21 +41,6 @@ jobs:
             docker run --rm -v $(pwd):/src -w /src githubchangeloggenerator/github-changelog-generator -u ${{ github.repository_owner }} -p ${{ github.event.repository.name }} -t ${{ secrets.GITHUB_TOKEN }} --no-issues --no-compare-link --since-tag=$previous_tag
           fi
           sudo chmod -R ugo+rwX .
-      - name: Download TestVersionSnapshot
-        id: download-test-version-snapshot-artifact
-        uses: dawidd6/action-download-artifact@268677152d06ba59fcec7a7f0b5d961b6ccd7e1e # v2.28.0
-        if: ${{ steps.PR.outputs.number != '' }}
-        with:
-          github_token: ${{secrets.GITHUB_TOKEN}}
-          pr: ${{ steps.PR.outputs.number }}
-          workflow: acc-test.yaml
-          name: TestRecord-${{ steps.PR.outputs.number }}
-          path: TestRecord
-          if_no_artifact_found: ignore
-      - name: Update Test Record
-        if: ${{ steps.PR.outputs.number != '' }}
-        run: |
-          sh scripts/update-test-record.sh
       - name: AutoFix
         id: autofix
         run: |
