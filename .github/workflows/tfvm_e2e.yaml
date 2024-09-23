@@ -13,12 +13,6 @@ jobs:
       REMOTE_SCRIPT: "https://raw.githubusercontent.com/Azure/tfmod-scaffold/refs/heads/oidc/scripts"
     steps:
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3.6.0
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
-        env:
-          ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
-          ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
-          ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       - name: e2e test
         env:
           ARM_CLIENT_ID: ${{ secrets.ARM_CLIENT_ID }}
