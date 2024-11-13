@@ -3,6 +3,10 @@ set -e
 
 generate_docs () {
   local dir=$1
+  if ! ls "$dir"/*.tf "$dir"/*.tf.json 1> /dev/null 2>&1; then
+    echo "===> Skipping $dir as it contains no .tf or .tf.json files"
+    return
+  fi
   echo "===> Generating documentation in $dir"
   rm -f "$dir/.terraform.lock.hcl"
   terraform-docs -c ".terraform-docs.yml" "$dir"
