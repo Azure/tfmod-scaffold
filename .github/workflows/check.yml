@@ -20,6 +20,9 @@ jobs:
       run: |
         docker build $(sh build-arg-helper.sh version.env) -t localrunner .
     - name: Run Trivy vulnerability scanner
+      env:
+        TRIVY_DB_REPOSITORY: 'ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db'
+        TRIVY_JAVA_DB_REPOSITORY: 'ghcr.io/aquasecurity/trivy-java-db,public.ecr.aws/aquasecurity/trivy-java-db'
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: 'localrunner'
