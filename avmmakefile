@@ -52,7 +52,7 @@ checkovplancheck:
 
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
-pr-check: clean fmtcheck tfvalidatecheck lint unit-test clean2
+pr-check: clean fmtcheck docscheck tfvalidatecheck lint unit-test clean2
 
 unit-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | bash
