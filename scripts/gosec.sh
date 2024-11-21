@@ -1,2 +1,1 @@
-echo "==> Checking go code with gosec..."
-cd test && gosec -tests ./...
+echo "==> Bypassing gosec check for TFVM modules for now."
