@@ -86,7 +86,4 @@ grept-apply:
 clean:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
 
-clean2:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
-
 .PHONY: clean clean2 docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck terraform-test gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
