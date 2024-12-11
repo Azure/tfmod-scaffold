@@ -24,9 +24,7 @@ RUN cd /src && \
     go install mvdan.cc/gofumpt@latest && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
-    git clone https://github.com/lonegunmanb/hcledit.git && \
-    cd hcledit && git checkout $HCLEDIT_VERSION && go install && \
-    cd /src && \
+    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     go install github.com/lonegunmanb/previousTag@latest && \
     go install github.com/magodo/hclgrep@latest && \
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
