@@ -13,6 +13,7 @@ ARG GREPT_VERSION=1a4f08c2fdc41b6a3702fa1238354c40a3fcce3e
 ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
 ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
 ARG HCLMERGE_VERSION=8735bef83162f3ee952213b16e89f8d0ac0d08f7
+ARG PREVIOUS_TAG_VERSION=656b12a97270ca29998ad62e3564d08e7d4369ba
 ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
@@ -25,7 +26,7 @@ RUN cd /src && \
     go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
     go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
-    go install github.com/lonegunmanb/previousTag@latest && \
+    go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
     go install github.com/magodo/hclgrep@latest && \
     go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
