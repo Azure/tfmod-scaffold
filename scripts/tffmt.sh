@@ -1,2 +1,2 @@
-@echo "==> Formatting terraform code..."
+echo "==> Formatting terraform code..."
 terraform fmt -recursive
