@@ -39,7 +39,7 @@ RUN cd /src && \
     cd yor && git checkout main && \
     go install && \
     cd /src && \
-    git clone https://github.com/gruntwork-io/terragrunt.git && \
+    git clone https://github.com/lonegunmanb/terragrunt.git && \
     cd terragrunt && git checkout $TERRAGRUNT_VERSION && \
     go install && \
     cd /src && \
