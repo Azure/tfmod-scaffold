@@ -190,3 +190,7 @@ rule "tags" {
 rule "provider_modtm_version" {
   enabled = true
 }
+
+rule "valid_template_interpolation" {
+  enabled = true
+}
