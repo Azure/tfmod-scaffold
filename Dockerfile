@@ -35,7 +35,7 @@ RUN cd /src && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
-    go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
+    go install github.com/lonegunmanb/conftest@$CONFTEST_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
