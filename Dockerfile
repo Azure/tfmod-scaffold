@@ -14,6 +14,7 @@ ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
 ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
 ARG HCLMERGE_VERSION=8735bef83162f3ee952213b16e89f8d0ac0d08f7
 ARG PREVIOUS_TAG_VERSION=656b12a97270ca29998ad62e3564d08e7d4369ba
+ARG CONFTEST_VERSION=v0.56.0
 ARG TARGETARCH
 COPY GNUmakefile /src/GNUmakefile
 COPY scripts /src/scripts
@@ -34,6 +35,7 @@ RUN cd /src && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
+    go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
