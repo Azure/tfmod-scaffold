@@ -36,7 +36,7 @@ RUN cd /src && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
     cd /src && \
-    git clone github.com/lonegunmanb/conftest.git && \
+    git clone https://github.com/lonegunmanb/conftest.git && \
     cd conftest && git checkout $CONFTEST_VERSION && go install github.com/open-policy-agent/conftest && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
