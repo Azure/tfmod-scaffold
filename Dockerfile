@@ -9,6 +9,7 @@ ARG GOSEC_VERSION=v2.14.0
 ARG YOR_VERSION=0.1.171
 ARG YORBOX_VERSION=latest
 ARG TFENV=v3.0.0
+ARG TFSEC_VERSION=v1.28.4
 ARG GREPT_VERSION=1a4f08c2fdc41b6a3702fa1238354c40a3fcce3e
 ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
 ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
@@ -35,6 +36,7 @@ RUN cd /src && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
+    go install github.com/aquasecurity/tfsec/cmd/tfsec@$TFSEC_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/conftest.git && \
     cd conftest && git checkout $CONFTEST_VERSION && go install github.com/open-policy-agent/conftest && \
@@ -75,7 +77,6 @@ ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
 ARG HOME_DIR=/home/runtimeuser
 ARG PACKER_VERSION=1.9.4
-ARG TFSEC_VERSION=v1.28.4
 ARG TFLINT_VERSION=v0.41.0
 ENV AVM_MOD_PATH=/src
 ENV AVM_IN_CONTAINER=1
