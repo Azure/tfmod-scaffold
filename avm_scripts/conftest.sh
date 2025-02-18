@@ -16,8 +16,11 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     cd "$d"
     echo "==> Checking $d"
 
+    echo "==> Initializing Terraform..."
     terraform init -input=false >/dev/null 2>&1
-    terraform plan -input=false -out=tfplan.binary || has_error=true
+    echo "==> Running Terraform plan..."
+    terraform plan -input=false -out=tfplan.binary >/dev/null 2>&1 || has_error=true
+    echo "==> Converting Terraform plan to JSON..."
     terraform show -json tfplan.binary > tfplan.json || has_error=true
 
     if [ -f "exception.rego" ]; then
