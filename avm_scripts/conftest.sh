@@ -11,13 +11,13 @@ fi
 
 cd examples
 
-for d in $(find . -type d); do
+for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
   if ls "$d"/*.tf > /dev/null 2>&1; then
     cd "$d"
     echo "==> Checking $d"
 
     terraform init -input=false >/dev/null 2>&1
-    terraform plan -out=tfplan.binary || has_error=true
+    terraform plan -input=false -out=tfplan.binary || has_error=true
     terraform show -json tfplan.binary > tfplan.json || has_error=true
 
     if [ -f "exception.rego" ]; then
