@@ -23,8 +23,8 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     echo "==> Converting Terraform plan to JSON..."
     terraform show -json tfplan.binary > tfplan.json || has_error=true
 
-    if [ -f "exception.rego" ]; then
-      conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exception.rego tfplan.json || has_error=true
+    if [ -d "exceptions" ]; then
+      conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
     else
       conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 tfplan.json || has_error=true
     fi
