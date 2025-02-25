@@ -17,11 +17,11 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     echo "==> Checking $d"
 
     echo "==> Initializing Terraform..."
-    terraform init -input=false >/dev/null 2>&1
+    terraform init -input=false
     echo "==> Running Terraform plan..."
-    terraform plan -input=false -out=tfplan.binary >/dev/null 2>&1 || has_error=true
+    terraform plan -input=false -out=tfplan.binary
     echo "==> Converting Terraform plan to JSON..."
-    terraform show -json tfplan.binary > tfplan.json || has_error=true
+    terraform show -json tfplan.binary > tfplan.json
 
     if [ -d "exceptions" ]; then
       conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
