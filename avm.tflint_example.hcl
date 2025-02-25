@@ -187,7 +187,7 @@ rule "tags" {
   enabled = false
 }
 
-rule "provider_modtm_version" {
+rule "provider_modtm_version_constraint" {
   enabled = false
 }
 
