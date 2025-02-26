@@ -1,4 +1,4 @@
-REMOTE_SCRIPT := "https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)"
+REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
 
 docs:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | bash
@@ -52,10 +52,12 @@ checkovplancheck:
 
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
-pr-check: clean fmtcheck docscheck tfvalidatecheck lint unit-test clean2
+pr-check: test-backup fmtcheck docscheck tfvalidatecheck lint unit-test test-restore
 
 unit-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-unit-test.sh" | bash
+
+run-unit-test:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | TESTTYPE="unit" bash
 
 test-example:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-example.sh" | bash
@@ -83,10 +85,10 @@ autofix:
 grept-apply:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | bash
 
-clean:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
+test-backup:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-backup.sh" | bash
 
-clean2:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/clean.sh" | bash
+test-restore:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-restore.sh" | bash
 
-.PHONY: clean clean2 docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck terraform-test gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
+.PHONY: test-backup test-restore docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck terraform-test gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check run-unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
