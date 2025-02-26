@@ -16,6 +16,12 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     cd "$d"
     echo "==> Checking $d"
 
+    if [ -f ".e2eignore" ]; then
+      echo "==> Skipping $d due to .e2eignore file"
+      cd - >/dev/null 2>&1
+      continue
+    fi
+
     echo "==> Initializing Terraform..."
     terraform init -input=false
     echo "==> Running Terraform plan..."
