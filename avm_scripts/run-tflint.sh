@@ -57,6 +57,17 @@ run_tflint () {
   return 0
 }
 
+echo "==> Copy module to temp dir..."
+RND="$RANDOM"
+TMPDIR="/tmp/avmtester$RND"
+cp -r . "$TMPDIR"
+cd "$TMPDIR"
+
+# clean up terraform files
+find -type d -name .terraform -print0 | xargs -0 rm -rf
+find -type f -name .terraform.lock.hcl -print0 | xargs -0 rm -rf
+find -type f -name 'terraform.tfstate*' -print0 | xargs -0 rm -rf
+
 has_error=false
 
 echo "==> Checking that root module complies with tflint requirements..."
