@@ -1,94 +1,107 @@
 REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
 
+.PHONY: docs
 docs:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | bash
 
+.PHONY: docscheck
 docscheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-check.sh" | bash
 
+.PHONY: fmt
 fmt: gofmt terrafmt
 	@echo "==> Fixing Terraform code with terraform fmt..."
 	terraform fmt -recursive
 
+.PHONY: gofmt
 gofmt:
 	@echo "==> Fixing source code with gofmt..."
 	@files=$$(find . -name '*.go' | grep -v vendor); if [ -n "$$files" ]; then echo $$files | xargs gofmt -s -w; fi
 
+.PHONY: fumpt
 fumpt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/go-fumpt.sh" | bash
 
+.PHONY: gosec
 gosec:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/gosec.sh" | bash
 
+.PHONY: tffmtcheck
 tffmtcheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terraform-fmt.sh" | bash
 
+.PHONY: tfvalidatecheck
 tfvalidatecheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terraform-validate.sh" | bash
 
+.PHONY: terrafmtcheck
 terrafmtcheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt-check.sh" | bash
 
-terraform-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-tftest.sh" | bash
-
+.PHONY: gofmtcheck
 gofmtcheck:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/gofmtcheck.sh" | bash
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/fumptcheck.sh" | bash
 
+.PHONY: golint
 golint:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-golangci-lint.sh" | bash
 
+.PHONY: tflint
 tflint:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-tflint.sh" | bash
 
+.PHONY: lint
 lint: golint tflint gosec
 
-checkovcheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/checkovcheck.sh" | bash
-
-checkovplancheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/checkovplancheck.sh" | bash
-
+.PHONY: fmtcheck
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
-pr-check: test-backup fmtcheck docscheck tfvalidatecheck lint unit-test test-restore
+.PHONY: pr-check
+pr-check: env-backup fmtcheck docscheck tfvalidatecheck lint run-unit-test env-restore
 
-unit-test:
+.PHONY: unit-test
+unit-test: env-backup run-unit-test env-restore
 
+.PHONY: run-unit-test
 run-unit-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | TESTTYPE="unit" bash
+  curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
 
+.PHONY: test-example
 test-example:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-example.sh" | bash
 
+.PHONY: e2e-test
 e2e-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-e2e-test.sh" | bash
 
+.PHONY: version-upgrade-test
 version-upgrade-test:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/version-upgrade-test.sh" | bash
 
+.PHONY: terrafmt
 terrafmt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | bash
 
+.PHONY: pre-commit
 pre-commit: depsensure fmt autofix docs
 
+.PHONY: depsensure
 depsensure:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/deps-ensure.sh" | bash
 
-yor-tag:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/yor-tag.sh" | bash
-
+.PHONY: autofix
 autofix:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/autofix.sh" | bash
 
+.PHONY: grept-apply
 grept-apply:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | bash
 
-test-backup:
+.PHONY: env-backup
+env-backup:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-backup.sh" | bash
 
-test-restore:
+.PHONY: env-restore
+env-restore:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-restore.sh" | bash
-
-.PHONY: test-backup test-restore docs docscheck fmt gofmt fumpt gosec tffmtcheck tfvalidatecheck terrafmtcheck terraform-test gofmtcheck golint tflint lint checkovcheck checkovplancheck fmtcheck pr-check run-unit-test e2e-test version-upgrade-test terrafmt pre-commit depsensure yor-tag autofix tools
