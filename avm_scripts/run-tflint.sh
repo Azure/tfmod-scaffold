@@ -57,6 +57,7 @@ run_tflint () {
   return 0
 }
 
+set -e
 echo "==> Copy module to temp dir..."
 RND="$RANDOM"
 TMPDIR="/tmp/avmtester$RND"
@@ -67,6 +68,7 @@ cd "$TMPDIR"
 find -type d -name .terraform -print0 | xargs -0 rm -rf
 find -type f -name .terraform.lock.hcl -print0 | xargs -0 rm -rf
 find -type f -name 'terraform.tfstate*' -print0 | xargs -0 rm -rf
+set +e
 
 has_error=false
 
