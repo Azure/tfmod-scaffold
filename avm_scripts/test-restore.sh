@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo "==> Restoring terraform directories, state files and lock files..."
 find -type d -name '.terraform.avmbackup' -print0 | while IFS= read -r -d '' dir; do
     original_dir="${dir%.avmbackup}"
