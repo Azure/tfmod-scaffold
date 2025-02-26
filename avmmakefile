@@ -63,9 +63,16 @@ pr-check: env-backup fmtcheck docscheck tfvalidatecheck lint run-unit-test env-r
 .PHONY: unit-test
 unit-test: env-backup run-unit-test env-restore
 
+.PHONY: integration-test
+unit-test: env-backup run-unit-test env-restore
+
 .PHONY: run-unit-test
 run-unit-test:
   curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
+
+.PHONY: run-integration-test
+run-unit-test:
+  curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- integration
 
 .PHONY: test-example
 test-example:
