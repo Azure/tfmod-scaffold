@@ -58,7 +58,7 @@ lint: golint tflint gosec
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
 .PHONY: pr-check
-pr-check: env-backup fmtcheck docscheck tfvalidatecheck lint run-unit-test env-restore
+pr-check: env-backup fmtcheck docscheck tfvalidatecheck lint run-unit-test run-integration-test env-restore
 
 .PHONY: unit-test
 unit-test: env-backup run-unit-test env-restore

@@ -8,6 +8,8 @@ fi
 
 TESTDIR="tests/$1"
 
+echo "==> Running terraform test in $TESTDIR..."
+
 # if testdir dir does not exist, exit
 if [ ! -d "$TESTDIR" ]; then
     echo "tests/$1 directory does not exist"

@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 echo "==> Cleaning terraform directories, state files and lock files..."
 find -type d -name .terraform -print0 | while IFS= read -r -d '' dir; do
     cp -r "$dir" "$dir.avmbackup"
