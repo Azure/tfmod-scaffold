@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -euo pipefail
 
 # if $1 is not set, exit
 if [ -z "$1" ]; then
@@ -17,15 +18,15 @@ fi
 echo "==> Copy module to temp dir..."
 RND="$RANDOM"
 TMPDIR="/tmp/avmtester$RND"
-cp -r . "$TMPDIR"
+cp -r "$(pwd)" "$TMPDIR"
 cd "$TMPDIR"
 
+# clean up terraform files
 find -type d -name .terraform -print0 | xargs -0 rm -rf
 find -type f -name .terraform.lock.hcl -print0 | xargs -0 rm -rf
 find -type f -name 'terraform.tfstate*' -print0 | xargs -0 rm -rf
 
 echo "==> Running terraform test in $TESTDIR..."
-# clean up terraform files
 
-terraform init -test-directory="$TESTDIR"
+terraform init -test-directory=" -test$TESTDIR"
 terraform test -test-directory="$TESTDIR"
