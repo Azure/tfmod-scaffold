@@ -1,5 +1,9 @@
 REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
 
+.PHONY: conftest
+conftest:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/conftest.sh" | bash
+
 .PHONY: docs
 docs:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | bash
