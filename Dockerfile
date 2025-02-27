@@ -91,6 +91,7 @@ ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh-server wget moby-cli && \
+    tdnf clean all && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
     cd / && \
@@ -111,6 +112,6 @@ RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
     chmod -Rv a+rwX ${HOME_DIR} && \
     chmod 777 ${HOME_DIR}/tfenv/bin/* && \
     chmod 777 ${HOME_DIR}/pkenv/bin/* && \
-    rm -r /tmp/* && \
-    yum clean all
+    rm -r /tmp/*
+
 ENV HOME=${HOME_DIR}
