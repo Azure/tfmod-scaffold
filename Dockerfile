@@ -71,7 +71,7 @@ RUN cd /src && \
     cd pkenv && \
     rm -rf .git
 
-FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
+FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
@@ -90,11 +90,10 @@ ENV TFLINT_PLUGIN_DIR ${HOME_DIR}/tflint
 ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
-RUN yum update -y && \
-    yum install -y ca-certificates zip unzip jq python3-devel python3-pip make git less diffutils build-essential openssh-server wget && \
-    tdnf install moby-cli ca-certificates -y && \
+RUN tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh-server wget moby-cli && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
+    cd / && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
     rm go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
