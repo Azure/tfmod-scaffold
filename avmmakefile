@@ -1,5 +1,9 @@
 REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
 
+.PHONY: help
+help:
+	@echo "please use 'make <target>'"
+
 .PHONY: conftest
 conftest:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/conftest.sh" | bash
@@ -66,11 +70,11 @@ pr-check: fmtcheck docscheck tfvalidatecheck lint unit-test integration-test
 
 .PHONY: unit-test
 unit-test:
-  curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
 
 .PHONY: integration-test
 integration-test:
-  curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- integration
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- integration
 
 .PHONY: test-example
 test-example:
