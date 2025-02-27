@@ -30,9 +30,9 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     terraform show -json tfplan.binary > tfplan.json
 
     if [ -d "exceptions" ]; then
-      conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
     else
-      conftest test --all-namespaces --update git::https://github.com/lonegunmanb/policy-library-avmrego.git//policy/Azure-Proactive-Resiliency-Library-v2 tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 tfplan.json || has_error=true
     fi
 
     cd - >/dev/null 2>&1
