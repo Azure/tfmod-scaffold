@@ -65,7 +65,7 @@ unit-test:
   curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
 
 .PHONY: integration-test
-unit-test:
+integration-test:
   curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- integration
 
 .PHONY: test-example
