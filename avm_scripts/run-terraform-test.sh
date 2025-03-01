@@ -28,5 +28,5 @@ find -type f -name 'terraform.tfstate*' -print0 | xargs -0 rm -rf
 
 echo "==> Running terraform test in $TESTDIR..."
 
-terraform init -test-directory=" -test$TESTDIR"
+terraform init -test-directory="$TESTDIR"
 terraform test -test-directory="$TESTDIR"
