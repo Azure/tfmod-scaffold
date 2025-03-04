@@ -37,9 +37,7 @@ RUN cd /src && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
     go install github.com/aquasecurity/tfsec/cmd/tfsec@$TFSEC_VERSION && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/conftest.git && \
-    cd conftest && git checkout $CONFTEST_VERSION && go install github.com/open-policy-agent/conftest && \
+    go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
@@ -91,7 +89,6 @@ ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh-server wget moby-cli && \
-    tdnf clean all && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
     cd / && \
