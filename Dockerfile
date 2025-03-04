@@ -38,13 +38,10 @@ RUN cd /src && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
     go install github.com/aquasecurity/tfsec/cmd/tfsec@$TFSEC_VERSION && \
     go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
+    go install github.com/gruntwork-io/terragrunt@TERRAGRUNT_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/yor.git && \
     cd yor && git checkout main && \
-    go install && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/terragrunt.git && \
-    cd terragrunt && git checkout $TERRAGRUNT_VERSION && \
     go install && \
     cd /src && \
     git clone https://github.com/lonegunmanb/tflintenv.git && \
