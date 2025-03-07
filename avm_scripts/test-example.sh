@@ -28,7 +28,8 @@ fi
 echo "==> go test"
 echo $TEST_TIMEOUT
 terraform version
-go test -v -timeout=$TEST_TIMEOUT -run TestExample --
+test_failed=false
+go test -v -timeout=$TEST_TIMEOUT -run TestExample || test_failed=true
 
 # change dir back into the example and run post.sh if it exists
 cd "$AVM_MOD_PATH/examples/$AVM_EXAMPLE"
@@ -36,4 +37,9 @@ if [ -f post.sh ]; then
     echo "==> Running post.sh"
     chmod +x ./post.sh
     ./post.sh
+fi
+
+if [ "$test_failed" = true ]; then
+    echo "==> Test failed"
+    exit 1
 fi
