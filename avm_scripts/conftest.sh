@@ -22,6 +22,13 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
       continue
     fi
 
+    # run pre.sh if it exists
+    if [ -f "./pre.sh" ]; then
+      echo "==> Running pre.sh"
+      chmod +x ./pre.sh
+      ./pre.sh
+    fi
+
     echo "==> Initializing Terraform..."
     terraform init -input=false
     echo "==> Running Terraform plan..."
@@ -33,6 +40,13 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
       conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
     else
       conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 tfplan.json || has_error=true
+    fi
+
+    # run post.sh if it exists
+    if [ -f "./post.sh" ]; then
+      echo "==> Running post.sh"
+      chmod +x ./post.sh
+      ./post.sh
     fi
 
     cd - >/dev/null 2>&1
