@@ -36,10 +36,15 @@ for d in $(find . -maxdepth 1 -mindepth 1 -type d); do
     echo "==> Converting Terraform plan to JSON..."
     terraform show -json tfplan.binary > tfplan.json
 
+    mkdir -p ./policy/default_exceptions
+    curl -sS -o ./policy/default_exceptions/avmsec_exceptions.rego https://raw.githubusercontent.com/Azure/policy-library-avm/refs/heads/main/policy/avmsec/avm_exceptions.rego.bak
+
     if [ -d "exceptions" ]; then
-      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy -p exceptions tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy/arpl -p policy/default_exceptions -p exceptions tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/avmsec -p policy/avmsec -p policy/default_exceptions -p exceptions tfplan.json || has_error=true
     else
-      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/Azure-Proactive-Resiliency-Library-v2 -p policy/arpl -p policy/default_exceptions tfplan.json || has_error=true
+      conftest test --all-namespaces --update git::https://github.com/Azure/policy-library-avm.git//policy/avmsec -p policy/avmsec -p policy/default_exceptions tfplan.json || has_error=true
     fi
 
     # run post.sh if it exists
