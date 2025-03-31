@@ -30,7 +30,7 @@ RUN cd /src && \
     go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
     go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
     go install github.com/magodo/hclgrep@latest && \
-    go install github.com/golangci/golangci-lint/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
+    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
     go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
