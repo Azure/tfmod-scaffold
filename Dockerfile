@@ -6,10 +6,7 @@ ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
 ARG GOLANGCI_LINT_VERSION=v1.49.0
 ARG HCLEDIT_VERSION=v0.2.6
 ARG GOSEC_VERSION=v2.14.0
-ARG YOR_VERSION=0.1.171
-ARG YORBOX_VERSION=latest
 ARG TFENV=v3.0.0
-ARG TFSEC_VERSION=v1.28.4
 ARG GREPT_VERSION=1a4f08c2fdc41b6a3702fa1238354c40a3fcce3e
 ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
 ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
@@ -32,16 +29,11 @@ RUN cd /src && \
     go install github.com/magodo/hclgrep@latest && \
     go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
     go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
-    go install github.com/lonegunmanb/yorbox@$YORBOX_VERSION && \
     go install github.com/Azure/grept@$GREPT_VERSION && \
     go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
-    go install github.com/aquasecurity/tfsec/cmd/tfsec@$TFSEC_VERSION && \
     go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/yor.git && \
-    cd yor && git checkout main && \
-    go install && \
+    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/tflintenv.git && \
     cd tflintenv && cd tflintenv && go install && \
@@ -49,11 +41,6 @@ RUN cd /src && \
     cd /src && \
     git clone https://github.com/lonegunmanb/terrafmt.git && \
     cd terrafmt && \
-    go install && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/terraform-docs.git && \
-    cd terraform-docs && \
-    git checkout $TERRAFORM_DOCS_VERSION && \
     go install && \
     cd /src && \
     git clone https://github.com/tfutils/tfenv.git && \
