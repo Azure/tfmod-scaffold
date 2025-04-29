@@ -35,7 +35,7 @@ RUN cd /src && \
     go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
     go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
     go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
-    go install github.com/lonegunmanb/mapotf@$MAPOTF_VERSION && \
+    go install github.com/Azure/mapotf@$MAPOTF_VERSION && \
     cd /src && \
     git clone https://github.com/lonegunmanb/tflintenv.git && \
     cd tflintenv && cd tflintenv && go install && \
