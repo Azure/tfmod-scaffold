@@ -52,7 +52,7 @@ RUN cd /src && \
     cd pkenv && \
     rm -rf .git
 
-FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
+FROM mcr.microsoft.com/cbl-mariner/base/python:3.9 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
