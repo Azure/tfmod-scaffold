@@ -71,7 +71,8 @@ ENV TFLINT_PLUGIN_DIR ${HOME_DIR}/tflint
 ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
-RUN tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh-server wget moby-cli && \
+RUN tdnf update && \
+    tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh openssh-server wget moby-cli && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
     cd / && \
