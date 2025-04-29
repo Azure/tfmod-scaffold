@@ -52,7 +52,7 @@ RUN cd /src && \
     cd pkenv && \
     rm -rf .git
 
-FROM mcr.microsoft.com/cbl-mariner/base/python:3.9 as runner
+FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
@@ -73,6 +73,7 @@ ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN tdnf update -y && \
     tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh openssh-server wget moby-cli && \
+    tdnf clean all && \
     pip3 install cryptography -U && \
     pip install azure-cli && \
     cd / && \
