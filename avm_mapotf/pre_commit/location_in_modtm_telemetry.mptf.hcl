@@ -7,10 +7,6 @@ locals {
   location_variable_exist = length(data.variable.location.result) == 1
 }
 
-data "resource" telemetry {
-  resource_type = "modtm_telemetry"
-}
-
 transform "update_in_place" telemetry {
   for_each = local.location_variable_exist ? [1] : toset([])
   target_block_address = "resource.modtm_telemetry.telemetry"
