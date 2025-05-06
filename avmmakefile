@@ -66,7 +66,7 @@ lint: golint tflint gosec
 fmtcheck: gofmtcheck tffmtcheck terrafmtcheck
 
 .PHONY: pr-check
-pr-check: fmtcheck docscheck tfvalidatecheck lint unit-test integration-test
+pr-check: fmtcheck docscheck mapotf-precommit-check tfvalidatecheck lint unit-test integration-test
 
 .PHONY: unit-test
 unit-test:
@@ -93,7 +93,15 @@ terrafmt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | bash
 
 .PHONY: pre-commit
-pre-commit: depsensure fmt autofix docs
+pre-commit: depsensure fmt autofix docs mapotf-precommit
+
+.PHONY: mapotf-precommit
+mapotf-precommit:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit.sh" | bash
+
+.PHONY: mapotf-precommit-check
+mapotf-precommit-check:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit-check.sh" | bash
 
 .PHONY: depsensure
 depsensure:
