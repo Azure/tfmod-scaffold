@@ -3,7 +3,7 @@ set -e
 
 # Ensure git working directory is clean
 if [[ -n $(git status --porcelain) ]]; then
-  echo "Error: Git working directory must be clean before running this check."
+  echo "git status shows uncommitted changes. Please commit or stash them before running this script."
   exit 1
 fi
 
