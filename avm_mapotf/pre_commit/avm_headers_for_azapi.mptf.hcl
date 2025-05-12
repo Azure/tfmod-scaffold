@@ -18,18 +18,18 @@ locals {
     ]
 EOT
     fork_avm                  = "!anytrue([for r in local.valid_module_source_regex : can(regex(r, one(data.modtm_module_source.telemetry).module_source))])"
-    avm_azapi_headers         = <<-EOT
-    !var.enable_telemetry ? {} : (local.fork_avm ? {
-      fork_avm  = "true"
-      random_id = one(random_uuid.telemetry).result
-    } : {
-      avm                = "true"
-      random_id          = one(random_uuid.telemetry).result
-      avm_module_source  = one(data.modtm_module_source.telemetry).module_source
-      avm_module_version = one(data.modtm_module_source.telemetry).module_version
-    })
-EOT
   }
+  avm_azapi_headers = <<-EOT
+  !var.enable_telemetry ? {} : (local.fork_avm ? {
+    fork_avm  = "true"
+    random_id = one(random_uuid.telemetry).result
+    } : {
+    avm                = "true"
+    random_id          = one(random_uuid.telemetry).result
+    avm_module_source  = one(data.modtm_module_source.telemetry).module_source
+    avm_module_version = one(data.modtm_module_source.telemetry).module_version
+  })
+EOT
 }
 
 transform "new_block" new_avm_azapi_headers_local {
@@ -37,22 +37,24 @@ transform "new_block" new_avm_azapi_headers_local {
   new_block_type = "locals"
   filename       = "main.telemetry.tf"
   body           = <<-EOT
-    valid_module_source_regex = ${local.azapi_headers_locals.valid_module_source_regex}
-    fork_avm = ${local.azapi_headers_locals.fork_avm}
     # tflint-ignore: terraform_unused_declarations
-    avm_azapi_headers = ${local.azapi_headers_locals.avm_azapi_headers}
+    avm_azapi_headers = ${local.avm_azapi_headers}
 EOT
 }
 
-transform "ensure_local" azapi_headers_local {
+transform "ensure_local" azapi_headers_helper_local {
   for_each           = local.azapi_headers_locals
   name               = each.key
   fallback_file_name = "main.telemetry.tf"
   value_as_string    = each.value
+}
 
-  depends_on = [
-    transform.new_block.new_avm_azapi_headers_local
-  ]
+# We can declare tflint-ignore annotation only by using new_block, so we don't provision ensure_local if local.avm_azapi_headers is absent
+transform "ensure_local" azapi_headers_local {
+  for_each           = local.avm_azapi_headers_exists ? toset([1]) : toset([])
+  name               = "avm_azapi_headers"
+  fallback_file_name = "main.telemetry.tf"
+  value_as_string    = local.avm_azapi_headers
 }
 
 data "variable" enable_telemetry {
