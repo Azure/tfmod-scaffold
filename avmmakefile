@@ -93,7 +93,7 @@ terrafmt:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | bash
 
 .PHONY: pre-commit
-pre-commit: depsensure fmt autofix docs mapotf-precommit
+pre-commit: depsensure fmt mapotf-precommit autofix docs
 
 .PHONY: mapotf-precommit
 mapotf-precommit:

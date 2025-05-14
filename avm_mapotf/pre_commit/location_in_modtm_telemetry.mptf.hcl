@@ -17,7 +17,7 @@ locals {
 }
 
 transform "update_in_place" telemetry_with_var_dot_location {
-  for_each             = local.location_variable_exist && !local.local_dot_main_location_exist ? data.resource.modtm_telemetry.result.modtm_telemetry : {}
+  for_each             = local.location_variable_exist && !local.local_dot_main_location_exist ? try(data.resource.modtm_telemetry.result.modtm_telemetry, {}) : {}
   target_block_address = each.value.mptf.block_address
   asstring {
     tags = strcontains(replace(each.value.tags, " ", ""), "location=var.location") ? each.value.tags : try("merge(${each.value.tags}, { location = var.location })", "{ location = var.location }")
@@ -25,7 +25,7 @@ transform "update_in_place" telemetry_with_var_dot_location {
 }
 
 transform "update_in_place" telemetry_with_local_dot_main_location {
-  for_each             = local.local_dot_main_location_exist ? data.resource.modtm_telemetry.result.modtm_telemetry : {}
+  for_each             = local.local_dot_main_location_exist ? try(data.resource.modtm_telemetry.result.modtm_telemetry, {}) : {}
   target_block_address = each.value.mptf.block_address
   asstring {
     tags = strcontains(replace(each.value.tags, " ", ""), "location=local.main_location") ? each.value.tags : try("merge(${each.value.tags}, { location = local.main_location })", "{ location = local.main_location }")
