@@ -1,10 +1,10 @@
-data "local" avm_azapi_headers {
-  name = "avm_azapi_headers"
+data "local" avm_azapi_header {
+  name = "avm_azapi_header"
 }
 
 locals {
   var_dot_enable_telemeetry_exists = try(data.variable.enable_telemetry.result["enable_telemetry"] != null, false)
-  avm_azapi_headers_exists         = try(data.local.avm_azapi_headers.result["avm_azapi_headers"] != null, false)
+  avm_azapi_header_exists          = try(data.local.avm_azapi_header.result["avm_azapi_header"] != null, false)
 }
 
 locals {
@@ -18,8 +18,7 @@ locals {
     ]
 EOT
     fork_avm                  = "!anytrue([for r in local.valid_module_source_regex : can(regex(r, one(data.modtm_module_source.telemetry).module_source))])"
-  }
-  avm_azapi_headers = <<-EOT
+    avm_azapi_headers         = <<-EOT
   !var.enable_telemetry ? {} : (local.fork_avm ? {
     fork_avm  = "true"
     random_id = one(random_uuid.telemetry).result
@@ -30,15 +29,17 @@ EOT
     avm_module_version = one(data.modtm_module_source.telemetry).module_version
   })
 EOT
+  }
+  avm_azapi_header = "join(\" \", [ for k, v in local.avm_azapi_headers : \"$${k}=$${v}\" ])"
 }
 
-transform "new_block" new_avm_azapi_headers_local {
-  for_each       = local.avm_azapi_headers_exists ? toset([]) : toset([1])
+transform "new_block" new_avm_azapi_header_local {
+  for_each       = local.avm_azapi_header_exists ? toset([]) : toset([1])
   new_block_type = "locals"
   filename       = "main.telemetry.tf"
   body           = <<-EOT
     # tflint-ignore: terraform_unused_declarations
-    avm_azapi_headers = ${local.avm_azapi_headers}
+    avm_azapi_header = ${local.avm_azapi_header}
 EOT
 }
 
@@ -51,10 +52,10 @@ transform "ensure_local" azapi_headers_helper_local {
 
 # We can declare tflint-ignore annotation only by using new_block, so we don't provision ensure_local if local.avm_azapi_headers is absent
 transform "ensure_local" azapi_headers_local {
-  for_each           = local.avm_azapi_headers_exists ? toset([1]) : toset([])
-  name               = "avm_azapi_headers"
+  for_each           = local.avm_azapi_header_exists ? toset([1]) : toset([])
+  name               = "avm_azapi_header"
   fallback_file_name = "main.telemetry.tf"
-  value_as_string    = local.avm_azapi_headers
+  value_as_string    = local.avm_azapi_header
 }
 
 data "variable" enable_telemetry {
@@ -178,17 +179,17 @@ transform "update_in_place" headers {
   for_each             = local.all_azapi_resources_map
   target_block_address = each.key
   asstring {
-    create_headers = try(strcontains(each.value.create_headers, "local.avm_azapi_headers"), false) ? each.value.create_headers : (
-      try(each.value.create_headers == "", true) ? "local.avm_azapi_headers" : "merge(${each.value.create_headers}, local.avm_azapi_headers)"
+    create_headers = try(strcontains(each.value.create_headers, "local.avm_azapi_header"), false) ? each.value.create_headers : (
+      try(each.value.create_headers == "", true) ? "{ \"User-Agent\" : local.avm_azapi_header }" : "merge(${each.value.create_headers}, { \"User-Agent\" : local.avm_azapi_header })"
     )
-    delete_headers = try(strcontains(each.value.delete_headers, "local.avm_azapi_headers"), false) ? each.value.delete_headers : (
-      try(each.value.delete_headers == "", true) ? "local.avm_azapi_headers" : "merge(${each.value.delete_headers}, local.avm_azapi_headers)"
+    delete_headers = try(strcontains(each.value.delete_headers, "local.avm_azapi_header"), false) ? each.value.delete_headers : (
+      try(each.value.delete_headers == "", true) ? "{ \"User-Agent\" : local.avm_azapi_header }" : "merge(${each.value.delete_headers}, { \"User-Agent\" : local.avm_azapi_header })"
     )
-    reader_headers = try(strcontains(each.value.reader_headers, "local.avm_azapi_headers"), false) ? each.value.reader_headers : (
-      try(each.value.reader_headers == "", true) ? "local.avm_azapi_headers" : "merge(${each.value.reader_headers}, local.avm_azapi_headers)"
+    read_headers = try(strcontains(each.value.read_headers, "local.avm_azapi_header"), false) ? each.value.read_headers : (
+      try(each.value.read_headers == "", true) ? "{ \"User-Agent\" : local.avm_azapi_header }" : "merge(${each.value.read_headers}, { \"User-Agent\" : local.avm_azapi_header })"
     )
-    update_headers = try(strcontains(each.value.update_headers, "local.avm_azapi_headers"), false) ? each.value.update_headers : (
-      try(each.value.update_headers == "", true) ? "local.avm_azapi_headers" : "merge(${each.value.update_headers}, local.avm_azapi_headers)"
+    update_headers = try(strcontains(each.value.update_headers, "local.avm_azapi_header"), false) ? each.value.update_headers : (
+      try(each.value.update_headers == "", true) ? "{ \"User-Agent\" : local.avm_azapi_header }" : "merge(${each.value.update_headers}, { \"User-Agent\" : local.avm_azapi_header })"
     )
   }
 }
