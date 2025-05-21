@@ -7,7 +7,7 @@ locals {
 }
 
 transform "update_in_place" azapi_provider_version {
-  for_each             = local.azapi_provider_version_valid ? toset([0]) : toset([1])
+  for_each             = local.avm_headers_for_azapi_enabled && !local.azapi_provider_version_valid ? toset([1]) : toset([])
   target_block_address = "terraform"
   asraw {
     required_providers {

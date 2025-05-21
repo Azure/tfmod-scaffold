@@ -1,3 +1,7 @@
+locals {
+  avm_headers_for_azapi_enabled = strcontains(env("AVMSCRIPT_VERSION"), "canary")
+}
+
 data "local" avm_azapi_header {
   name = "avm_azapi_header"
 }
@@ -34,7 +38,7 @@ EOT
 }
 
 transform "new_block" new_avm_azapi_header_local {
-  for_each       = local.avm_azapi_header_exists ? toset([]) : toset([1])
+  for_each       = local.avm_headers_for_azapi_enabled || !local.avm_azapi_header_exists ? toset([1]) : toset([])
   new_block_type = "locals"
   filename       = "main.telemetry.tf"
   body           = <<-EOT
@@ -44,7 +48,7 @@ EOT
 }
 
 transform "ensure_local" azapi_headers_helper_local {
-  for_each           = local.azapi_headers_locals
+  for_each           = local.avm_headers_for_azapi_enabled ? local.azapi_headers_locals : {}
   name               = each.key
   fallback_file_name = "main.telemetry.tf"
   value_as_string    = each.value
@@ -52,7 +56,7 @@ transform "ensure_local" azapi_headers_helper_local {
 
 # We can declare tflint-ignore annotation only by using new_block, so we don't provision ensure_local if local.avm_azapi_headers is absent
 transform "ensure_local" azapi_headers_local {
-  for_each           = local.avm_azapi_header_exists ? toset([1]) : toset([])
+  for_each           = local.avm_headers_for_azapi_enabled && local.avm_azapi_header_exists ? toset([1]) : toset([])
   name               = "avm_azapi_header"
   fallback_file_name = "main.telemetry.tf"
   value_as_string    = local.avm_azapi_header
@@ -63,7 +67,7 @@ data "variable" enable_telemetry {
 }
 
 transform "new_block" new_enable_telemetry_variable {
-  for_each       = local.var_dot_enable_telemeetry_exists ? toset([]) : toset([1])
+  for_each       = local.avm_headers_for_azapi_enabled && !local.var_dot_enable_telemeetry_exists ? toset([1]) : toset([])
   new_block_type = "variable"
   labels         = ["enable_telemetry"]
   filename       = "variables.tf"
@@ -80,7 +84,7 @@ DESCRIPTION
 }
 
 transform "update_in_place" enable_telemetry_variable {
-  for_each             = local.var_dot_enable_telemeetry_exists ? toset([1]) : toset([])
+  for_each             = local.avm_headers_for_azapi_enabled && local.var_dot_enable_telemeetry_exists ? toset([1]) : toset([])
   target_block_address = "variable.enable_telemetry"
   asraw {
     type        = bool
@@ -102,7 +106,7 @@ data "resource" "random_uuid" {
 }
 
 transform "new_block" new_random_uuid {
-  for_each       = try(data.resource.random_uuid.result["random_uuid"].telemetry != null, false) ? toset([]) : toset([1])
+  for_each       = local.avm_headers_for_azapi_enabled && try(data.resource.random_uuid.result["random_uuid"].telemetry == null, true) ? toset([1]) : toset([])
   new_block_type = "resource"
   labels         = ["random_uuid", "telemetry"]
   filename       = "main.telemetry.tf"
@@ -112,7 +116,7 @@ transform "new_block" new_random_uuid {
 }
 
 transform "update_in_place" random_uuid {
-  for_each             = try(data.resource.random_uuid.result["random_uuid"].telemetry != null, false) ? toset([1]) : toset([])
+  for_each             = local.avm_headers_for_azapi_enabled && try(data.resource.random_uuid.result["random_uuid"].telemetry != null, false) ? toset([1]) : toset([])
   target_block_address = "resource.random_uuid.telemetry"
   asraw {
     count = var.enable_telemetry ? 1 : 0
@@ -127,7 +131,7 @@ data "data" modtm_module_source {
 }
 
 transform "new_block" new_modtm_module_source {
-  for_each       = try(data.data.modtm_module_source.result["modtm_module_source"].telemetry != null, false) ? toset([]) : toset([1])
+  for_each       = local.avm_headers_for_azapi_enabled && try(data.data.modtm_module_source.result["modtm_module_source"].telemetry == null, true) ? toset([1]) : toset([])
   new_block_type = "data"
   labels         = ["modtm_module_source", "telemetry"]
   filename       = "main.telemetry.tf"
@@ -138,7 +142,7 @@ transform "new_block" new_modtm_module_source {
 }
 
 transform "update_in_place" modtm_module_source {
-  for_each             = try(data.data.modtm_module_source.result["modtm_module_source"].telemetry != null, false) ? toset([1]) : toset([])
+  for_each             = local.avm_headers_for_azapi_enabled && try(data.data.modtm_module_source.result["modtm_module_source"].telemetry != null, false) ? toset([1]) : toset([])
   target_block_address = "data.modtm_module_source.telemetry"
   asraw {
     count       = var.enable_telemetry ? 1 : 0
@@ -176,7 +180,7 @@ locals {
 }
 
 transform "update_in_place" headers {
-  for_each             = local.all_azapi_resources_map
+  for_each             = local.avm_headers_for_azapi_enabled ? local.all_azapi_resources_map : {}
   target_block_address = each.key
   asstring {
     create_headers = try(strcontains(each.value.create_headers, "local.avm_azapi_header"), false) ? each.value.create_headers : (
