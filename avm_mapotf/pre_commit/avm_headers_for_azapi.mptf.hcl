@@ -180,7 +180,7 @@ locals {
 }
 
 transform "update_in_place" headers {
-  for_each             = local.avm_headers_for_azapi_enabled ? local.all_azapi_resources_map : {}
+  for_each             = local.avm_headers_for_azapi_enabled ? tomap(local.all_azapi_resources_map) : tomap({})
   target_block_address = each.key
   asstring {
     create_headers = try(strcontains(each.value.create_headers, "local.avm_azapi_header"), false) ? each.value.create_headers : (
