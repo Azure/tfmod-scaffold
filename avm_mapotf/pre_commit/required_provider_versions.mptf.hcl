@@ -13,7 +13,7 @@ transform "update_in_place" azapi_provider_version {
     required_providers {
       azapi = {
         source  = "Azure/azapi"
-        version = ">= 2.4.0, < 3.0"
+        version = "~> 2.4"
       }
     }
   }
