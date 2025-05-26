@@ -38,7 +38,7 @@ EOT
 }
 
 transform "new_block" new_avm_azapi_header_local {
-  for_each       = local.avm_headers_for_azapi_enabled || !local.avm_azapi_header_exists ? toset([1]) : toset([])
+  for_each       = local.avm_headers_for_azapi_enabled && !local.avm_azapi_header_exists ? toset([1]) : toset([])
   new_block_type = "locals"
   filename       = "main.telemetry.tf"
   body           = <<-EOT
@@ -172,7 +172,7 @@ locals {
       for result_set in resource.result : flatten([
         for r in result_set : r
       ])
-    ]
+    ] if local.avm_headers_for_azapi_enabled
   ])
   all_azapi_resources_map = {
     for r in local.all_azapi_resources : r.mptf.block_address => r
@@ -180,7 +180,7 @@ locals {
 }
 
 transform "update_in_place" headers {
-  for_each             = local.avm_headers_for_azapi_enabled ? tomap(local.all_azapi_resources_map) : tomap({})
+  for_each             = local.all_azapi_resources_map
   target_block_address = each.key
   asstring {
     create_headers = try(strcontains(each.value.create_headers, "local.avm_azapi_header"), false) ? each.value.create_headers : (
