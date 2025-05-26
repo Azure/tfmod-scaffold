@@ -54,7 +54,8 @@ RUN cd /src && \
     cd pkenv && \
     rm -rf .git
 
-FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
+#FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner # in case we cannot use azure-cli as base image
+FROM mcr.microsoft.com/azure-cli:cbl-mariner2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
@@ -76,8 +77,8 @@ ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 RUN tdnf update -y && \
     tdnf install -y ca-certificates zip unzip jq make git less diffutils build-essential openssh openssh-server wget moby-cli && \
     tdnf clean all && \
-    pip3 install cryptography -U && \
-    pip install azure-cli && \
+#    pip3 install cryptography -U && \ # Uncomment if we need to use azure-cli with python3
+#    pip install azure-cli && \
     cd / && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
