@@ -99,9 +99,17 @@ pre-commit: depsensure fmt mapotf-precommit autofix docs
 mapotf-precommit:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit.sh" | bash
 
+.PHONY: grept-precommit
+grept-precommit:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit.sh" | bash
+
 .PHONY: mapotf-precommit-check
 mapotf-precommit-check:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit-check.sh" | bash
+
+.PHONY: grept-precommit-check
+grept-precommit:
+	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit-check.sh" | bash
 
 .PHONY: depsensure
 depsensure:
