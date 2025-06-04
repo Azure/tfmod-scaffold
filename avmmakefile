@@ -108,7 +108,7 @@ mapotf-precommit-check:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit-check.sh" | bash
 
 .PHONY: grept-precommit-check
-grept-precommit:
+grept-precommit-check:
 	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit-check.sh" | bash
 
 .PHONY: depsensure
