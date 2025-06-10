@@ -2,8 +2,6 @@
 
 set -e
 
-exit 0
-
 has_error=false
 
 if [ ! -d "examples" ]; then
