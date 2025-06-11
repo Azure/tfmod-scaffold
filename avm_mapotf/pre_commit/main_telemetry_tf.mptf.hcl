@@ -1,13 +1,13 @@
 locals {
-    sync_main_telemetry_tf = strcontains(env("AVMSCRIPT_VERSION"), "canary")
-  }
+  sync_main_telemetry_tf = strcontains(env("AVMSCRIPT_VERSION"), "canary")
+}
 
 data "local" avm_azapi_header {
   name = "avm_azapi_header"
 }
 
 locals {
-  avm_azapi_header_exists          = try(data.local.avm_azapi_header.result["avm_azapi_header"] != null, false)
+  avm_azapi_header_exists = try(data.local.avm_azapi_header.result["avm_azapi_header"] != null, false)
   azapi_headers_locals = {
     valid_module_source_regex = <<-EOT
     [
@@ -85,7 +85,7 @@ transform "new_block" azapi_client_config {
   labels         = ["azapi_client_config", "telemetry"]
   filename       = "main.telemetry.tf"
   asraw {
-    count       = var.enable_telemetry ? 1 : 0
+    count = var.enable_telemetry ? 1 : 0
   }
 }
 
@@ -93,7 +93,7 @@ transform "update_in_place" azapi_client_config {
   for_each             = local.sync_main_telemetry_tf && local.data_azapi_client_config_telemetry_exists ? toset([1]) : toset([])
   target_block_address = "data.azapi_client_config.telemetry"
   asraw {
-    count       = var.enable_telemetry ? 1 : 0
+    count = var.enable_telemetry ? 1 : 0
   }
 }
 
@@ -167,11 +167,11 @@ data "local" "main_location" {
 }
 
 locals {
-  location_variable_exist       = length(data.variable.location.result) == 1
-  local_dot_main_location_exist = length(data.local.main_location.result) == 1
+  location_variable_exist                   = length(data.variable.location.result) == 1
+  local_dot_main_location_exist             = length(data.local.main_location.result) == 1
   resource_modtm_telemetry_telemetry_exists = try(data.resource.modtm_telemetry_telemetry.result["modtm_telemetry"].telemetry.mptf != null, false)
   location_pair = local.local_dot_main_location_exist ? "{ location = local.main_location }" : (
-            local.location_variable_exist ? "{ location = var.location }" : "{}"
+    local.location_variable_exist ? "{ location = var.location }" : "{}"
   )
 }
 
