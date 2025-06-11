@@ -3,7 +3,7 @@ data "terraform" this {
 }
 
 locals {
-  azapi_provider_version_valid = try(!semvercheck(data.terraform.this.required_providers.azapi.version, "2.3.999"), false)
+  azapi_provider_version_valid = try(!semvercheck(data.terraform.this.required_providers.azapi.version, "2.3.999"), false) && try(semvercheck(data.terraform.this.required_providers.azapi.version, "2.999.999"), false)
 }
 
 transform "update_in_place" azapi_provider_version {
