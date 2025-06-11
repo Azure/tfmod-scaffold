@@ -1,4 +1,4 @@
-REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
+REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/$(AVMSCRIPT_VERSION)/avm_scripts
 
 .PHONY: help
 help:

@@ -170,9 +170,13 @@ locals {
   location_variable_exist                   = length(data.variable.location.result) == 1
   local_dot_main_location_exist             = length(data.local.main_location.result) == 1
   resource_modtm_telemetry_telemetry_exists = try(data.resource.modtm_telemetry_telemetry.result["modtm_telemetry"].telemetry.mptf != null, false)
-  location_pair = local.local_dot_main_location_exist ? "{ location = local.main_location }" : (
-    local.location_variable_exist ? "{ location = var.location }" : "{}"
-  )
+}
+
+transform "ensure_local" main_location {
+  for_each           = local.sync_main_telemetry_tf && !local.local_dot_main_location_exist ? toset([1]) : toset([])
+  name               = "main_location"
+  fallback_file_name = "main.telemetry.tf"
+  value_as_string    = local.location_variable_exist ? "var.location" : "\"unknown\""
 }
 
 transform "new_block" new_modtm_telemetry_telemetry {
@@ -190,7 +194,7 @@ transform "new_block" new_modtm_telemetry_telemetry {
       module_source   = one(data.modtm_module_source.telemetry).module_source
       module_version  = one(data.modtm_module_source.telemetry).module_version
       random_id       = one(random_uuid.telemetry).result
-    }, ${local.location_pair})
+    }, { location = local.main_location })
 EOT
   }
 }
@@ -208,7 +212,7 @@ transform "update_in_place" modtm_telemetry_telemetry {
       module_source   = one(data.modtm_module_source.telemetry).module_source
       module_version  = one(data.modtm_module_source.telemetry).module_version
       random_id       = one(random_uuid.telemetry).result
-    }, ${local.location_pair})
+    }, { location = local.main_location })
 EOT
   }
 }
