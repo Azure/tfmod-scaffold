@@ -1,6 +1,6 @@
-FROM local_builder as build
+FROM localhost:5000/builder:latest as build
 
-#FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner # in case we cannot use azure-cli as base image
+#FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
 FROM mcr.microsoft.com/azure-cli:cbl-mariner2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
 ARG TERRAFORM_VERSION=1.3.3
