@@ -1,4 +1,5 @@
-REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts$(AVMSCRIPT_VERSION)
+REMOTE_SCRIPT := https://raw.githubusercontent.com/Azure/tfmod-scaffold/main/avm_scripts
+RUN_SCRIPT = if [ -n "$$LOCAL_SCRIPT" ]; then bash "$$LOCAL_SCRIPT/$1"; else curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/$1" | bash; fi
 
 .PHONY: help
 help:
@@ -6,58 +7,56 @@ help:
 
 .PHONY: conftest
 conftest:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/conftest.sh" | bash
+	@$(call RUN_SCRIPT,conftest.sh)
 
 .PHONY: docs
 docs:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-gen.sh" | bash
+	@$(call RUN_SCRIPT,docs-gen.sh)
 
 .PHONY: docscheck
 docscheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/docs-check.sh" | bash
+	@$(call RUN_SCRIPT,docs-check.sh)
 
 .PHONY: fmt
 fmt: gofmt terrafmt
-	@echo "==> Fixing Terraform code with terraform fmt..."
-	terraform fmt -recursive
+	@$(call RUN_SCRIPT,terraform-fmt-apply.sh)
 
 .PHONY: gofmt
 gofmt:
-	@echo "==> Fixing source code with gofmt..."
-	@files=$$(find . -name '*.go' | grep -v vendor); if [ -n "$$files" ]; then echo $$files | xargs gofmt -s -w; fi
+	@$(call RUN_SCRIPT,gofmt.sh)
 
 .PHONY: fumpt
 fumpt:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/go-fumpt.sh" | bash
+	@$(call RUN_SCRIPT,go-fumpt.sh)
 
 .PHONY: gosec
 gosec:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/gosec.sh" | bash
+	@$(call RUN_SCRIPT,gosec.sh)
 
 .PHONY: tffmtcheck
 tffmtcheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terraform-fmt.sh" | bash
+	@$(call RUN_SCRIPT,terraform-fmt.sh)
 
 .PHONY: tfvalidatecheck
 tfvalidatecheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terraform-validate.sh" | bash
+	@$(call RUN_SCRIPT,terraform-validate.sh)
 
 .PHONY: terrafmtcheck
 terrafmtcheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt-check.sh" | bash
+	@$(call RUN_SCRIPT,terrafmt-check.sh)
 
 .PHONY: gofmtcheck
 gofmtcheck:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/gofmtcheck.sh" | bash
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/fumptcheck.sh" | bash
+	@$(call RUN_SCRIPT,gofmtcheck.sh)
+	@$(call RUN_SCRIPT,fumptcheck.sh)
 
 .PHONY: golint
 golint:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-golangci-lint.sh" | bash
+	@$(call RUN_SCRIPT,run-golangci-lint.sh)
 
 .PHONY: tflint
 tflint:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-tflint.sh" | bash
+	@$(call RUN_SCRIPT,run-tflint.sh)
 
 .PHONY: lint
 lint: golint tflint gosec
@@ -70,55 +69,55 @@ pr-check: fmtcheck docscheck mapotf-precommit-check grept-precommit-check tfvali
 
 .PHONY: unit-test
 unit-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- unit
+	@$(call RUN_SCRIPT,run-terraform-test.sh)
 
 .PHONY: integration-test
 integration-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-terraform-test.sh" | bash -s -- integration
+	@$(call RUN_SCRIPT,run-terraform-test.sh)
 
 .PHONY: test-example
 test-example:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/test-example.sh" | bash
+	@$(call RUN_SCRIPT,test-example.sh)
 
 .PHONY: e2e-test
 e2e-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/run-e2e-test.sh" | bash
+	@$(call RUN_SCRIPT,run-e2e-test.sh)
 
 .PHONY: version-upgrade-test
 version-upgrade-test:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/version-upgrade-test.sh" | bash
+	@$(call RUN_SCRIPT,version-upgrade-test.sh)
 
 .PHONY: terrafmt
 terrafmt:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/terrafmt.sh" | bash
+	@$(call RUN_SCRIPT,terrafmt.sh)
 
 .PHONY: pre-commit
 pre-commit: depsensure fmt mapotf-precommit grept-precommit autofix docs
 
 .PHONY: mapotf-precommit
 mapotf-precommit:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit.sh" | bash
+	@$(call RUN_SCRIPT,mapotf-precommit.sh)
 
 .PHONY: grept-precommit
 grept-precommit:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit.sh" | bash
+	@$(call RUN_SCRIPT,grept-precommit.sh)
 
 .PHONY: mapotf-precommit-check
 mapotf-precommit-check:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/mapotf-precommit-check.sh" | bash
+	@$(call RUN_SCRIPT,mapotf-precommit-check.sh)
 
 .PHONY: grept-precommit-check
 grept-precommit-check:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit-check.sh" | bash
+	@$(call RUN_SCRIPT,grept-precommit-check.sh)
 
 .PHONY: depsensure
 depsensure:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/deps-ensure.sh" | bash
+	@$(call RUN_SCRIPT,deps-ensure.sh)
 
 .PHONY: autofix
 autofix:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/autofix.sh" | bash
+	@$(call RUN_SCRIPT,autofix.sh)
 
 .PHONY: grept-apply
 grept-apply:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-apply.sh" | bash
+	@$(call RUN_SCRIPT,grept-apply.sh)
