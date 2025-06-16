@@ -14,7 +14,7 @@ repo.
 We maintain all versions of tools that we used in [version.env](version.env) file, if you'd like to build the docker image on your machine, please use the following command (need Linux and awk):
 
 ```shell
-docker build $(sh build-arg-helper.sh version.env) -t localrunner .
+bash dockerbuild.sh
 ```
 
 ## Before you commit
