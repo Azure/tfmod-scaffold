@@ -1,4 +1,4 @@
-FROM local_builder as build
+FROM localhost:5000/builder:latest as build
 
 FROM mcr.microsoft.com/cbl-mariner/base/core:2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19

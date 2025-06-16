@@ -46,16 +46,18 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Generate App Version
         run: echo APP_VERSION=`git describe --tags --always` >> $GITHUB_ENV
+      - name: Set up local registry
+        run: docker run -d -p 5000:5000 --restart=always --name registry registry:2
       - name: Local builder image
         id: docker_build_builder
         uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
         with:
-          push: false
+          push: true
           platforms: |
             linux/amd64
             linux/arm64
           file: ./Dockerfile_builder
-          tags: builder:latest
+          tags: localhost:5000/builder:latest
           build-args: |
             ${{ steps.readenv.outputs.content }}
       - name: Build and push azterraform
