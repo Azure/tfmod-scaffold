@@ -20,7 +20,7 @@ ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN tdnf update -y && \
-    tdnf install -y ca-certificates jq make git wget tar && \
+    tdnf install -y ca-certificates make git wget tar && \
     tdnf clean all && \
     cd / && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
@@ -34,12 +34,10 @@ RUN mkdir ${HOME_DIR}
 COPY .terraformrc ${HOME_DIR}/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
 COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
-COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
 RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
     mkdir ${HOME_DIR}/tflintenv && \
     chmod -Rv a+rwX ${HOME_DIR} && \
     chmod 777 ${HOME_DIR}/tfenv/bin/* && \
-    chmod 777 ${HOME_DIR}/pkenv/bin/* && \
     rm -r /tmp/*
 
 ENV HOME=${HOME_DIR}
