@@ -32,11 +32,11 @@ git clone "$REPO_URL" "$TEMP_DIR" || { echo "Failed to clone $REPO_URL"; exit 1;
 
 # Run pre-commit check
 echo "Running pre-commit check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { echo "Pre-commit check failed"; exit 1; }
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { echo "Pre-commit check failed"; exit 1; }
 
 # Run PR check
 echo "Running PR check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pr-check || { echo "PR check failed"; exit 1; }
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pr-check || { echo "PR check failed"; exit 1; }
 
 echo "===== Completed testing for $FOLDER_NAME ====="
 exit 0
