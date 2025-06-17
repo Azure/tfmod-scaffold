@@ -22,7 +22,7 @@ jobs:
     - name: Maximize build space
       uses: easimon/maximize-build-space@fc881a613ad2a34aca9c9624518214ebc21dfc0c #v10
       with:
-        root-reserve-mb: 1024
+        root-reserve-mb: 20240
         swap-size-mb: 1024
         build-mount-path: '/var/lib/docker'
     - name: Restart Docker
