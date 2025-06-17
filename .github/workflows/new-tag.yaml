@@ -60,6 +60,8 @@ jobs:
           tags: localhost:5000/builder:latest
           build-args: |
             ${{ steps.readenv.outputs.content }}
+          driver-opts: |
+            network=host
       - name: Build and push azterraform
         id: docker_build_azterraform
         uses: docker/build-push-action@1104d471370f9806843c095c1db02b5a90c5f8b6 # v3.3.1
@@ -73,3 +75,5 @@ jobs:
             ${{ env.DOCKERHUB_REPO }}:${{ env.APP_VERSION }}
           build-args: |
             ${{ steps.readenv.outputs.content }}
+          driver-opts: |
+            network=host
