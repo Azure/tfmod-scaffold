@@ -9,6 +9,8 @@ if [ ! "$(command -v "$CONTAINER_RUNTIME")" ]; then
     exit 1
 fi
 
-$CONTAINER_RUNTIME build $(sh build-arg-helper.sh version.env) --build-arg TARGETARCH=amd64 -f Dockerfile_builder -t localhost:5000/builder .
-$CONTAINER_RUNTIME build $(sh build-arg-helper.sh version.env) --build-arg TARGETARCH=amd64 -f Dockerfile -t localrunner .
+cat Dockerfile.build Dockerfile.azterraform > Dockerfile_azterraform
+cat Dockerfile.build Dockerfile.avm > Dockerfile_avm
+
+$CONTAINER_RUNTIME build $(sh build-arg-helper.sh version.env) --build-arg TARGETARCH=amd64 -f Dockerfile_azterraform -t localrunner .
 $CONTAINER_RUNTIME build $(sh build-arg-helper.sh version.env) --build-arg TARGETARCH=amd64 -f Dockerfile_avm -t localrunner_avm .
