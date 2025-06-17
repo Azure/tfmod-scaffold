@@ -18,7 +18,7 @@ ENV TFLINTENV_DEFAULT_VERSION=$TFLINT_VERSION
 ENV TFLINTENV_HOME_DIR=${HOME_DIR}/tflintenv
 # Update image, install and configure system-wide software
 RUN tdnf update -y && \
-    tdnf install -y ca-certificates make git wget tar && \
+    tdnf install -y ca-certificates make git wget tar unzip awk && \
     tdnf clean all && \
     cd / && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
