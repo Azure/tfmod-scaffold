@@ -32,7 +32,7 @@ git clone "$REPO_URL" "$TEMP_DIR" || { echo "Failed to clone $REPO_URL"; exit 1;
 
 # Run pre-commit check
 echo "Running pre-commit check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { failed_tasks+=("commit check failed)"; exit 1; }
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { echo "pre-commit failed"; exit 1; }
 
 has_error=false
 # Initialize array to collect failed tasks
