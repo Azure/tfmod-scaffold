@@ -34,9 +34,36 @@ git clone "$REPO_URL" "$TEMP_DIR" || { echo "Failed to clone $REPO_URL"; exit 1;
 echo "Running pre-commit check"
 docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { echo "Pre-commit check failed"; exit 1; }
 
+has_error=false
 # Run PR check
-echo "Running PR check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pr-check || { echo "PR check failed"; exit 1; }
+echo "Running fmtcheck check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make fmtcheck || has_error=true
+
+echo "Running docscheck check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make docscheck || has_error=true
+
+echo "Running mapotf-precommit-check check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make mapotf-precommit-check || has_error=true
+
+echo "Running grept-precommit-check check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make grept-precommit-check || has_error=true
+
+echo "Running tfvalidatecheck check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make tfvalidatecheck || has_error=true
+
+echo "Running lint check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make lint || has_error=true
+
+echo "Running unit-test check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make unit-test || has_error=true
+
+echo "Running integration-test check"
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make integration-test || has_error=true
+
+if [ "$has_error" = true ]; then
+    echo "Some checks failed. Please review the output above."
+    exit 1
+fi
 
 echo "===== Completed testing for $FOLDER_NAME ====="
 exit 0

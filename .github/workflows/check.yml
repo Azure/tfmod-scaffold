@@ -47,5 +47,12 @@ jobs:
         scanners: 'vuln'
     - name: Test AVM image with AVM modules
       run: |
-        bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault
-        bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp
+        has_error=false
+        bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault || has_error=true
+        bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp || has_error=true
+        if [ "$has_error" = true ]; then
+          echo "AVM module tests failed, but it might be as expected, eg: new files added."
+          exit 1
+        else
+          echo "AVM module tests passed"
+        fi
