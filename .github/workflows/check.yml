@@ -11,7 +11,7 @@ on:
 
 jobs:
   test:
-    name: Build and Check with Trivy
+    name: Build Check Test
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
