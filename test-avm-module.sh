@@ -32,44 +32,4 @@ git clone "$REPO_URL" "$TEMP_DIR" || { echo "Failed to clone $REPO_URL"; exit 1;
 
 # Run pre-commit check
 echo "Running pre-commit check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make pre-commit || { echo "pre-commit failed"; exit 1; }
-
-has_error=false
-# Initialize array to collect failed tasks
-failed_tasks=()
-# Run PR check
-echo "Running fmtcheck check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make fmtcheck || { failed_tasks+=("fmtcheck failed"); has_error=true; }
-
-echo "Running docscheck check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make docscheck || { failed_tasks+=("docscheck failed"); has_error=true; }
-
-echo "Running mapotf-precommit-check check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make mapotf-precommit-check || { failed_tasks+=("mapotf-precommit-check failed"); has_error=true; }
-
-echo "Running grept-precommit-check check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make grept-precommit-check || { failed_tasks+=("grept-precommit-check failed"); has_error=true; }
-
-echo "Running tfvalidatecheck check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make tfvalidatecheck || { failed_tasks+=("tfvalidatecheck failed"); has_error=true; }
-
-echo "Running lint check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make lint || { failed_tasks+=("lint failed"); has_error=true; }
-
-echo "Running unit-test check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make unit-test || { failed_tasks+=("unit-test failed"); has_error=true; }
-
-echo "Running integration-test check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" make integration-test || { failed_tasks+=("integration-test failed"); has_error=true; }
-
-if [ "$has_error" = true ]; then
-    echo "===== The following checks failed: ====="
-    for task in "${failed_tasks[@]}"; do
-        echo "- $task"
-    done
-    echo "Please review the output above for details."
-    exit 1
-fi
-
-echo "===== Completed testing for $FOLDER_NAME ====="
-exit 0
+docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" bash -c 'make pre-commit && git commit -am "test" && make pr-check' || { echo "pre-commit failed"; exit 1; }
