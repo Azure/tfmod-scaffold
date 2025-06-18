@@ -1,55 +1,78 @@
-ARG GOLANG_IMAGE_TAG=1.20
-FROM mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} as build
+ARG GOLANG_IMAGE_TAG=1.24
+# Use native build architecture and cross compile for target architecture
+FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} AS builder
+ARG AVMFIX_VERSION=v0.6.0
+ARG GREPT_VERSION=60c71b2d8554c7ec562168a1ffd46a695a73322d
+ARG HCLEDIT_VERSION=0.2.17
+ARG HCLMERGE_VERSION=2dff14bd831a6f696d6572f03a5a61a11e4e3d66
+ARG MAPOTF_VERSION=1a50a9033189df84e72f32c94fe88ab4ff70a0a9
+ARG PORCH_VERSION=0.0.3
 ARG TERRAFORM_DOCS_VERSION=v0.18.0
-ARG TERRAGRUNT_VERSION=v0.43.0
-ARG TFMOD_TEST_HELPER_VERSION=v0.0.22
-ARG GOLANGCI_LINT_VERSION=v1.49.0
-ARG HCLEDIT_VERSION=v0.2.6
-ARG GOSEC_VERSION=v2.14.0
 ARG TFENV=v3.0.0
-ARG GREPT_VERSION=1a4f08c2fdc41b6a3702fa1238354c40a3fcce3e
-ARG NEWRES_VERSION=a535fe92925845dfa033a3db71adf7d65511cbf3
-ARG AVMFIX_VERSION=9c158444b055e845c0cc9afc7cdc88d0ab19e5eb
-ARG HCLMERGE_VERSION=8735bef83162f3ee952213b16e89f8d0ac0d08f7
-ARG PREVIOUS_TAG_VERSION=656b12a97270ca29998ad62e3564d08e7d4369ba
-ARG CONFTEST_VERSION=v0.56.0
-ARG MAPOTF_VERSION=34acfd616ae081a560286d06c42f1f8329cf5b74
+ARG GOBUILDARGS='-trimpath'
+# The below is set by Buildx for cross-platform builds
 ARG TARGETARCH
-COPY GNUmakefile /src/GNUmakefile
-COPY scripts /src/scripts
-RUN cd /src && \
-    apt-get update && \
-    apt-get install -y zip  && \
-    export CGO_ENABLED=0 && \
-    go install golang.org/x/tools/cmd/goimports@latest && \
-    go install mvdan.cc/gofumpt@latest && \
-    go install github.com/Azure/terraform-module-test-helper/bin/breaking_detect@$TFMOD_TEST_HELPER_VERSION && \
-    go install github.com/securego/gosec/v2/cmd/gosec@$GOSEC_VERSION && \
-    go install github.com/minamijoyo/hcledit@$HCLEDIT_VERSION && \
-    go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
-    go install github.com/magodo/hclgrep@latest && \
-    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@$GOLANGCI_LINT_VERSION && \
-    go install github.com/lonegunmanb/avmfix@$AVMFIX_VERSION && \
-    go install github.com/Azure/grept@$GREPT_VERSION && \
-    go install github.com/lonegunmanb/newres/v3@$NEWRES_VERSION && \
-    go install github.com/lonegunmanb/hclmerge@$HCLMERGE_VERSION && \
-    go install github.com/open-policy-agent/conftest@$CONFTEST_VERSION && \
-    go install github.com/terraform-docs/terraform-docs@$TERRAFORM_DOCS_VERSION && \
-    go install github.com/Azure/mapotf@$MAPOTF_VERSION && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/tflintenv.git && \
-    cd tflintenv && cd tflintenv && go install && \
-    cd ../tflint && go install && \
-    cd /src && \
-    git clone https://github.com/lonegunmanb/terrafmt.git && \
-    cd terrafmt && \
-    go install && \
-    cd /src && \
-    git clone https://github.com/tfutils/tfenv.git && \
-    cd /src/tfenv && \
-    git checkout $TFENV && \
-    rm -rf .git && \
-    cd /src && \
-    git clone https://github.com/iamhsa/pkenv.git && \
-    cd pkenv && \
-    rm -rf .git
+# Cross compile go binaries
+ENV GOARCH=${TARGETARCH}
+RUN mkdir /src && \
+  cd /src && \
+  export CGO_ENABLED=0 && \
+  echo "Build hcledit" && \
+  curl -sL https://github.com/minamijoyo/hcledit/releases/download/v${HCLEDIT_VERSION}/hcledit_${HCLEDIT_VERSION}_linux_${TARGETARCH}.tar.gz -o hcledit.tar.gz && \
+  tar -xzf hcledit.tar.gz && \
+  mv hcledit /go/bin && \
+  echo "Build hclgrep" && \
+  git clone https://github.com/magodo/hclgrep && \
+  cd hclgrep && \
+  git checkout main && \
+  go build ${GOBUILDARGS} -o /go/bin/hclgrep . && \
+  cd /src && \
+  echo "Build avmfix" && \
+  git clone https://github.com/lonegunmanb/avmfix && \
+  cd avmfix && \
+  git checkout ${AVMFIX_VERSION} && \
+  go build ${GOBUILDARGS} -o /go/bin/avmfix . && \
+  cd /src && \
+  echo "Build grept" && \
+  git clone https://github.com/Azure/grept && \
+  cd grept && \
+  git checkout ${GREPT_VERSION} && \
+  go build ${GOBUILDARGS} -o /go/bin/grept . && \
+  cd /src && \
+  echo "Build hclmerge" && \
+  git clone https://github.com/lonegunmanb/hclmerge && \
+  cd hclmerge && \
+  git checkout ${HCLMERGE_VERSION} && \
+  go build ${GOBUILDARGS} -o /go/bin/hclmerge . && \
+  echo "Build terraform-docs" && \
+  curl -sL https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-${TARGETARCH}.tar.gz -o terraform-docs.tar.gz && \
+  tar -xzf terraform-docs.tar.gz && \
+  mv terraform-docs /go/bin && \
+  echo "Build mapotf" && \
+  git clone https://github.com/Azure/mapotf && \
+  cd mapotf && \
+  git checkout ${MAPOTF_VERSION} && \
+  go build ${GOBUILDARGS} -o /go/bin/mapotf . && \
+  cd /src && \
+  echo "Build porch" && \
+  curl -sL https://github.com/matt-FFFFFF/porch/releases/download/v${PORCH_VERSION}/porch_${PORCH_VERSION}_linux_${TARGETARCH}.tar.gz -o porch.tar.gz && \
+  tar -xzf porch.tar.gz && \
+  mv porch /go/bin && \
+  echo "Build tflintenv" && \
+  git clone https://github.com/lonegunmanb/tflintenv.git && \
+  cd tflintenv && cd tflintenv && go build ${GOBUILDARGS} -o /go/bin/tflintenv && \
+  cd ../tflint && go build ${GOBUILDARGS} -o /go/bin/tflint && \
+  cd /src && \
+  echo "Build terrafmt" && \
+  git clone https://github.com/lonegunmanb/terrafmt.git && \
+  cd terrafmt && \
+  go build ${GOBUILDARGS} -o /go/bin/terrafmt . && \
+  cd /src && \
+  echo "Fetch tfenv" && \
+  git clone https://github.com/tfutils/tfenv.git && \
+  cd /src/tfenv && \
+  git checkout $TFENV && \
+  rm -rf .git && \
+  cd /src && \
+  rm -rf .git && \
+  chmod a+x /go/bin/*
