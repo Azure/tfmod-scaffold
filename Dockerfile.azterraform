@@ -48,9 +48,9 @@ RUN tdnf update -y && \
 # Create home directory, copy over utilities for xyzenv, terraform cli config, and set permissions
 RUN mkdir ${HOME_DIR}
 COPY .terraformrc ${HOME_DIR}/.terraformrc
-COPY --from=build /go/bin /usr/local/go/bin
+COPY --from=builder /go/bin /usr/local/go/bin
 COPY --from=azterraform_builder /go/bin /usr/local/bin
-COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
+COPY --from=builder /src/tfenv ${HOME_DIR}/tfenv
 COPY --from=azterraform_builder /src/pkenv ${HOME_DIR}/pkenv
 RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
     mkdir ${HOME_DIR}/tflintenv && \
