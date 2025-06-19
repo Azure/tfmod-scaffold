@@ -44,10 +44,15 @@ RUN mkdir /src && \
   cd hclmerge && \
   git checkout ${HCLMERGE_VERSION} && \
   go build ${GOBUILDARGS} -o /go/bin/hclmerge . && \
+  cd /src && \
   echo "Build terraform-docs" && \
-  curl -sL https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-${TARGETARCH}.tar.gz -o terraform-docs.tar.gz && \
-  tar -xzf terraform-docs.tar.gz && \
-  mv terraform-docs /go/bin && \
+  # curl -sL https://github.com/terraform-docs/terraform-docs/releases/download/${TERRAFORM_DOCS_VERSION}/terraform-docs-${TERRAFORM_DOCS_VERSION}-linux-${TARGETARCH}.tar.gz -o terraform-docs.tar.gz && \
+  # tar -xzf terraform-docs.tar.gz && \
+  # mv terraform-docs /go/bin && \
+  git clone https://github.com/terraform-docs/terraform-docs.git && \
+  cd terraform-docs && \
+  go build ${GOBUILDARGS} -o /go/bin/terraform-docs . && \
+  cd /src && \
   echo "Build mapotf" && \
   git clone https://github.com/Azure/mapotf && \
   cd mapotf && \
