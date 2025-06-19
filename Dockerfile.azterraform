@@ -1,6 +1,17 @@
+ARG GOLANG_IMAGE_TAG=1.24
+# Use native build architecture and cross compile for target architecture
+FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} AS azterraform_builder
+ARG PREVIOUS_TAG_VERSION=656b12a97270ca29998ad62e3564d08e7d4369ba
+RUN go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
+    cd /src && \
+    git clone https://github.com/iamhsa/pkenv.git && \
+    cd pkenv && \
+    rm -rf .git
+
 #FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
 FROM mcr.microsoft.com/azure-cli:cbl-mariner2.0 as runner
 ARG GOLANG_IMAGE_TAG=1.19
+ARG CONFTEST_VERSION=0.60.0
 ARG TERRAFORM_VERSION=1.3.3
 ARG TARGETARCH
 ARG HOME_DIR=/home/runtimeuser
@@ -23,6 +34,10 @@ RUN tdnf update -y && \
     tdnf clean all && \
 #    pip3 install cryptography -U && \ # Uncomment if we need to use azure-cli with python3
 #    pip install azure-cli && \
+    echo "Install conftest" && \
+    curl -sL https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_linux_${TARGETARCH}.rpm -o conftest.rpm && \
+    rpm -i conftest.rpm && \
+    rm conftest.rpm
     cd / && \
     wget -q https://go.dev/dl/go${GOLANG_IMAGE_TAG}.linux-${TARGETARCH}.tar.gz && \
     tar -C /usr/local -xzf go*.linux-${TARGETARCH}.tar.gz && \
@@ -34,8 +49,9 @@ RUN tdnf update -y && \
 RUN mkdir ${HOME_DIR}
 COPY .terraformrc ${HOME_DIR}/.terraformrc
 COPY --from=build /go/bin /usr/local/go/bin
+COPY --from=azterraform_builder /go/bin /usr/local/bin
 COPY --from=build /src/tfenv ${HOME_DIR}/tfenv
-COPY --from=build /src/pkenv ${HOME_DIR}/pkenv
+COPY --from=azterraform_builder /src/pkenv ${HOME_DIR}/pkenv
 RUN cp /root/.gitconfig ${HOME_DIR}/.gitconfig && \
     mkdir ${HOME_DIR}/tflintenv && \
     chmod -Rv a+rwX ${HOME_DIR} && \
