@@ -51,6 +51,7 @@ RUN mkdir /src && \
   # mv terraform-docs /go/bin && \
   git clone https://github.com/terraform-docs/terraform-docs.git && \
   cd terraform-docs && \
+  git checkout ${TERRAFORM_DOCS_VERSION} && \
   go build ${GOBUILDARGS} -o /go/bin/terraform-docs . && \
   cd /src && \
   echo "Build mapotf" && \
