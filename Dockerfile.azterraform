@@ -3,6 +3,7 @@ ARG GOLANG_IMAGE_TAG=1.24
 FROM --platform=${BUILDPLATFORM} mcr.microsoft.com/oss/go/microsoft/golang:${GOLANG_IMAGE_TAG} AS azterraform_builder
 ARG PREVIOUS_TAG_VERSION=656b12a97270ca29998ad62e3564d08e7d4369ba
 RUN go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
+    mkdir /src && \
     cd /src && \
     git clone https://github.com/iamhsa/pkenv.git && \
     cd pkenv && \
