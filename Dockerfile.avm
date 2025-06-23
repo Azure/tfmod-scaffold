@@ -16,7 +16,7 @@ COPY --from=builder /go/bin /usr/local/bin
 COPY --from=builder /src/tfenv ${HOME_DIR}/tfenv
 # The below is set by Buildx for cross-platform builds
 ARG TARGETARCH
-RUN tdnf install --security -y ca-certificates azure-cli gawk git jq less make powershell unzip wget zip diffutils && \
+RUN tdnf install --security -y ca-certificates azure-cli gawk git jq less make powershell unzip wget zip diffutils which && \
   tdnf upgrade --security -y && \
   tdnf clean all && \
   git config --global user.email "tfmod442916@users.noreply.github.com" && \
