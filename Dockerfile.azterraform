@@ -7,7 +7,11 @@ RUN go install github.com/lonegunmanb/previousTag@$PREVIOUS_TAG_VERSION && \
     cd /src && \
     git clone https://github.com/iamhsa/pkenv.git && \
     cd pkenv && \
-    rm -rf .git
+    rm -rf .git && \
+    cd /src && \
+    git clone https://github.com/mvdan/gofumpt.git && \
+    cd gofumpt && \
+    go build ${GOBUILDARGS} -o /go/bin/gofumpt .
 
 #FROM mcr.microsoft.com/azurelinux/base/python:3.12 as runner
 FROM mcr.microsoft.com/azure-cli:cbl-mariner2.0 as runner
