@@ -1,9 +1,19 @@
 #!/bin/bash
 set -e
+# Script to test an AVM module
+# Usage: bash test-avm.sh REPO_URL FOLDER_NAME [DOCKER_IMAGE]
+# Example: bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault localrunner_avm
+# If DOCKER_IMAGE is not provided, it defaults to localrunner_avm
+
+# Check if required arguments are provided
+if [ $# -lt 2 ]; then
+    echo "Usage: $0 REPO_URL FOLDER_NAME [DOCKER_IMAGE]"
+    exit 1
+fi
 
 export WORKSPACE=$(pwd)
-# Function to update the avmmakefile
-update_avmmakefile() {
+# Function to update the Makefile to use local version of avmmakefile
+patch_makefile() {
     MAKEFILE="Makefile"
     # Check if file exists
     if [ ! -f "$MAKEFILE" ]; then
@@ -19,17 +29,6 @@ update_avmmakefile() {
     cp -vf $WORKSPACE/avmmakefile ./avmmakefile
     echo "avmmakefile replaced with pr version"
 }
-
-# Script to test an AVM module
-# Usage: bash test-avm.sh REPO_URL FOLDER_NAME [DOCKER_IMAGE]
-# Example: bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault localrunner_avm
-# If DOCKER_IMAGE is not provided, it defaults to localrunner_avm
-
-# Check if required arguments are provided
-if [ $# -lt 2 ]; then
-    echo "Usage: $0 REPO_URL FOLDER_NAME [DOCKER_IMAGE]"
-    exit 1
-fi
 
 REPO_URL="$1"
 FOLDER_NAME="$2"
@@ -57,12 +56,12 @@ export MPTF_DIR="$SCAFFOLD/avm_mapotf"
 export AVM_IMAGE=$DOCKER_IMAGE
 cd "$TEMP_DIR"
 
-update_avmmakefile
+patch_makefile
 # Run grept first in case `avm` file has been modified (changing avm script on the fly might cause transient errors, which could be ignored by simply rerun `./avm pre-commit` again)
 make grept-precommit
-update_avmmakefile
+patch_makefile
 ./avm pre-commit
-update_avmmakefile
+patch_makefile
 git add -A
 git commit -am "test"
 ./avm pr-check
