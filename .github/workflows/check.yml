@@ -43,6 +43,10 @@ jobs:
       run: |
         has_error=false
         export AVM_NO_CONTAINER_PULL=1
+        # Required by git commit inside test-avm-module.sh
+        git config --global user.email "tfmod442916@users.noreply.github.com"
+        git config --global user.name "github-actions[bot]"
+        git config --global --add safe.directory '*'
         bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault || has_error=true
         bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp || has_error=true
         if [ "$has_error" = true ]; then
