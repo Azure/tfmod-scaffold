@@ -42,6 +42,7 @@ jobs:
     - name: Test AVM image with AVM modules
       run: |
         has_error=false
+        export AVM_NO_CONTAINER_PULL=1
         bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault || has_error=true
         bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp || has_error=true
         if [ "$has_error" = true ]; then
