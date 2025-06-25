@@ -62,7 +62,7 @@ update_avmmakefile
 make grept-precommit
 update_avmmakefile
 ./avm pre-commit
+update_avmmakefile
 git add -A
 git commit -am "test"
-update_avmmakefile
 ./avm pr-check
