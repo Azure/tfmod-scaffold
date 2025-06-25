@@ -33,6 +33,12 @@ jobs:
     - name: Docker Build Test
       run: |
         bash dockerbuild.sh
+    - uses: actions/setup-go@v5
+      with:
+        go-version: 'stable'
+    - name: Install grept
+      run: |
+        go install github.com/Azure/grept@latest
     - name: Test AVM image with AVM modules
       run: |
         has_error=false
