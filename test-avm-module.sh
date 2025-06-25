@@ -32,4 +32,4 @@ git clone "$REPO_URL" "$TEMP_DIR" || { echo "Failed to clone $REPO_URL"; exit 1;
 
 # Run pre-commit check
 echo "Running pre-commit check"
-docker run --rm -v "$(pwd):/scaffold" -e LOCAL_SCRIPT="/scaffold/avm_scripts" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" bash -c './avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check' || { echo "pre-commit failed"; exit 1; }
+docker run --rm -v "$(pwd):/scaffold" -e AVM_IN_CONTAINER=1 -e LOCAL_SCRIPT="/scaffold/avm_scripts" -e MPTF_DIR="/scaffold/avm_mapotf" -v "$TEMP_DIR:/src" -w /src "$DOCKER_IMAGE" bash -c './avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check' || { echo "pre-commit failed"; exit 1; }
