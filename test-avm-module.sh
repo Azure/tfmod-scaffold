@@ -57,6 +57,7 @@ export MPTF_DIR="$SCAFFOLD/avm_mapotf"
 export AVM_IMAGE=$DOCKER_IMAGE
 cd "$TEMP_DIR"
 
+update_avmmakefile
 # Run grept first in case `avm` file has been modified (changing avm script on the fly might cause transient errors, which could be ignored by simply rerun `./avm pre-commit` again)
 make grept-precommit
 update_avmmakefile
