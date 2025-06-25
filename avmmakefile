@@ -102,10 +102,6 @@ mapotf-precommit:
 grept-precommit:
 	@$(call RUN_SCRIPT,grept-precommit.sh)
 
-.PHONY: grept-precommit
-grept-precommit:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit.sh" | bash
-
 .PHONY: mapotf-precommit-check
 mapotf-precommit-check:
 	@$(call RUN_SCRIPT,mapotf-precommit-check.sh)
@@ -113,10 +109,6 @@ mapotf-precommit-check:
 .PHONY: grept-precommit-check
 grept-precommit-check:
 	@$(call RUN_SCRIPT,grept-precommit-check.sh)
-
-.PHONY: grept-precommit-check
-grept-precommit-check:
-	curl -H 'Cache-Control: no-cache, no-store' -sSL "$(REMOTE_SCRIPT)/grept-precommit-check.sh" | bash
 
 .PHONY: depsensure
 depsensure:
