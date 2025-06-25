@@ -33,6 +33,17 @@ jobs:
     - name: Docker Build Test
       run: |
         bash dockerbuild.sh
+    - name: Test AVM image with AVM modules
+      run: |
+        has_error=false
+        bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault || has_error=true
+        bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp || has_error=true
+        if [ "$has_error" = true ]; then
+          echo "AVM module tests failed, but it might be as expected, eg: new files added."
+          exit 1
+        else
+          echo "AVM module tests passed"
+        fi
     - name: Run Trivy vulnerability scanner against full image
       env:
         TRIVY_DB_REPOSITORY: 'ghcr.io/aquasecurity/trivy-db,public.ecr.aws/aquasecurity/trivy-db'
@@ -59,14 +70,3 @@ jobs:
         trivyignores: '.trivyignore'
         timeout: '120m'
         scanners: 'vuln'
-    - name: Test AVM image with AVM modules
-      run: |
-        has_error=false
-        bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault || has_error=true
-        bash test-avm-module.sh https://github.com/Azure/terraform-azurerm-avm-res-app-containerapp.git terraform-azurerm-avm-res-app-containerapp || has_error=true
-        if [ "$has_error" = true ]; then
-          echo "AVM module tests failed, but it might be as expected, eg: new files added."
-          exit 1
-        else
-          echo "AVM module tests passed"
-        fi

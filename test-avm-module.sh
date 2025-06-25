@@ -37,7 +37,7 @@ echo "Running pre-commit check"
 export SCAFFOLD=$(pwd)
 export LOCAL_SCRIPT="$SCAFFOLD/avm_scripts"
 export MPTF_DIR="$SCAFFOLD/avm_mapotf"
-export AVM_IMAG=$DOCKER_IMAGE
+export AVM_IMAGE=$DOCKER_IMAGE
 cd "$TEMP_DIR"
 
 MAKEFILE="Makefile"
@@ -55,4 +55,4 @@ echo "Line downloading remote avmmakefile has been commented out"
 cp -vf $WORKSPACE/avmmakefile ./avmmakefile
 echo "avmmakefile replaced with pr version"
 
-./avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check || { echo "pre-commit failed"; exit 1; }
+make grept-precommit && ./avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check || { echo "pre-commit failed"; exit 1; }
