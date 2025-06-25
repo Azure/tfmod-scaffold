@@ -1,6 +1,25 @@
 #!/bin/bash
 set -e
 
+export WORKSPACE=$(pwd)
+# Function to update the avmmakefile
+update_avmmakefile() {
+    MAKEFILE="Makefile"
+    # Check if file exists
+    if [ ! -f "$MAKEFILE" ]; then
+        echo "Error: $MAKEFILE not found"
+        exit 1
+    fi
+    # Search pattern - escaping special characters for sed
+    PATTERN="https:\/\/raw\.githubusercontent\.com\/Azure\/tfmod-scaffold\/main\/avmmakefile"
+
+    # Comment out the line containing the pattern
+    sed -i "/$PATTERN/s/^/#/" "$MAKEFILE"
+    echo "Line downloading remote avmmakefile has been commented out"
+    cp -vf $WORKSPACE/avmmakefile ./avmmakefile
+    echo "avmmakefile replaced with pr version"
+}
+
 # Script to test an AVM module
 # Usage: bash test-avm.sh REPO_URL FOLDER_NAME [DOCKER_IMAGE]
 # Example: bash test-avm.sh https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault.git terraform-azurerm-avm-res-keyvault-vault localrunner_avm
@@ -16,8 +35,6 @@ REPO_URL="$1"
 FOLDER_NAME="$2"
 DOCKER_IMAGE="${3:-localrunner_avm}"  # Use third parameter if provided, otherwise default to localrunner_avm
 TEMP_DIR="/tmp/${FOLDER_NAME}"
-
-export WORKSPACE=$(pwd)
 
 echo "===== Testing AVM module: $FOLDER_NAME ====="
 echo "Using Docker image: $DOCKER_IMAGE"
@@ -40,19 +57,11 @@ export MPTF_DIR="$SCAFFOLD/avm_mapotf"
 export AVM_IMAGE=$DOCKER_IMAGE
 cd "$TEMP_DIR"
 
-MAKEFILE="Makefile"
-# Check if file exists
-if [ ! -f "$MAKEFILE" ]; then
-    echo "Error: $MAKEFILE not found"
-    exit 1
-fi
-# Search pattern - escaping special characters for sed
-PATTERN="https:\/\/raw\.githubusercontent\.com\/Azure\/tfmod-scaffold\/main\/avmmakefile"
-
-# Comment out the line containing the pattern
-sed -i "/$PATTERN/s/^/#/" "$MAKEFILE"
-echo "Line downloading remote avmmakefile has been commented out"
-cp -vf $WORKSPACE/avmmakefile ./avmmakefile
-echo "avmmakefile replaced with pr version"
-
-make grept-precommit && ./avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check || { echo "pre-commit failed"; exit 1; }
+# Run grept first in case `avm` file has been modified (changing avm script on the fly might cause transient errors, which could be ignored by simply rerun `./avm pre-commit` again)
+make grept-precommit
+update_avmmakefile
+./avm pre-commit
+git add -A
+git commit -am "test"
+update_avmmakefile
+./avm pr-check
