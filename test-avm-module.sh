@@ -17,7 +17,7 @@ FOLDER_NAME="$2"
 DOCKER_IMAGE="${3:-localrunner_avm}"  # Use third parameter if provided, otherwise default to localrunner_avm
 TEMP_DIR="/tmp/${FOLDER_NAME}"
 
-export PWD=$(pwd)
+export WORKSPACE=$(pwd)
 
 echo "===== Testing AVM module: $FOLDER_NAME ====="
 echo "Using Docker image: $DOCKER_IMAGE"
@@ -52,7 +52,7 @@ PATTERN="https:\/\/raw\.githubusercontent\.com\/Azure\/tfmod-scaffold\/main\/avm
 # Comment out the line containing the pattern
 sed -i "/$PATTERN/s/^/#/" "$MAKEFILE"
 echo "Line downloading remote avmmakefile has been commented out"
-cp -vf $PWD/avmmakefile ./avmmakefile
+cp -vf $WORKSPACE/avmmakefile ./avmmakefile
 echo "avmmakefile replaced with pr version"
 
 ./avm pre-commit && git add -A && git commit -am "test" && ./avm pr-check || { echo "pre-commit failed"; exit 1; }
