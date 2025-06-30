@@ -129,3 +129,11 @@ autofix:
 .PHONY: grept-apply
 grept-apply:
 	@$(call RUN_SCRIPT,grept-apply.sh)
+
+.PHONY: migrate
+migrate:
+	@curl -H 'Cache-Control: no-cache, no-store' -sSL https://raw.githubusercontent.com/Azure/avm-terraform-governance/main/managed-files/root/avm -o avm
+	@curl -H 'Cache-Control: no-cache, no-store' -sSL https://raw.githubusercontent.com/Azure/avm-terraform-governance/main/managed-files/root/avm.ps1 -o avm.ps1
+	@curl -H 'Cache-Control: no-cache, no-store' -sSL https://raw.githubusercontent.com/Azure/avm-terraform-governance/main/managed-files/root/avm.bat -o avm.bat
+	@curl -H 'Cache-Control: no-cache, no-store' -sSL https://raw.githubusercontent.com/Azure/avm-terraform-governance/main/managed-files/root/Makefile -o Makefile
+	@echo "Migration complete. Please run ./avm pre-commit now."
