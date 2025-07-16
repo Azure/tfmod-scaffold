@@ -65,6 +65,7 @@ rule "terraform_module_pinned_source" {
 
 rule "terraform_module_version" {
   enabled = true
+  exact = true
 }
 
 rule "terraform_naming_convention" {
